@@ -10,17 +10,24 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 # Try to find spdlog (optional)
 find_package(spdlog QUIET)
 
-# Source files
-set(SOURCES
-    main.cpp
-    src/Logger.cpp
+# Source files (recursively find all .cpp files in src)
+file(GLOB_RECURSE SOURCES
+    ${CMAKE_SOURCE_DIR}/src/*.cpp
+)
+
+# Header files (recursively find all .h and .hpp files in src and include)
+file(GLOB_RECURSE HEADERS
+    ${CMAKE_SOURCE_DIR}/src/*.h
+    ${CMAKE_SOURCE_DIR}/src/*.hpp
+    ${CMAKE_SOURCE_DIR}/include/*.h
+    ${CMAKE_SOURCE_DIR}/include/*.hpp
 )
 
 # Create executable
-add_executable(${PROJECT_NAME} ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES} main.cpp)
 
 # Include directories
-target_include_directories(${PROJECT_NAME} PRIVATE include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics sfml-window sfml-system)
