@@ -1,91 +1,78 @@
-# My Gimp (SFML)
+# My Gimp (C++/SFML) – Minimal Starter
 
-> A lightweight, extensible image editor built with **C++**, **SFML**, and **CMake**. Designed for learning graphics programming and prototyping simple GIMP‑like workflows.
-
----
-
-## ✨ Features
-
-* **Canvas & Layers**: Multi‑layer bitmap editing with per‑layer visibility and opacity.
-* **Drawing Tools**: Pencil, brush, eraser, line, rectangle/ellipse (filled & outline).
-* **Selections**: Rectangular marquee with copy/cut/paste.
-* **Filters**: Grayscale, invert colors, brightness/contrast, blur (box/gaussian*), sharpen*.
-* **History**: Undo/redo stack with memory‑aware checkpoints.
-* **IO**: Load/Save PNG, JPG, BMP (via SFML image codecs). Export to PNG.
-* **Shortcuts**: Familiar hotkeys (Ctrl+N/O/S/Z/Y, etc.).
-* **Theming**: Light/Dark UI theme toggle.
-* **Plugin Hooks**: Minimal plugin API (C++) for custom filters/tools.*
-
-> *Starred items are optional/behind feature flags depending on your current milestone.
+> Setting up a clean project structure and an extensible CMake for starting the My Gimp project.
 
 ---
 
-## 🧰 Tech Stack
-
-* **Language**: C++17 (or later)
-* **Graphics**: [SFML 2.6+](https://www.sfml-dev.org/)
-* **Build System**: CMake ≥ 3.20
-* **CI**: GitHub Actions (Linux/Windows/macOS) – build & tests
-* **Code Style**: google format
-
----
-
-## 📦 Project Structure
+## 📁 Minimal Directory Structure
 
 ```
 MyGimp/
 ├─ CMakeLists.txt
-├─ cmake/                      # CMake helpers (FetchContent, warnings, etc.)
-├─ external/                   # Pinned third‑party libs (optional)
-├─ src/
-│  ├─ app/                     # main(), window loop, menus, dispatch
-│  ├─ core/                    # image, layer, selection, history, commands
-│  ├─ tools/                   # brush, eraser, shapes… (ITool hierarchy)
-│  ├─ filters/                 # grayscale, blur, sharpen… (IFilter)
-│  ├─ ui/                      # widgets, panels, color picker, dock layout
-│  └─ platform/                # filesystem, dialogs, clipboard
-├─ include/                    # public headers (if lib split)
-├─ assets/                     # fonts, icons, demo images
-├─ tests/                      # unit/functional tests
-├─ docs/
-│  └─ screenshots/             # README images
+├─ cmake/               # additional CMake scripts (optional)
+├─ include/             # headers (.hpp)
+├─ src/                 # sources (.cpp)
+├─ tests/               # unit tests (optional)
+└─ extern/              # third-party dependencies (empty initially)
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Prerequisites
 
-### Prerequisites
+- **C++ compiler** supporting C++20 or higher
+- **CMake ≥ 3.20**
+- **SFML 2.6+** (installed on your system or via package manager)
+- **Git**
 
-* **C++ compiler** with C++17 support
-* **CMake ≥ 3.20**
-* **SFML 2.6+** (fetched automatically via CMake `FetchContent` or system packages)
-* **Git**
+---
 
-### Clone
+## ⚡ Installation & Build
+
+### 1. Clone the project
 
 ```bash
 git clone https://github.com/<you>/my-gimp.git
 cd my-gimp
 ```
 
-### Configure & Build (CMake)
+### 2. Configure the project (Debug by default)
 
 ```bash
-# Configure (Debug by default)
-cmake -S . -B build -DMYGIMP_ENABLE_TESTS=ON -DMYGIMP_FETCH_SFML=ON
-
-# Build
-cmake --build build --config Debug -j
-
-# Run
-./build/MyGimp
+cmake -S . -B build
 ```
 
-### Run Tests
+> For Release: `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release`
+
+### 3. Build
 
 ```bash
-ctest --test-dir build --output-on-failure
+cmake --build build
 ```
 
-> If you prefer system packages, set `-DMYGIMP_FETCH_SFML=OFF` and make sure SFML is discoverable (e.g., `find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)`).
+### 4. Run the executable
+
+```bash
+./build/bin/my_gimp
+```
+
+---
+
+## 🔗 SFML Integration
+
+- SFML is detected via `find_package(SFML 2.6 COMPONENTS system window graphics REQUIRED)`.
+- If SFML is not installed, follow the official documentation: [SFML Install](https://www.sfml-dev.org/tutorials/2.6/)
+
+---
+
+## 🧪 Preparing for Tests
+
+- A `tests/` folder is provided for future unit tests (optional at this stage).
+
+---
+
+## 📝 Notes
+
+- The structure and CMake are designed to be easily extensible (adding modules, options, tests, etc.).
+- This base will serve as the foundation for all future features.
+
