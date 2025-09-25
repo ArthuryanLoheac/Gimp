@@ -60,20 +60,20 @@ jobs:
       image: epitechcontent/epitest-docker:latest
     steps:
       - name: "Checkout"
-      uses: actions/checkout@v4
+        uses: actions/checkout@v4
       - name: "Configure with CMake"
-      run: cmake -S . -B build
+        run: cmake -S . -B build
       - name: "Build with CMake"
-      run: cmake --build build
+        run: cmake --build build
       - name: "Check existing Linux executables"
-      run: |
-        LIST=$(echo $EXECUTABLES | tr ',' ' ')
-        for exe in $LIST; do
-        if [ ! -x "build/$exe" ]; then
-          echo "::error file=build/$exe::Linux executable $exe not found or not executable after CMake build."
-          exit 1
-        fi
-        done
+        run: |
+          LIST=$(echo $EXECUTABLES | tr ',' ' ')
+          for exe in $LIST; do
+          if [ ! -x "build/$exe" ]; then
+            echo "::error file=build/$exe::Linux executable $exe not found or not executable after CMake build."
+            exit 1
+          fi
+          done
   run_tests_cmake:
     needs: [check_cmake_compilation, check_coding_style, check_epitech_coding_style]
     runs-on: ubuntu-latest
