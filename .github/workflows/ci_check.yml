@@ -90,7 +90,7 @@ jobs:
           cd build
           ctest --output-on-failure
   push_to_mirror:
-    needs: run_tests
+    needs: run_tests_cmake
     runs-on: ubuntu-latest
     if: ${{ github.event_name == 'push' }}
     steps:
