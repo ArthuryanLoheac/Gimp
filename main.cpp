@@ -9,7 +9,7 @@ int main() {
     // Initialize logging system
     LOG_INIT();
     LOG_INFO("Starting My Gimp application");
-    
+
     try {
         MyGimp::App app;
         app.init();
@@ -19,7 +19,7 @@ int main() {
         LOG_SHUTDOWN();
         return 1;
     }
-    
+
     LOG_INFO("My Gimp application shutting down normally");
     LOG_SHUTDOWN();
     return 0;
