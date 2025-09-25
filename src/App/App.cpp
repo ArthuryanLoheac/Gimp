@@ -1,4 +1,4 @@
-#include "src/App.hpp"
+#include "App/App.hpp"
 #include "Logger.h"
 
 namespace MyGimp {

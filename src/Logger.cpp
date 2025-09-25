@@ -8,12 +8,16 @@
 namespace MyGimp {
 bool Logger::initialized = false;
 
+#ifdef USE_SPDLOG
 std::shared_ptr<spdlog::logger> Logger::logger = nullptr;
+#endif
 
 void Logger::initialize() {
-    if (initialized)
+    if (initialized) {
         return;
+    }
 
+#ifdef USE_SPDLOG
     try {
         // Create a colored console logger with spdlog
         logger = spdlog::stdout_color_mt("MyGimp");
@@ -25,18 +29,22 @@ void Logger::initialize() {
         // Fallback to console logging
         logger = nullptr;
     }
-
+#else
     // Console fallback initialization message
     std::cout << "[" << getCurrentTimestamp()
         << "] [MyGimp] [INFO] Logger initialized with console fallback"
         << std::endl;
+#endif
+
     initialized = true;
 }
 
 void Logger::shutdown() {
-    if (!initialized)
+    if (!initialized) {
         return;
+    }
 
+#ifdef USE_SPDLOG
     if (logger) {
         logger->info("Logger shutting down");
         spdlog::shutdown();
@@ -44,16 +52,20 @@ void Logger::shutdown() {
         std::cout << "[" << getCurrentTimestamp() <<
             "] [MyGimp] [INFO] Logger shutting down" << std::endl;
     }
+#else
     std::cout << "[" << getCurrentTimestamp()
         << "] [MyGimp] [INFO] Logger shutting down" << std::endl;
+#endif
 
     initialized = false;
 }
 
 void Logger::log(Level level, const std::string& message) {
-    if (!initialized)
+    if (!initialized) {
         initialize();
+    }
 
+#ifdef USE_SPDLOG
     if (logger) {
         switch (level) {
             case Level::INFO:
@@ -71,6 +83,7 @@ void Logger::log(Level level, const std::string& message) {
         }
         return;
     }
+#endif
 
     // Fallback to console output
     static std::mutex console_mutex;
@@ -79,7 +92,7 @@ void Logger::log(Level level, const std::string& message) {
     std::ostream* output = (level == Level::ERROR) ? &std::cerr : &std::cout;
 
     *output << "[" << getCurrentTimestamp() << "] [MyGimp] ["
-        << levelToString(level) << "] " << message << std::endl;
+            << levelToString(level) << "] " << message << std::endl;
 }
 
 void Logger::info(const std::string& message) {

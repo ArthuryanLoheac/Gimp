@@ -2,7 +2,7 @@
 # include <string>
 # include <SFML/Graphics.hpp>
 # include "Logger.h"
-# include "src/App.hpp"
+# include "App/App.hpp"
 
 
 int main() {
