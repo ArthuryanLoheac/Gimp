@@ -10,7 +10,7 @@ on:
 
 env:
   MIRROR_URL: 'git@github.com:ArthuryanLoheac/Gimp_Mirrored'
-  EXECUTABLES: 'zappy_server, zappy_gui, zappy_ai'
+  EXECUTABLES: 'MyGimp'
 
 jobs:
   check_coding_style:
