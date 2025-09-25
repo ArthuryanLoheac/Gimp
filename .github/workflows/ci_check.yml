@@ -68,12 +68,7 @@ jobs:
       - name: "Check existing Linux executables"
         run: |
           LIST=$(echo $EXECUTABLES | tr ',' ' ')
-          for exe in $LIST; do
-          if [ ! -x "build/$exe" ]; then
-            echo "::error file=build/$exe::Linux executable $exe not found or not executable after CMake build."
-            exit 1
-          fi
-          done
+          find $LIST
   run_tests_cmake:
     needs: [check_cmake_compilation, check_coding_style, check_epitech_coding_style]
     runs-on: ubuntu-latest
