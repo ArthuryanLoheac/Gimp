@@ -47,3 +47,4 @@ MyGimp
 # Visual Studio Code
 .vscode/
 venv
+*.sh
