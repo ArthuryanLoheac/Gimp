@@ -20,6 +20,8 @@ class App {
     void update(float deltaTime);
     void render();
 
+    void close();
+
     DrawApp drawApp;
     sf::RenderWindow window;
 };

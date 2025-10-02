@@ -28,16 +28,20 @@ void App::init() {
 void App::processEvents() {
     sf::Event event;
     while (window.pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            LOG_DEBUG("Window close event received");
-            window.close();
-        } else if (event.type == sf::Event::KeyPressed &&
-            event.key.code == sf::Keyboard::Escape) {
-            LOG_DEBUG("Escape key pressed - closing application");
-            window.close();
+        if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+            close();
         } else {
             drawApp.handleInput(event);
         }
+    }
+}
+
+void App::close() {
+    if (window.isOpen()) {
+        window.close();
+        LOG_INFO("Window closed successfully");
+    } else {
+        LOG_WARN("Attempted to close an already closed window");
     }
 }
 
