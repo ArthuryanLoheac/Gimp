@@ -1,6 +1,7 @@
 #include "App/DrawApp.hpp"
 #include "Logger.h"
 #include "Exceptions/DrawAppExceptions.hpp"
+#include "Exceptions/CalqueExceptions.hpp"
 
 namespace MyGimp {
 void DrawApp::draw(sf::RenderWindow& window) {
@@ -44,7 +45,7 @@ void DrawApp::init(const std::string& filepath) {
         calques.emplace_back("Calque 1");
         calques.back().createFromFile(filepath);
         dimensions = calques.back().getImage().getSize();
-    } catch (const std::exception &e) {
+    } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
         init(800, 600);
     }
@@ -54,7 +55,7 @@ void DrawApp::newCalque(const std::string& name, sf::Color col) {
     try {
         calques.emplace_back(name);
         calques.back().createEmpty(dimensions.x, dimensions.y, col);
-    } catch (const std::exception &e) {
+    } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
     }
 }
@@ -63,7 +64,7 @@ void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
     try {
         calques.emplace_back(name);
         calques.back().createFromFile(filepath);
-    } catch (const std::exception &e) {
+    } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
     }
 }
