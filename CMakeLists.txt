@@ -10,6 +10,15 @@ find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
 # Try to find spdlog (optional)
 find_package(spdlog QUIET)
 
+# Enable testing
+enable_testing()
+
+# Try to find Criterion for unit tests
+find_package(PkgConfig QUIET)
+if(PkgConfig_FOUND)
+    pkg_check_modules(CRITERION criterion)
+endif()
+
 # Source files (recursively find all .cpp files in src)
 file(GLOB_RECURSE SOURCES
     ${CMAKE_SOURCE_DIR}/src/*.cpp
@@ -50,3 +59,46 @@ endif()
 set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
 )
+
+# Unit Tests Configuration
+if(CRITERION_FOUND)
+    message(STATUS "Criterion found - enabling unit tests")
+
+    # Find all test files
+    file(GLOB_RECURSE TEST_SOURCES
+        ${CMAKE_SOURCE_DIR}/tests/*.cpp
+    )
+
+    # Create test executable
+    add_executable(${PROJECT_NAME}_tests ${TEST_SOURCES} ${SOURCES})
+
+    # Include directories for tests
+    target_include_directories(${PROJECT_NAME}_tests PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CRITERION_INCLUDE_DIRS}
+    )
+
+    # Link libraries for tests
+    target_link_libraries(${PROJECT_NAME}_tests PRIVATE
+        sfml-graphics sfml-window sfml-system
+        ${CRITERION_LIBRARIES}
+    )
+
+    # Optional spdlog for tests
+    if(spdlog_FOUND)
+        target_link_libraries(${PROJECT_NAME}_tests PRIVATE spdlog::spdlog)
+        target_compile_definitions(${PROJECT_NAME}_tests PRIVATE USE_SPDLOG)
+    endif()
+
+    # Set compilation flags for Criterion
+    target_compile_options(${PROJECT_NAME}_tests PRIVATE ${CRITERION_CFLAGS_OTHER})
+    target_link_directories(${PROJECT_NAME}_tests PRIVATE ${CRITERION_LIBRARY_DIRS})
+
+    # Add test to CTest
+    add_test(NAME MyGimpTests COMMAND ${PROJECT_NAME}_tests)
+
+    # Set test output directory
+    set_target_properties(${PROJECT_NAME}_tests PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    )
+endif()
