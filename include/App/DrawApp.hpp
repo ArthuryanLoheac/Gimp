@@ -21,6 +21,8 @@ class DrawApp {
     void newCalque(const std::string& name,
         sf::Color col = sf::Color::Transparent);
     void newCalque(const std::string& name, const std::string& filepath);
+    std::vector<Calque>& getCalques();
+    sf::Vector2u getDimensions();
 
  private:
     std::vector<Calque> calques;

@@ -76,6 +76,14 @@ void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
     }
 }
 
+std::vector<Calque>& DrawApp::getCalques() {
+    return calques;
+}
+
+sf::Vector2u DrawApp::getDimensions() {
+    return dimensions;
+}
+
 void DrawApp::saveFile() {
     LOG_INFO("SAVE FILE");
 }
