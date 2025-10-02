@@ -16,13 +16,26 @@ void DrawApp::handleInput() {
     // Input handling logic here
 }
 
-sf::Vector2i DrawApp::getDimensions() const {
+sf::Vector2u DrawApp::getDimensions() const {
     return dimensions;
 }
 
-void DrawApp::newCalque(const std::string& name, int width, int height) {
+void DrawApp::init(int width, int height) {
+    calques.clear();
+    dimensions = sf::Vector2u(width, height);
+    newCalque("Calque 1");
+}
+
+void DrawApp::init(const std::string& filepath) {
+    calques.clear();
+    calques.emplace_back("Calque 1");
+    calques.back().createFromFile(filepath);
+    dimensions = calques.back().getImage().getSize();
+}
+
+void DrawApp::newCalque(const std::string& name, sf::Color col) {
     calques.emplace_back(name);
-    calques.back().createEmpty(width, height, sf::Color::White);
+    calques.back().createEmpty(dimensions.x, dimensions.y, col);
 }
 
 void DrawApp::newCalque(const std::string& name, const std::string& filepath) {

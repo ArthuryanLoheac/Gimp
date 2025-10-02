@@ -19,7 +19,6 @@ void App::init() {
         + "x" + std::to_string(HEIGHT) + ")");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
-    drawApp.newCalque("CALQUE 1", 200, 200);
     LOG_INFO("Window initialization completed");
 }
 
