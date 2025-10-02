@@ -61,6 +61,10 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
+      - name: "Install Xvfb for potential SFML dependencies"
+        run: |
+          apt-get update
+          apt-get install -y xvfb
       - name: "Configure with CMake"
         run: cmake -S . -B build
       - name: "Build with CMake"
@@ -77,13 +81,16 @@ jobs:
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
-      - name: "Run CMake tests"
+      - name: "Install Xvfb for headless display"
+        run: |
+          apt-get update
+          apt-get install -y xvfb
+      - name: "Run CMake tests with virtual display"
         timeout-minutes: 2
         run: |
           cmake -S . -B build
           cmake --build build
-          cd build
-          ctest --output-on-failure
+          xvfb-run -a ctest --test-dir build --output-on-failure
   push_to_mirror:
     needs: run_tests_cmake
     runs-on: ubuntu-latest

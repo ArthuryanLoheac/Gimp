@@ -12,35 +12,35 @@
 #endif
 
 namespace MyGimp {
-    class Logger {
-    public:
-        enum class Level {
-            DEBUG,
-            INFO,
-            WARN,
-            ERROR,
-        };
+class Logger {
+ public:
+    enum class Level {
+        DEBUG,
+        INFO,
+        WARN,
+        ERROR,
+    };
 
-        // Initialize the logger
-        static void initialize();
-        
-        // Shutdown the logger
-        static void shutdown();
-        
-        // Log functions
-        static void log(Level level, const std::string& message);
-        static void info(const std::string& message);
-        static void warn(const std::string& message);
-        static void debug(const std::string& message);
-        static void error(const std::string& message);
+    // Initialize the logger
+    static void initialize();
 
-    private:
-        static bool initialized;
-        static std::string getCurrentTimestamp();
-        static std::string levelToString(Level level);
-        
+    // Shutdown the logger
+    static void shutdown();
+
+    // Log functions
+    static void log(Level level, const std::string& message);
+    static void info(const std::string& message);
+    static void warn(const std::string& message);
+    static void debug(const std::string& message);
+    static void error(const std::string& message);
+
+ private:
+    static bool initialized;
+    static std::string getCurrentTimestamp();
+    static std::string levelToString(Level level);
+
 #ifdef USE_SPDLOG
-        static std::shared_ptr<spdlog::logger> logger;
+    static std::shared_ptr<spdlog::logger> logger;
 #endif
     };
 }
