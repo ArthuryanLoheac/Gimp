@@ -13,6 +13,14 @@ const static float ZOOM_STEP = 0.1f;
 
 namespace MyGimp {
 void DrawApp::draw(sf::RenderWindow& window) {
+    if (viewOffset.x > window.getSize().x / 2.f + (dimensions.x * zoom / 2.f - 50))
+        viewOffset.x = window.getSize().x / 2.f + (dimensions.x * zoom / 2.f - 50);
+    if (viewOffset.y > window.getSize().y / 2.f + (dimensions.y * zoom / 2.f - 50))
+        viewOffset.y = window.getSize().y / 2.f + (dimensions.y * zoom / 2.f - 50);
+    if (viewOffset.x < -(int)(window.getSize().x) / 2.f - (dimensions.x * zoom / 2.f - 50))
+        viewOffset.x = -(int)(window.getSize().x) / 2.f - (dimensions.x * zoom / 2.f - 50);
+    if (viewOffset.y < -(int)(window.getSize().y) / 2.f - (dimensions.y * zoom / 2.f - 50))
+        viewOffset.y = -(int)(window.getSize().y) / 2.f - (dimensions.y * zoom / 2.f - 50);
     sf::Vector2f pos =  {
         viewOffset.x + window.getSize().x / 2.f - dimensions.x * zoom / 2.f,
         viewOffset.y + window.getSize().y / 2.f - dimensions.y * zoom / 2.f};
@@ -23,7 +31,14 @@ void DrawApp::draw(sf::RenderWindow& window) {
 }
 
 void DrawApp::update(float deltaTime) {
-    // Update logic here
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        viewOffset.x += 500 * deltaTime;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        viewOffset.x -= 500 * deltaTime;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        viewOffset.y += 500 * deltaTime;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        viewOffset.y -= 500 * deltaTime;
 }
 
 void DrawApp::handleInput(sf::Event &event) {
