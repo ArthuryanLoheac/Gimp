@@ -19,6 +19,7 @@ void App::init() {
         + "x" + std::to_string(HEIGHT) + ")");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
+    drawApp.newCalque("CALQUE 1", 200, 200);
     LOG_INFO("Window initialization completed");
 }
 
@@ -28,22 +29,24 @@ void App::processEvents() {
         if (event.type == sf::Event::Closed) {
             LOG_DEBUG("Window close event received");
             window.close();
-        }
-        if (event.type == sf::Event::KeyPressed &&
+        } else if (event.type == sf::Event::KeyPressed &&
             event.key.code == sf::Keyboard::Escape) {
             LOG_DEBUG("Escape key pressed - closing application");
             window.close();
+        } else {
+            drawApp.handleInput();
         }
     }
 }
 
 void App::update(float deltaTime) {
     // Update game logic here
-    (void) deltaTime;
+    drawApp.update(deltaTime);
 }
 
 void App::render() {
     window.clear(sf::Color::Black);
+    drawApp.draw(window);
     window.display();
 }
 }  // namespace MyGimp

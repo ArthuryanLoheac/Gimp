@@ -7,8 +7,8 @@ void Calque::createFromFile(const std::string& filepath) {
     }
 }
 
-void Calque::createEmpty(int width, int height) {
-    image.create(width, height, sf::Color::Transparent);
+void Calque::createEmpty(int width, int height, sf::Color col) {
+    image.create(width, height, col);
 }
 
 void Calque::setVisible(bool isVisible) {

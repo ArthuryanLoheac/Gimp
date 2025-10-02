@@ -9,7 +9,7 @@ class Calque {
     Calque(const std::string& name) : name(name) {}
     ~Calque() = default;
 
-    void createEmpty(int width, int height);
+    void createEmpty(int width, int height, sf::Color col = sf::Color::Transparent);
     void createFromFile(const std::string& filepath);
 
     void draw(sf::RenderWindow& window);

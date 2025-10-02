@@ -10,11 +10,16 @@ class DrawApp {
  public:
     ~DrawApp() = default;
 
-    void draw() = 0;
-    void update() = 0;
-    void handleInput() = 0;
+    void draw(sf::RenderWindow &);
+    void update(float deltaTime);
+    void handleInput();
 
+    sf::Vector2i getDimensions() const;
+
+    void newCalque(const std::string& name, int width, int height);
+    void newCalque(const std::string& name, const std::string& filepath);
  private:
     std::vector<Calque> calques;
+    sf::Vector2i dimensions;
 };
 }  // namespace MyGimp

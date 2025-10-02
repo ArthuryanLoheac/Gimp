@@ -3,6 +3,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+#include "App/DrawApp.hpp"
+
 namespace MyGimp {
 class App {
  public:
@@ -18,6 +20,7 @@ class App {
     void update(float deltaTime);
     void render();
 
+    DrawApp drawApp;
     sf::RenderWindow window;
 };
 }  // namespace MyGimp
