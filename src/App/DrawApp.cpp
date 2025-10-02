@@ -7,12 +7,18 @@
 #include "Exceptions/DrawAppExceptions.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
 
-
+const static float MIN_ZOOM = 0.01f;
+const static float MAX_ZOOM = 25.0f;
+const static float ZOOM_STEP = 0.1f;
 
 namespace MyGimp {
 void DrawApp::draw(sf::RenderWindow& window) {
+    sf::Vector2f pos =  {
+        viewOffset.x + window.getSize().x / 2.f - dimensions.x * zoom / 2.f,
+        viewOffset.y + window.getSize().y / 2.f - dimensions.y * zoom / 2.f};
+
     for (auto &calque : calques) {
-        calque.draw(window);
+        calque.draw(window, zoom, pos);
     }
 }
 
@@ -31,6 +37,13 @@ void DrawApp::handleInput(sf::Event &event) {
             event.key.code == sf::Keyboard::S
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
             saveFile();
+        }
+        if (event.type == sf::Event::MouseWheelScrolled) {
+            if (event.mouseWheelScroll.delta > 0)
+                zoom += ZOOM_STEP;
+            else if (event.mouseWheelScroll.delta < 0)
+                zoom -= ZOOM_STEP;
+            zoom = std::max(MIN_ZOOM, std::min(zoom, MAX_ZOOM));
         }
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
