@@ -1,4 +1,6 @@
 #pragma once
+#include <string>
+
 #include "Exceptions/Exceptions_A.hpp"
 
 namespace MyGimp {

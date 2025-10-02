@@ -1,3 +1,5 @@
+#include <string>
+
 #include "App/Calque.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
 

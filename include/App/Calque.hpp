@@ -1,15 +1,16 @@
 #pragma once
 #include <string>
-#include <SFML/Graphics.hpp>
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 namespace MyGimp {
 class Calque {
  public:
-    Calque(const std::string& name) : name(name) {}
+    explicit Calque(const std::string& name) : name(name) {}
     ~Calque() = default;
 
-    void createEmpty(int width, int height, sf::Color col = sf::Color::Transparent);
+    void createEmpty(int width, int height,
+        sf::Color col = sf::Color::Transparent);
     void createFromFile(const std::string& filepath);
 
     void draw(sf::RenderWindow& window);

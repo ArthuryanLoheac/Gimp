@@ -18,7 +18,8 @@ class DrawApp {
 
     void init(int width, int height);
     void init(const std::string& filepath);
-    void newCalque(const std::string& name, sf::Color col = sf::Color::Transparent);
+    void newCalque(const std::string& name,
+        sf::Color col = sf::Color::Transparent);
     void newCalque(const std::string& name, const std::string& filepath);
 
  private:

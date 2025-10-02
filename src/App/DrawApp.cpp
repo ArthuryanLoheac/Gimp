@@ -1,7 +1,12 @@
-#include "App/DrawApp.hpp"
+#include <string>
+
 #include "Logger.h"
+
+#include "App/DrawApp.hpp"
 #include "Exceptions/DrawAppExceptions.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
+
+
 
 namespace MyGimp {
 void DrawApp::draw(sf::RenderWindow& window) {
@@ -16,11 +21,13 @@ void DrawApp::update(float deltaTime) {
 
 void DrawApp::handleInput(sf::Event &event) {
     try {
-        if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E
+        if (event.type == sf::Event::KeyReleased &&
+            event.key.code == sf::Keyboard::E
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
             exportFile();
         }
-        if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::S
+        if (event.type == sf::Event::KeyReleased &&
+            event.key.code == sf::Keyboard::S
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
             saveFile();
         }
@@ -78,7 +85,8 @@ void DrawApp::exportFile() {
 
     if (calques.size() <= 0)
         throw DrawApp_NoCalque("No calques to export");
-    exportedImage.create(calques[0].getImage().getSize().x, calques[0].getImage().getSize().y);
+    exportedImage.create(calques[0].getImage().getSize().x,
+                        calques[0].getImage().getSize().y);
     for (Calque &c : calques) {
         sf::Vector2u dimensionstoCopy = exportedImage.getSize();
         if (c.getImage().getSize().x < dimensionstoCopy.x)
@@ -104,11 +112,9 @@ const sf::Vector2u dimensionstoCopy) {
                 (pixel.r * (1 - a)) + (newPixel.r * a),
                 (pixel.g * (1 - a)) + (newPixel.g * a),
                 (pixel.b * (1 - a)) + (newPixel.b * a),
-                255
-            );
+                255);
             exportedImage.setPixel(x, y, finalPixel);
         }
     }
 }
-
 }  // namespace MyGimp
