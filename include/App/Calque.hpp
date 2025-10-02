@@ -19,7 +19,7 @@ class Calque {
     void setVisible(bool isVisible);
     bool isVisible() const;
     const std::string& getName() const;
-    sf::Image getImage() const;
+    const sf::Image& getImage() const;
 
  private:
     std::string name;

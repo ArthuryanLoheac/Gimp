@@ -81,10 +81,6 @@ std::vector<Calque>& DrawApp::getCalques() {
     return calques;
 }
 
-sf::Vector2u DrawApp::getDimensions() {
-    return dimensions;
-}
-
 void DrawApp::saveFile() {
     LOG_INFO("SAVE FILE");
 }
@@ -110,8 +106,8 @@ void DrawApp::exportFile() {
 
 void DrawApp::mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
 const sf::Vector2u dimensionstoCopy) {
-    for (int x = 0; x < dimensionstoCopy.x; x++) {
-        for (int y = 0; y < dimensionstoCopy.y; y++) {
+    for (unsigned int x = 0; x < dimensionstoCopy.x; x++) {
+        for (unsigned int y = 0; y < dimensionstoCopy.y; y++) {
             const sf::Color pixel = exportedImage.getPixel(x, y);
             const sf::Color newPixel = c.getImage().getPixel(x, y);
             const float a = newPixel.a / 255.f;
