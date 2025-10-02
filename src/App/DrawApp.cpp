@@ -34,20 +34,33 @@ void DrawApp::init(int width, int height) {
 }
 
 void DrawApp::init(const std::string& filepath) {
-    calques.clear();
-    calques.emplace_back("Calque 1");
-    calques.back().createFromFile(filepath);
-    dimensions = calques.back().getImage().getSize();
+    try {
+        calques.clear();
+        calques.emplace_back("Calque 1");
+        calques.back().createFromFile(filepath);
+        dimensions = calques.back().getImage().getSize();
+    } catch (const std::exception &e) {
+        LOG_ERROR(e.what());
+        init(800, 600);
+    }
 }
 
 void DrawApp::newCalque(const std::string& name, sf::Color col) {
-    calques.emplace_back(name);
-    calques.back().createEmpty(dimensions.x, dimensions.y, col);
+    try {
+        calques.emplace_back(name);
+        calques.back().createEmpty(dimensions.x, dimensions.y, col);
+    } catch (const std::exception &e) {
+        LOG_ERROR(e.what());
+    }
 }
 
 void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
-    calques.emplace_back(name);
-    calques.back().createFromFile(filepath);
+    try {
+        calques.emplace_back(name);
+        calques.back().createFromFile(filepath);
+    } catch (const std::exception &e) {
+        LOG_ERROR(e.what());
+    }
 }
 
 void DrawApp::saveFile() {
