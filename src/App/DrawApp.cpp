@@ -1,5 +1,6 @@
 #include "App/DrawApp.hpp"
 #include "Logger.h"
+#include "Exceptions/DrawAppExceptions.hpp"
 
 namespace MyGimp {
 void DrawApp::draw(sf::RenderWindow& window) {
@@ -13,13 +14,17 @@ void DrawApp::update(float deltaTime) {
 }
 
 void DrawApp::handleInput(sf::Event &event) {
-    if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E
-        && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        exportFile();
-    }
-    if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::S
-        && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
-        saveFile();
+    try {
+        if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::E
+            && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            exportFile();
+        }
+        if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::S
+            && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            saveFile();
+        }
+    } catch (const std::exception &e) {
+        LOG_ERROR(e.what());
     }
 }
 
@@ -71,7 +76,7 @@ void DrawApp::exportFile() {
     sf::Image exportedImage;
 
     if (calques.size() <= 0)
-        return;
+        throw DrawApp_NoCalque("No calques to export");
     exportedImage.create(calques[0].getImage().getSize().x, calques[0].getImage().getSize().y);
     for (Calque &c : calques) {
         sf::Vector2u dimensionstoCopy = exportedImage.getSize();
@@ -81,7 +86,8 @@ void DrawApp::exportFile() {
             dimensionstoCopy.y = c.getImage().getSize().y;
         mixCalqueForExport(exportedImage, c, dimensionstoCopy);
     }
-    exportedImage.saveToFile("Saves/Img.jpg");
+    if (!exportedImage.saveToFile("Saves/Img.jpg"))
+        throw DrawApp_ExportError("Failed to export");
 }
 
 void DrawApp::mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
