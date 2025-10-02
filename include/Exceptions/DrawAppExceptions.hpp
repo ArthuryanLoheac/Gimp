@@ -8,7 +8,7 @@ namespace MyGimp {
 class DrawApp_Error : public Exception_A {
  public:
     explicit DrawApp_Error(const std::string &message)
-        : Exception_A("Calque Error: " + message) {}
+        : Exception_A("DrawApp Error: " + message) {}
 };
 
 class DrawApp_ExportError : public DrawApp_Error {
