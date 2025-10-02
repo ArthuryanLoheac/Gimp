@@ -12,7 +12,7 @@ class DrawApp {
 
     void draw(sf::RenderWindow &);
     void update(float deltaTime);
-    void handleInput();
+    void handleInput(sf::Event &event);
 
     sf::Vector2u getDimensions() const;
 
@@ -23,5 +23,10 @@ class DrawApp {
  private:
     std::vector<Calque> calques;
     sf::Vector2u dimensions;
+
+    void saveFile();
+    void exportFile();
+    void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
+        const sf::Vector2u dimensionstoCopy);
 };
 }  // namespace MyGimp

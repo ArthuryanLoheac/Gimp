@@ -48,3 +48,4 @@ MyGimp
 .vscode/
 venv
 *.sh
+Saves/*

@@ -23,7 +23,7 @@ const std::string& Calque::getName() const {
     return name;
 }
 
-sf::Image& Calque::getImage() {
+sf::Image Calque::getImage() const {
     return image;
 }
 

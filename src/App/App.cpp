@@ -19,6 +19,9 @@ void App::init() {
         + "x" + std::to_string(HEIGHT) + ")");
     window.setFramerateLimit(60);
     window.setVerticalSyncEnabled(true);
+    drawApp.init("tests/Images/Img.jpg");
+    drawApp.newCalque("Calque 2", sf::Color(0, 0, 255, 50));
+    drawApp.newCalque("Calque 3", sf::Color(255, 0, 0, 50));
     LOG_INFO("Window initialization completed");
 }
 
@@ -33,7 +36,7 @@ void App::processEvents() {
             LOG_DEBUG("Escape key pressed - closing application");
             window.close();
         } else {
-            drawApp.handleInput();
+            drawApp.handleInput(event);
         }
     }
 }
