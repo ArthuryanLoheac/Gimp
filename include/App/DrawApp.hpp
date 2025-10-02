@@ -26,6 +26,7 @@ class DrawApp {
  private:
     std::vector<Calque> calques;
     sf::Vector2u dimensions;
+    float zoomLevel = 1.0f;
 
     void saveFile();
     void exportFile();

@@ -12,7 +12,7 @@
 namespace MyGimp {
 void DrawApp::draw(sf::RenderWindow& window) {
     for (auto &calque : calques) {
-        calque.draw(window);
+        calque.draw(window, zoomLevel);
     }
 }
 
@@ -31,6 +31,13 @@ void DrawApp::handleInput(sf::Event &event) {
             event.key.code == sf::Keyboard::S
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
             saveFile();
+        }
+        if (event.type == sf::Event::MouseWheelScrolled) {
+            if (event.mouseWheelScroll.delta > 0)
+                zoomLevel += 0.1f;
+            else if (event.mouseWheelScroll.delta < 0)
+                zoomLevel -= 0.1f;
+            zoomLevel = std::max(0.1f, std::min(zoomLevel, 5.0f));
         }
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());

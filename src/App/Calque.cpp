@@ -31,10 +31,11 @@ const sf::Image& Calque::getImage() const {
     return image;
 }
 
-void Calque::draw(sf::RenderWindow& window) {
+void Calque::draw(sf::RenderWindow& window, float zoomLevel) {
     if (visible) {
         texture.loadFromImage(image);
         sprite.setTexture(texture);
+        sprite.setScale(zoomLevel, zoomLevel);
         window.draw(sprite);
     }
 }
