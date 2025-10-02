@@ -82,7 +82,7 @@ jobs:
         run: |
           cmake -S . -B build
           cmake --build build
-          cmake --build build --target test
+          ctest --test-dir build --output-on-failure
   push_to_mirror:
     needs: run_tests_cmake
     runs-on: ubuntu-latest
