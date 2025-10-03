@@ -23,6 +23,7 @@ class DrawApp {
     void newCalque(const std::string& name, const std::string& filepath);
     std::vector<Calque>& getCalques();
 
+    bool isDragging() const { return dragging; }
  private:
     std::vector<Calque> calques;
     sf::Vector2u dimensions;
