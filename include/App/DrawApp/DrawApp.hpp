@@ -11,7 +11,7 @@ class DrawApp {
     ~DrawApp() = default;
 
     void draw(sf::RenderWindow &);
-    void update(float deltaTime);
+    void update(float deltaTime, sf::RenderWindow& window);
     void handleInput(sf::Event &event);
 
     sf::Vector2u getDimensions() const;
@@ -23,9 +23,17 @@ class DrawApp {
     void newCalque(const std::string& name, const std::string& filepath);
     std::vector<Calque>& getCalques();
 
+    bool isDragging() const { return dragging; }
  private:
     std::vector<Calque> calques;
     sf::Vector2u dimensions;
+    float zoom = 1.0f;
+    sf::Vector2f viewOffset = {0.0f, 0.0f};
+    bool dragging = false;
+    sf::Vector2i lastMousePos;
+
+    void handleDragging(sf::Event &event);
+    void handleZooming(sf::Event &event);
 
     void saveFile();
     void exportFile();

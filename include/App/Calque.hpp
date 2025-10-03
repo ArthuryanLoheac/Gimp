@@ -13,7 +13,7 @@ class Calque {
         sf::Color col = sf::Color::Transparent);
     void createFromFile(const std::string& filepath);
 
-    void draw(sf::RenderWindow& window);
+    void draw(sf::RenderWindow& window, float zoom, sf::Vector2f pos);
 
     // Getters and Setters
     void setVisible(bool isVisible);

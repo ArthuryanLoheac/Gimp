@@ -18,7 +18,9 @@ void App::init() {
     LOG_INFO("Window created successfully (" + std::to_string(WIDTH)
         + "x" + std::to_string(HEIGHT) + ")");
     window.setFramerateLimit(60);
+    resetCursor();
     window.setVerticalSyncEnabled(true);
+    window.setMouseCursorVisible(true);
     drawApp.init("tests/Images/Img.jpg");
     drawApp.newCalque("Calque 2", sf::Color(0, 0, 255, 50));
     drawApp.newCalque("Calque 3", sf::Color(255, 0, 0, 50));
@@ -48,7 +50,8 @@ void App::close() {
 
 void App::update(float deltaTime) {
     // Update game logic here
-    drawApp.update(deltaTime);
+    drawApp.update(deltaTime, window);
+    updateCursor();
 }
 
 void App::render() {
@@ -56,4 +59,26 @@ void App::render() {
     drawApp.draw(window);
     window.display();
 }
+
+void App::setCursor(const sf::Cursor::Type type) {
+    if (cursor.loadFromSystem(type)) {
+        window.setMouseCursor(cursor);
+    } else {
+        LOG_ERROR("Failed to load cursor of type " + std::to_string(type));
+    }
+}
+
+void App::resetCursor() {
+    if (cursor.loadFromSystem(sf::Cursor::Arrow))
+        window.setMouseCursor(cursor);
+}
+
+void App::updateCursor() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+        setCursor(sf::Cursor::Hand);
+    } else {
+        resetCursor();
+    }
+}
+
 }  // namespace MyGimp
