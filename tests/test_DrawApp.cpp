@@ -1,5 +1,5 @@
 #include <criterion/criterion.h>
-#include "App/DrawApp.hpp"
+#include "App/DrawApp/DrawApp.hpp"
 
 Test(DrawApp, init_with_dimensions) {
     MyGimp::DrawApp app;

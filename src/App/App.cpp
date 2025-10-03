@@ -48,7 +48,7 @@ void App::close() {
 
 void App::update(float deltaTime) {
     // Update game logic here
-    drawApp.update(deltaTime);
+    drawApp.update(deltaTime, window);
 }
 
 void App::render() {
