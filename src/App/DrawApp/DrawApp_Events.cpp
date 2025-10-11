@@ -25,6 +25,7 @@ void DrawApp::handleInput(sf::Event &event) {
         }
         handleZooming(event);
         handleDragging(event);
+        topBar.handleInput(event);
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }

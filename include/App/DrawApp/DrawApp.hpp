@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 #include <SFML/Graphics.hpp>
+
 #include "App/Calque.hpp"
+#include "App/TopBar.hpp"
 
 
 namespace MyGimp {
@@ -32,6 +34,7 @@ class DrawApp {
     sf::Vector2f viewOffset = {0.0f, 0.0f};
     bool dragging = false;
     sf::Vector2i lastMousePos;
+    TopBar topBar;
 
     void handleDragging(sf::Event &event);
     void handleZooming(sf::Event &event);

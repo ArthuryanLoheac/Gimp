@@ -13,5 +13,6 @@ void DrawApp::draw(sf::RenderWindow& window) {
     for (auto &calque : calques) {
         calque.draw(window, zoom, pos);
     }
+    topBar.draw(window);
 }
 }  // namespace MyGimp
