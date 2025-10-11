@@ -2,10 +2,9 @@
 #include "Logger.h"
 
 namespace MyGimp {
-TopButton::TopButton(std::string title) {
+TopButton::TopButton(std::string title, std::vector<std::string> items) {
     background.setSize(sf::Vector2f(title.length() * 10 + 20, 30));
-    background.setFillColor(sf::Color::Blue);
-    background.setPosition(100, 100);
+    background.setFillColor(sf::Color(50, 50, 50));
 
     if (!font.loadFromFile("Assets/Fonts/Inter.ttf")) {
         Logger::error("Failed to load font for TopButton");
@@ -15,20 +14,71 @@ TopButton::TopButton(std::string title) {
     text.setString(title);
     text.setCharacterSize(16);
     text.setFillColor(sf::Color::White);
-    text.setPosition(110, 110);
+
+    for (const auto &item : items) {
+        std::shared_ptr<TopButtonsDropDown> dropDown = std::make_shared<TopButtonsDropDown>(item);
+        dropDown->setState(TopButtonsDropDown::stateButton::HIDE);
+        buttonsDropDown.push_back(dropDown);
+    }
+    setPosition(100, 100);
 }
 
 void TopButton::draw(sf::RenderWindow &window) {
+    if (currentState == HOVER || isDown) {
+        background.setFillColor(sf::Color(70, 70, 70));
+    } else {
+        background.setFillColor(sf::Color(50, 50, 50));
+    }
+
     window.draw(background);
     window.draw(text);
+    for (auto &dropDown : buttonsDropDown) {
+        dropDown->draw(window);
+    }
 }
 
 void TopButton::handleInput(const sf::Event &event) {
+    if (event.type == sf::Event::MouseMoved) {
+        sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
+        if (background.getGlobalBounds().contains(mousePos)) {
+            currentState = HOVER;
+        } else {
+            currentState = IDLE;
+        }
+    }
+    if (event.type == sf::Event::MouseButtonPressed) {
+        if (event.mouseButton.button == sf::Mouse::Left) {
+            sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
+            if (background.getGlobalBounds().contains(mousePos)) {
+                isDown = !isDown;
+                activateDropDowns(isDown);
+            } else {
+                activateDropDowns(false);
+                isDown = false;
+            }
+        }
+    }
+}
+
+void TopButton::activateDropDowns(bool activate) {
+    for (auto &dropDown : buttonsDropDown) {
+        if (activate) {
+            dropDown->setState(TopButtonsDropDown::stateButton::IDLE);
+        } else {
+            dropDown->setState(TopButtonsDropDown::stateButton::HIDE);
+        }
+    }
 }
 
 void TopButton::setPosition(float x, float y) {
     background.setPosition(x, y);
     text.setPosition(x + 10, y + 5);
+
+    int newY = y + background.getSize().y;
+    for (const auto &item : buttonsDropDown) {
+        item->setPosition(background.getPosition().x, newY);
+        newY += item->getHeight();
+    }
 }
 
 float TopButton::getWidth() const {

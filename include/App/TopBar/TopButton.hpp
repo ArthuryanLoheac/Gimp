@@ -2,10 +2,16 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
+#include <vector>
+#include <memory>
+#include "App/TopBar/TopButtonsDropDown.hpp"
+
 namespace MyGimp {
 class TopButton {
  public:
-    TopButton(std::string title = "Button");
+    enum stateButton { IDLE, HOVER };
+
+    TopButton(std::string title = "Button", std::vector<std::string> items = {});
     ~TopButton() = default;
     void draw(sf::RenderWindow &window);
     void handleInput(const sf::Event &event);
@@ -14,8 +20,13 @@ class TopButton {
     float getWidth() const;
 
  private:
+    void activateDropDowns(bool activate);
+
+    bool isDown = false;
+    stateButton currentState;
     sf::RectangleShape background;
     sf::Text text;
     sf::Font font;
+    std::vector<std::shared_ptr<TopButtonsDropDown>> buttonsDropDown;
 };
 }  // namespace MyGimp

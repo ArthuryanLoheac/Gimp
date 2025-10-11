@@ -8,9 +8,8 @@ TopBar::TopBar() {
     background.setPosition(0, 0);
 
     buttons.clear();
-    buttons.push_back(std::make_shared<TopButton>("File"));
-    buttons.push_back(std::make_shared<TopButton>("Edit"));
-    buttons.push_back(std::make_shared<TopButton>("View"));
+    buttons.push_back(std::make_shared<TopButton>("File", std::vector<std::string>{"New", "Open", "Save", "Exit"}));
+    buttons.push_back(std::make_shared<TopButton>("Edit", std::vector<std::string>{"Undo", "Redo", "Cut", "Copy", "Paste"}));
 
     float x = 10.0f;
 
