@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <vector>
+#include <functional>
 #include <memory>
 #include "App/TopBar/TopButtonsDropDown.hpp"
 
@@ -11,7 +12,7 @@ class TopButton {
  public:
     enum stateButton { IDLE, HOVER };
 
-    TopButton(std::string title = "Button", std::vector<std::string> items = {});
+    TopButton(std::string title = "Button", std::vector<std::pair<std::string, std::function<void()>>> items = {});
     ~TopButton() = default;
     void draw(sf::RenderWindow &window);
     void handleInput(const sf::Event &event);

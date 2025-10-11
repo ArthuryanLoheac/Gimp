@@ -2,7 +2,7 @@
 #include "Logger.h"
 
 namespace MyGimp {
-TopButton::TopButton(std::string title, std::vector<std::string> items) {
+TopButton::TopButton(std::string title, std::vector<std::pair<std::string, std::function<void()>>> items) {
     background.setSize(sf::Vector2f(title.length() * 10 + 20, 30));
     background.setFillColor(sf::Color(50, 50, 50));
 
@@ -12,11 +12,11 @@ TopButton::TopButton(std::string title, std::vector<std::string> items) {
 
     text.setFont(font);
     text.setString(title);
-    text.setCharacterSize(16);
+        text.setCharacterSize(16);
     text.setFillColor(sf::Color::White);
 
     for (const auto &item : items) {
-        std::shared_ptr<TopButtonsDropDown> dropDown = std::make_shared<TopButtonsDropDown>(item);
+        std::shared_ptr<TopButtonsDropDown> dropDown = std::make_shared<TopButtonsDropDown>(item.first, item.second);
         dropDown->setState(TopButtonsDropDown::stateButton::HIDE);
         buttonsDropDown.push_back(dropDown);
     }
@@ -40,11 +40,14 @@ void TopButton::draw(sf::RenderWindow &window) {
 void TopButton::handleInput(const sf::Event &event) {
     if (event.type == sf::Event::MouseMoved) {
         sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
-        if (background.getGlobalBounds().contains(mousePos)) {
+        if (background.getGlobalBounds().contains(mousePos))
             currentState = HOVER;
-        } else {
+        else
             currentState = IDLE;
-        }
+    }
+    if (isDown) {
+        for (auto &dropDown : buttonsDropDown)
+            dropDown->handleInput(event);
     }
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
@@ -53,8 +56,8 @@ void TopButton::handleInput(const sf::Event &event) {
                 isDown = !isDown;
                 activateDropDowns(isDown);
             } else {
-                activateDropDowns(false);
                 isDown = false;
+                activateDropDowns(false);
             }
         }
     }
@@ -62,11 +65,10 @@ void TopButton::handleInput(const sf::Event &event) {
 
 void TopButton::activateDropDowns(bool activate) {
     for (auto &dropDown : buttonsDropDown) {
-        if (activate) {
+        if (activate)
             dropDown->setState(TopButtonsDropDown::stateButton::IDLE);
-        } else {
+        else
             dropDown->setState(TopButtonsDropDown::stateButton::HIDE);
-        }
     }
 }
 

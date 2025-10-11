@@ -8,8 +8,14 @@ TopBar::TopBar() {
     background.setPosition(0, 0);
 
     buttons.clear();
-    buttons.push_back(std::make_shared<TopButton>("File", std::vector<std::string>{"New", "Open", "Save", "Exit"}));
-    buttons.push_back(std::make_shared<TopButton>("Edit", std::vector<std::string>{"Undo", "Redo", "Cut", "Copy", "Paste"}));
+    buttons.push_back(std::make_shared<TopButton>("File", std::vector<std::pair<std::string, std::function<void()>>>{
+        {"New", []() { Logger::info("New File action triggered"); }},
+        {"Open", []() { Logger::info("Open File action triggered"); }},
+        {"Save", []() { Logger::info("Save File action triggered"); }},
+        {"Exit", []() { Logger::info("Exit action triggered"); }} }));
+    buttons.push_back(std::make_shared<TopButton>("Edit", std::vector<std::pair<std::string, std::function<void()>>>{
+        {"Undo", []() { Logger::info("Undo action triggered"); }},
+        {"Redo", []() { Logger::info("Redo action triggered"); }} }));
 
     float x = 10.0f;
 
