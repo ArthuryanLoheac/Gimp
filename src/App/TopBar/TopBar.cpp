@@ -13,6 +13,7 @@ TopBar::TopBar() {
     buttons.clear();
     buttons.push_back(std::make_shared<TopButton>("File",
         std::vector<std::pair<std::string, std::string>>{
+                    {"New", "new_file"},
                     {"Save", "save_file"},
                     {"Export", "export_file"}}));
 

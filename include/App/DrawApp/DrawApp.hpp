@@ -45,5 +45,6 @@ class DrawApp {
     void exportFile();
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
         const sf::Vector2u dimensionstoCopy);
+    void newFile();
 };
 }  // namespace MyGimp

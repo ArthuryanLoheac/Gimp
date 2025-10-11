@@ -10,6 +10,8 @@ void DrawApp::handleCommand(const std::string& command) {
         saveFile();
     } else if (command == "export_file") {
         exportFile();
+    } else if (command == "new_file") {
+        newFile();
     }
 }
 }  // namespace MyGimp

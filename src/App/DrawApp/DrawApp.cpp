@@ -50,6 +50,12 @@ void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
     }
 }
 
+void DrawApp::newFile() {
+    calques.clear();
+    dimensions = sf::Vector2u(800, 600);
+    newCalque("Calque 1", sf::Color::White);
+}
+
 // Getters & Setters
 
 std::vector<Calque>& DrawApp::getCalques() {
