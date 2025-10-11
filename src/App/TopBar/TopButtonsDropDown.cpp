@@ -1,3 +1,6 @@
+#include <iostream>
+#include <string>
+
 #include "App/TopBar/TopButtonsDropDown.hpp"
 
 namespace MyGimp {

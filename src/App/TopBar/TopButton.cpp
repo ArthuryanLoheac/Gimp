@@ -1,8 +1,13 @@
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "App/TopBar/TopButton.hpp"
 #include "Logger.h"
 
 namespace MyGimp {
-TopButton::TopButton(std::string title, std::vector<std::pair<std::string, std::string>> items) {
+TopButton::TopButton(std::string title,
+std::vector<std::pair<std::string, std::string>> items) {
     background.setSize(sf::Vector2f(title.length() * 10 + 20, 30));
     background.setFillColor(sf::Color(50, 50, 50));
 
@@ -16,7 +21,8 @@ TopButton::TopButton(std::string title, std::vector<std::pair<std::string, std::
     text.setFillColor(sf::Color::White);
 
     for (const auto &item : items) {
-        std::shared_ptr<TopButtonsDropDown> dropDown = std::make_shared<TopButtonsDropDown>(item.first, item.second);
+        std::shared_ptr<TopButtonsDropDown> dropDown =
+            std::make_shared<TopButtonsDropDown>(item.first, item.second);
         dropDown->setState(TopButtonsDropDown::stateButton::HIDE);
         buttonsDropDown.push_back(dropDown);
     }
@@ -32,9 +38,8 @@ void TopButton::draw(sf::RenderWindow &window) {
 
     window.draw(background);
     window.draw(text);
-    for (auto &dropDown : buttonsDropDown) {
+    for (auto &dropDown : buttonsDropDown)
         dropDown->draw(window);
-    }
 }
 
 std::string TopButton::handleInput(const sf::Event &event) {
@@ -48,7 +53,7 @@ std::string TopButton::handleInput(const sf::Event &event) {
             currentState = IDLE;
     }
     if (isDown) {
-        for (auto &dropDown : buttonsDropDown){
+        for (auto &dropDown : buttonsDropDown) {
             std::string code = dropDown->handleInput(event);
             if (code != "") codeReturn = code;
         }

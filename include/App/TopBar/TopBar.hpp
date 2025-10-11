@@ -1,10 +1,10 @@
 #pragma once
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <vector>
 #include <memory>
 #include <string>
 
+#include <SFML/Graphics.hpp>
 #include "App/TopBar/TopButton.hpp"
 
 namespace MyGimp {

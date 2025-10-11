@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+
 #include "App/TopBar/TopBar.hpp"
 #include "Logger.h"
 

@@ -1,10 +1,11 @@
 #pragma once
 #include <iostream>
-#include <SFML/Graphics.hpp>
-
 #include <vector>
 #include <functional>
 #include <memory>
+#include <string>
+
+#include <SFML/Graphics.hpp>
 #include "App/TopBar/TopButtonsDropDown.hpp"
 
 namespace MyGimp {
@@ -12,7 +13,8 @@ class TopButton {
  public:
     enum stateButton { IDLE, HOVER };
 
-    TopButton(std::string title = "Button", std::vector<std::pair<std::string, std::string>> items = {});
+    explicit TopButton(std::string title = "Button",
+        std::vector<std::pair<std::string, std::string>> items = {});
     ~TopButton() = default;
     void draw(sf::RenderWindow &window);
     std::string handleInput(const sf::Event &event);

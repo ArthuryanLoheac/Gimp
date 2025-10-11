@@ -1,3 +1,5 @@
+#include <string>
+
 #include "Logger.h"
 
 #include "App/DrawApp/DrawApp.hpp"
