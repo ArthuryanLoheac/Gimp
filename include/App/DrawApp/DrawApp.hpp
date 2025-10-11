@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "App/Calque.hpp"
-#include "App/TopBar.hpp"
+#include "App/TopBar/TopBar.hpp"
 
 
 namespace MyGimp {

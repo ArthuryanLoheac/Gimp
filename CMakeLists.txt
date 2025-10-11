@@ -60,6 +60,33 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
 )
 
+# --- Ensure Assets are available in the build/runtime directories ---
+set(ASSETS_SOURCE_DIR "${CMAKE_SOURCE_DIR}/Assets")
+set(ASSETS_BINARY_DIR "${CMAKE_BINARY_DIR}/Assets")
+if(EXISTS ${ASSETS_SOURCE_DIR})
+    message(STATUS "Assets directory found at ${ASSETS_SOURCE_DIR}; configuring copy to ${ASSETS_BINARY_DIR}")
+
+    # Create binary assets directory and copy all files at configure time preserving structure
+    file(MAKE_DIRECTORY ${ASSETS_BINARY_DIR})
+    file(GLOB_RECURSE ASSET_FILES RELATIVE ${ASSETS_SOURCE_DIR} "${ASSETS_SOURCE_DIR}/*")
+    foreach(_asset IN LISTS ASSET_FILES)
+        get_filename_component(_asset_dir "${_asset}" DIRECTORY)
+        if(NOT "${_asset_dir}" STREQUAL "")
+            file(MAKE_DIRECTORY "${ASSETS_BINARY_DIR}/${_asset_dir}")
+        endif()
+        configure_file("${ASSETS_SOURCE_DIR}/${_asset}" "${ASSETS_BINARY_DIR}/${_asset}" COPYONLY)
+    endforeach()
+
+    # Also copy assets to the runtime output directory after building the main target
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${ASSETS_SOURCE_DIR}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets"
+        COMMENT "Copying Assets to runtime directory for ${PROJECT_NAME}"
+    )
+else()
+    message(STATUS "No Assets directory found at ${ASSETS_SOURCE_DIR}; skipping asset copy")
+endif()
+
 # Unit Tests Configuration
 if(CRITERION_FOUND)
     message(STATUS "Criterion found - enabling unit tests")
