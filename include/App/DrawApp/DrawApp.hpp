@@ -24,6 +24,7 @@ class DrawApp {
     std::vector<Calque>& getCalques();
 
     bool isDragging() const { return dragging; }
+
  private:
     std::vector<Calque> calques;
     sf::Vector2u dimensions;
