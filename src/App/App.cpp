@@ -20,7 +20,6 @@ void App::init() {
     window.setFramerateLimit(60);
     resetCursor();
     window.setVerticalSyncEnabled(true);
-    window.setMouseCursorVisible(true);
     drawApp.init("tests/Images/Img.jpg");
     drawApp.newCalque("Calque 2", sf::Color(0, 0, 255, 50));
     drawApp.newCalque("Calque 3", sf::Color(255, 0, 0, 50));
@@ -51,7 +50,6 @@ void App::close() {
 void App::update(float deltaTime) {
     // Update game logic here
     drawApp.update(deltaTime, window);
-    updateCursor();
 }
 
 void App::render() {
@@ -71,14 +69,6 @@ void App::setCursor(const sf::Cursor::Type type) {
 void App::resetCursor() {
     if (cursor.loadFromSystem(sf::Cursor::Arrow))
         window.setMouseCursor(cursor);
-}
-
-void App::updateCursor() {
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        setCursor(sf::Cursor::Hand);
-    } else {
-        resetCursor();
-    }
 }
 
 }  // namespace MyGimp

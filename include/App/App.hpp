@@ -18,7 +18,6 @@ class App {
  private:
     void processEvents();
     void update(float deltaTime);
-    void updateCursor();
     void render();
 
     void setCursor(const sf::Cursor::Type type);
