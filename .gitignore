@@ -43,7 +43,10 @@
 # build directory
 build/
 MyGimp
+MyGimp_tests
 
 # Visual Studio Code
 .vscode/
-
+venv
+*.sh
+Saves/*
