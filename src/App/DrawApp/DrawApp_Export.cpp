@@ -10,7 +10,7 @@ namespace MyGimp {
 void DrawApp::exportFile() {
     sf::Image exportedImage;
 
-    if (calques.size() <= 0)
+    if (calques.empty())
         throw DrawApp_NoCalque("No calques to export");
     exportedImage.create(calques[0].getImage().getSize().x,
                         calques[0].getImage().getSize().y);
