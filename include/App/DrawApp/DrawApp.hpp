@@ -36,6 +36,8 @@ class DrawApp {
     sf::Vector2i lastMousePos;
     TopBar topBar;
 
+    void handleCommand(const std::string& command);
+
     void handleDragging(sf::Event &event);
     void handleZooming(sf::Event &event);
 

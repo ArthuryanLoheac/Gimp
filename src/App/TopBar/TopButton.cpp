@@ -2,7 +2,7 @@
 #include "Logger.h"
 
 namespace MyGimp {
-TopButton::TopButton(std::string title, std::vector<std::pair<std::string, std::function<void()>>> items) {
+TopButton::TopButton(std::string title, std::vector<std::pair<std::string, std::string>> items) {
     background.setSize(sf::Vector2f(title.length() * 10 + 20, 30));
     background.setFillColor(sf::Color(50, 50, 50));
 
@@ -37,7 +37,9 @@ void TopButton::draw(sf::RenderWindow &window) {
     }
 }
 
-void TopButton::handleInput(const sf::Event &event) {
+std::string TopButton::handleInput(const sf::Event &event) {
+    std::string codeReturn = "";
+
     if (event.type == sf::Event::MouseMoved) {
         sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
         if (background.getGlobalBounds().contains(mousePos))
@@ -46,8 +48,10 @@ void TopButton::handleInput(const sf::Event &event) {
             currentState = IDLE;
     }
     if (isDown) {
-        for (auto &dropDown : buttonsDropDown)
-            dropDown->handleInput(event);
+        for (auto &dropDown : buttonsDropDown){
+            std::string code = dropDown->handleInput(event);
+            if (code != "") codeReturn = code;
+        }
     }
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
@@ -61,6 +65,7 @@ void TopButton::handleInput(const sf::Event &event) {
             }
         }
     }
+    return codeReturn;
 }
 
 void TopButton::activateDropDowns(bool activate) {

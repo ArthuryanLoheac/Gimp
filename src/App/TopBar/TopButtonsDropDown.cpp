@@ -1,15 +1,14 @@
 #include "App/TopBar/TopButtonsDropDown.hpp"
 
 namespace MyGimp {
-TopButtonsDropDown::TopButtonsDropDown(std::string title, std::function<void()> onClick) {
+TopButtonsDropDown::TopButtonsDropDown(std::string title, std::string code) {
     background.setSize(sf::Vector2f(200, 30));
     background.setFillColor(sf::Color(70, 70, 70));
     background.setPosition(200, 100);
     currentState = IDLE;
 
-    if (!font.loadFromFile("Assets/Fonts/Inter.ttf")) {
+    if (!font.loadFromFile("Assets/Fonts/Inter.ttf"))
         std::cerr << "Failed to load font for TopButtonsDropDown" << std::endl;
-    }
 
     text.setFont(font);
     text.setString(title);
@@ -17,7 +16,7 @@ TopButtonsDropDown::TopButtonsDropDown(std::string title, std::function<void()> 
     text.setFillColor(sf::Color::White);
     text.setPosition(210, 110);
 
-    this->onClick = onClick;
+    this->code = code;
 }
 
 void TopButtonsDropDown::draw(sf::RenderWindow &window) {
@@ -34,27 +33,28 @@ void TopButtonsDropDown::draw(sf::RenderWindow &window) {
     window.draw(text);
 }
 
-void TopButtonsDropDown::handleInput(const sf::Event &event) {
+std::string TopButtonsDropDown::handleInput(const sf::Event &event) {
+    std::string codeReturn = "";
+
     if (event.type == sf::Event::MouseMoved) {
         sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
-        if (background.getGlobalBounds().contains(mousePos)) {
+        if (background.getGlobalBounds().contains(mousePos))
             currentState = HOVER;
-        } else {
+        else
             currentState = IDLE;
-        }
     }
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
             sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
             if (background.getGlobalBounds().contains(mousePos)) {
                 currentState = ACTIVE;
-                if (onClick)
-                    onClick();
+                codeReturn = code;
             } else {
                 currentState = IDLE;
             }
         }
     }
+    return codeReturn;
 }
 
 void TopButtonsDropDown::setPosition(float x, float y) {
@@ -72,6 +72,10 @@ void TopButtonsDropDown::setState(stateButton state) {
 
 float TopButtonsDropDown::getHeight() const {
     return background.getSize().y;
+}
+
+std::string TopButtonsDropDown::getCode() const {
+    return code;
 }
 
 }  // namespace MyGimp

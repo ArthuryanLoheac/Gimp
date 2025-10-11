@@ -25,7 +25,9 @@ void DrawApp::handleInput(sf::Event &event) {
         }
         handleZooming(event);
         handleDragging(event);
-        topBar.handleInput(event);
+        std::string topBarCode = topBar.handleInput(event);
+        if (topBarCode != "")
+            handleCommand(topBarCode);
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }
