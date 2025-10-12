@@ -1,5 +1,8 @@
+#include <string>
+#include <vector>
+
 #include "App/CalqueMenu/CalqueMenu.hpp"
-#include "const.hpp"
+#include "App/const.hpp"
 
 namespace MyGimp {
 CalqueMenu::CalqueMenu() {

@@ -1,6 +1,6 @@
 #include "App/App.hpp"
-#include "Logger.hpp"
-#include "const.hpp"
+#include "App/Logger.hpp"
+#include "App/const.hpp"
 
 namespace MyGimp {
 void App::run() {

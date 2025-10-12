@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "App/TopBar/TopBar.hpp"
-#include "Logger.hpp"
+#include "App/Logger.hpp"
 
 namespace MyGimp {
 TopBar::TopBar() {

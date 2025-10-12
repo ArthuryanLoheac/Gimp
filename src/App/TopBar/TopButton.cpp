@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "App/TopBar/TopButton.hpp"
-#include "Logger.hpp"
+#include "App/Logger.hpp"
 
 namespace MyGimp {
 TopButton::TopButton(std::string title,
