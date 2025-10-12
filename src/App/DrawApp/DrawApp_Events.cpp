@@ -26,7 +26,7 @@ void DrawApp::handleInput(sf::Event &event) {
         handleZooming(event);
         handleDragging(event);
         handleCommandCalques(calqueMenu.handleInput(event));
-        handleCommandFile(topBar.handleInput(event));
+        handleCommand(topBar.handleInput(event));
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }

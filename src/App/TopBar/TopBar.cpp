@@ -16,6 +16,9 @@ TopBar::TopBar() {
                     {"New", "new_file"},
                     {"Save", "save_file"},
                     {"Export", "export_file"}}));
+    buttons.push_back(std::make_shared<TopButton>("Calque",
+        std::vector<std::pair<std::string, std::string>>{
+                    {"New Calque", "add_calque"}}));
 
     float x = 10.0f;
 

@@ -1,8 +1,9 @@
+#include <string>
+
 #include "App/CalqueMenu/CalqueButton.hpp"
 
 namespace MyGimp {
-CalqueButton::CalqueButton(std::string name)
-{
+CalqueButton::CalqueButton(std::string name) {
     calqueButton.init(name, "calque_button", 230);
     calqueButton.setColor(sf::Color(50, 50, 50));
 }

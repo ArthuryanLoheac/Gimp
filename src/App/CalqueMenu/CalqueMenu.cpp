@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "App/CalqueMenu/CalqueMenu.hpp"
 #include "App/const.hpp"
@@ -9,7 +10,8 @@ const int MENU_HEIGHT = 300;
 
 namespace MyGimp {
 CalqueMenu::CalqueMenu() {
-    addCalqueButton.setPosition(WIDTH - MENU_WIDTH + 10, HEIGHT - MENU_HEIGHT + 10);
+    addCalqueButton.setPosition(WIDTH - MENU_WIDTH + 10,
+        HEIGHT - MENU_HEIGHT + 10);
     addCalqueButton.setState(Button::IDLE);
 
     background.setSize(sf::Vector2f(MENU_WIDTH, MENU_HEIGHT));
@@ -29,7 +31,8 @@ void CalqueMenu::update(float deltaTime, std::vector<Calque> &calques) {
     for (const auto &calque : calques) {
         std::shared_ptr<CalqueButton> button =
             std::make_shared<CalqueButton>(calque.getName());
-        button->setPosition(WIDTH - MENU_WIDTH + 10, HEIGHT - MENU_HEIGHT + 50 + calqueButtons.size() * 35);
+        button->setPosition(WIDTH - MENU_WIDTH + 10,
+            HEIGHT - MENU_HEIGHT + 50 + calqueButtons.size() * 35);
         calqueButtons.emplace_back(button);
     }
 }
