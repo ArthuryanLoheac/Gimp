@@ -31,6 +31,10 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         }
     } else if (command == "delete_calque") {
         deleteCalque();
+    } else if (command == "move_calque_up") {
+        moveCalquePos(true);
+    } else if (command == "move_calque_down") {
+        moveCalquePos(false);
     }
 }
 

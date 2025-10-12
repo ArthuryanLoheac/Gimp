@@ -17,6 +17,18 @@ CalqueMenu::CalqueMenu() {
 
     deleteCalqueButton.setPosition(x, HEIGHT - MENU_HEIGHT + 10);
     deleteCalqueButton.setState(Button::IDLE);
+    x += deleteCalqueButton.getWidth() + 10;
+
+    arrowUpButton.initIcon("Assets/Icons/arrow_up.png", "move_calque_up", 20);
+    arrowUpButton.setPosition(x, HEIGHT - MENU_HEIGHT + 10);
+    arrowUpButton.setState(Button::IDLE);
+    x += arrowUpButton.getWidth() + 10;
+
+    arrowDownButton.initIcon("Assets/Icons/arrow_down.png",
+        "move_calque_down", 20);
+    arrowDownButton.setPosition(x, HEIGHT - MENU_HEIGHT + 10);
+    arrowDownButton.setState(Button::IDLE);
+    x += arrowDownButton.getWidth() + 10;
 
     background.setSize(sf::Vector2f(MENU_WIDTH, MENU_HEIGHT));
     background.setFillColor(sf::Color(50, 50, 50, 200));
@@ -27,6 +39,8 @@ void CalqueMenu::draw(sf::RenderWindow &window) {
     window.draw(background);
     addCalqueButton.draw(window);
     deleteCalqueButton.draw(window);
+    arrowUpButton.draw(window);
+    arrowDownButton.draw(window);
     int id = 0;
     for (auto &button : calqueButtons) {
         button->setActive(id == actualCalqueId);
@@ -52,6 +66,8 @@ std::string CalqueMenu::handleInput(const sf::Event &event, bool &consumed) {
 
     codeReturn += addCalqueButton.handleInput(event, consumed);
     codeReturn += deleteCalqueButton.handleInput(event, consumed);
+    codeReturn += arrowUpButton.handleInput(event, consumed);
+    codeReturn += arrowDownButton.handleInput(event, consumed);
     for (size_t i = 0; i < calqueButtons.size(); i++) {
         std::string code = calqueButtons[i]->handleInput(event, consumed);
         if (code != "")

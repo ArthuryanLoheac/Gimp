@@ -27,6 +27,7 @@ class DrawApp {
     std::vector<Calque>& getCalques();
     bool deleteCalque();
     bool deleteCalque(int id);
+    void moveCalquePos(bool up);
     bool isDragging() const { return dragging; }
 
  private:

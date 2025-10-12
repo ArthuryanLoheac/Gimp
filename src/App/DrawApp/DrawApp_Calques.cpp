@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include "App/Logger.hpp"
@@ -49,6 +50,20 @@ bool DrawApp::deleteCalque(int id) {
         return true;
     }
     return false;
+}
+
+void DrawApp::moveCalquePos(bool up) {
+    if (actualCalqueId < 0 ||
+        actualCalqueId >= static_cast<int>(calques.size()))
+        return;
+    if (up && actualCalqueId > 0) {
+        std::swap(calques[actualCalqueId], calques[actualCalqueId - 1]);
+        actualCalqueId = actualCalqueId - 1;
+    } else if (!up && actualCalqueId < static_cast<int>(calques.size()) - 1) {
+        std::swap(calques[actualCalqueId], calques[actualCalqueId + 1]);
+        actualCalqueId = actualCalqueId + 1;
+    }
+    updateCalques();
 }
 
 void DrawApp::updateCalques() {

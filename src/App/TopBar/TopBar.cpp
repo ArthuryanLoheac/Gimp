@@ -19,7 +19,9 @@ TopBar::TopBar() {
     buttons.push_back(std::make_shared<TopButton>("Calque",
         std::vector<std::pair<std::string, std::string>>{
                     {"New Calque", "add_calque"},
-                    {"Delete Calque", "delete_calque"}}));
+                    {"Delete Calque", "delete_calque"},
+                    {"Move Up", "move_calque_up"},
+                    {"Move Down", "move_calque_down"}}));
 
     float x = 10.0f;
 

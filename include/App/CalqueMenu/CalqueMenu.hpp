@@ -21,6 +21,8 @@ class CalqueMenu {
     std::vector<std::shared_ptr<CalqueButton>> calqueButtons;
     Button addCalqueButton{"Add", "add_calque", 0};
     Button deleteCalqueButton{"Delete", "delete_calque", 0};
+    Button arrowUpButton;
+    Button arrowDownButton;
     sf::RectangleShape background;
 };
 }  // namespace MyGimp
