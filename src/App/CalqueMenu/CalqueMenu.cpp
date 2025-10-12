@@ -22,11 +22,16 @@ CalqueMenu::CalqueMenu() {
 void CalqueMenu::draw(sf::RenderWindow &window) {
     window.draw(background);
     addCalqueButton.draw(window);
-    for (auto &button : calqueButtons)
+    int id = 0;
+    for (auto &button : calqueButtons) {
+        button->setActive(id == actualCalqueId);
         button->draw(window);
+        id++;
+    }
 }
 
-void CalqueMenu::update(float deltaTime, std::vector<Calque> &calques) {
+void CalqueMenu::update(std::vector<Calque> &calques, int actualCalqueId) {
+    this->actualCalqueId = actualCalqueId;
     calqueButtons.clear();
     for (const auto &calque : calques) {
         std::shared_ptr<CalqueButton> button =
@@ -42,6 +47,10 @@ std::string CalqueMenu::handleInput(const sf::Event &event) {
 
     if (addCalqueButton.handleInput(event) == "add_calque")
         codeReturn = "add_calque";
+    for (size_t i = 0; i < calqueButtons.size(); i++) {
+        if (calqueButtons[i]->handleInput(event) == "select_calque")
+            codeReturn = "select_calque_" + std::to_string(i);
+    }
     return codeReturn;
 }
 }  // namespace MyGimp

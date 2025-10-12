@@ -13,10 +13,11 @@ class CalqueMenu {
     ~CalqueMenu() = default;
 
     void draw(sf::RenderWindow &window);
-    void update(float deltaTime, std::vector<Calque> &calques);
+    void update(std::vector<Calque> &calques, int actualCalqueId);
     std::string handleInput(const sf::Event &event);
 
  private:
+    int actualCalqueId = 0;
     std::vector<std::shared_ptr<CalqueButton>> calqueButtons;
     Button addCalqueButton{"Add", "add_calque", 0};
     sf::RectangleShape background;

@@ -17,6 +17,12 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         return;
     if (command == "add_calque") {
         newCalque("New Calque", sf::Color::Transparent);
+    } else if (command.rfind("select_calque_", 0) == 0) {
+        try {
+            setId(std::stoi(command.substr(14)));
+        } catch (const std::exception &e) {
+            LOG_ERROR("Invalid calque selection command: " + command);
+        }
     }
 }
 

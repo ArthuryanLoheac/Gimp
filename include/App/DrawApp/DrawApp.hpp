@@ -36,11 +36,14 @@ class DrawApp {
     bool dragging = false;
     sf::Vector2i lastMousePos;
     TopBar topBar;
+    int actualCalqueId = 0;
     CalqueMenu calqueMenu;
 
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);
     void handleCommandFile(const std::string& command);
+
+    void setId(int id);
 
     void handleDragging(sf::Event &event);
     void handleZooming(sf::Event &event);

@@ -33,6 +33,5 @@ void DrawApp::update(float deltaTime, sf::RenderWindow& window) {
         viewOffset.x = getMinOffset(window.getSize().x, dimensions.x, zoom);
     if (viewOffset.y < getMinOffset(window.getSize().y, dimensions.y, zoom))
         viewOffset.y = getMinOffset(window.getSize().y, dimensions.y, zoom);
-    calqueMenu.update(deltaTime, calques);
 }
 }  // namespace MyGimp
