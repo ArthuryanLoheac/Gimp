@@ -16,6 +16,7 @@ class CalqueMenu {
 
  private:
     Button addCalqueButton{"Add", "add_calque"};
+    sf::RectangleShape background;
 };
 }  // namespace MyGimp
 

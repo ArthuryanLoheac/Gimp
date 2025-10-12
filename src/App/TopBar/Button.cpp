@@ -4,8 +4,11 @@
 #include "App/TopBar/Button.hpp"
 
 namespace MyGimp {
-Button::Button(std::string title, std::string code) {
-    background.setSize(sf::Vector2f(200, 30));
+Button::Button(std::string title, std::string code, bool widthForced) {
+    if (widthForced)
+        background.setSize(sf::Vector2f(200, 30));
+    else
+        background.setSize(sf::Vector2f(title.length() * 10 + 20, 30));
     background.setFillColor(sf::Color(70, 70, 70));
     background.setPosition(200, 100);
     currentState = IDLE;

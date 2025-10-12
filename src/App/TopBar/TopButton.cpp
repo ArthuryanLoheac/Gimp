@@ -22,7 +22,7 @@ std::vector<std::pair<std::string, std::string>> items) {
 
     for (const auto &item : items) {
         std::shared_ptr<Button> dropDown =
-            std::make_shared<Button>(item.first, item.second);
+            std::make_shared<Button>(item.first, item.second, true);
         dropDown->setState(Button::stateButton::HIDE);
         buttonsDropDown.push_back(dropDown);
     }

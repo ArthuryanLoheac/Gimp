@@ -12,7 +12,7 @@ class Button {
     enum stateButton { HIDE, IDLE, HOVER, ACTIVE };
 
     explicit Button(std::string title = "Button",
-       std::string code = "");
+       std::string code = "", bool widthForced = false);
     ~Button() = default;
     void draw(sf::RenderWindow &window);
     std::string handleInput(const sf::Event &event);

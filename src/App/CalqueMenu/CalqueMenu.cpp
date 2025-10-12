@@ -3,11 +3,18 @@
 
 namespace MyGimp {
 CalqueMenu::CalqueMenu() {
-    addCalqueButton.setPosition(WIDTH - 200, HEIGHT - 50);
+    const int width = 250;
+    const int height = 300;
+    addCalqueButton.setPosition(WIDTH - width + 10, HEIGHT - height + 10);
     addCalqueButton.setState(Button::IDLE);
+
+    background.setSize(sf::Vector2f(width, height));
+    background.setFillColor(sf::Color(50, 50, 50, 200));
+    background.setPosition(WIDTH - width, HEIGHT - height);
 }
 
 void CalqueMenu::draw(sf::RenderWindow &window) {
+    window.draw(background);
     addCalqueButton.draw(window);
 }
 
