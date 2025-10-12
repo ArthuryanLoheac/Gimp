@@ -4,7 +4,7 @@
 
 namespace MyGimp {
 CalqueButton::CalqueButton(std::string name) {
-    calqueButton.init(name, "select_calque", 195);
+    calqueButton.init(name, "select_calque", 230);
     calqueButton.setColor(sf::Color(50, 50, 50));
     deleteButton.initIcon("Assets/Icons/delete.png", "delete_calque_id", 20);
 }
@@ -30,10 +30,10 @@ void CalqueButton::setActive(bool active) {
         calqueButton.setColor(sf::Color(50, 50, 50), Button::IDLE);
 }
 
-std::string CalqueButton::handleInput(const sf::Event &event) {
-    std::string codeReturn = calqueButton.handleInput(event);
+std::string CalqueButton::handleInput(const sf::Event &event, bool &consumed) {
+    std::string codeReturn = deleteButton.handleInput(event, consumed);
     if (codeReturn.empty())
-        codeReturn = deleteButton.handleInput(event);
+        codeReturn = calqueButton.handleInput(event, consumed);
     return codeReturn;
 }
 }  // namespace MyGimp

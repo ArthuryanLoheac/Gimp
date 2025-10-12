@@ -11,7 +11,7 @@ class CalqueButton {
     void setPosition(float x, float y);
     void setName(const std::string &name);
     void setActive(bool active);
-    std::string handleInput(const sf::Event &event);
+    std::string handleInput(const sf::Event &event, bool &consumed);
 
  private:
     Button calqueButton;

@@ -66,15 +66,18 @@ void Button::draw(sf::RenderWindow &window) {
         window.draw(icon);
 }
 
-std::string Button::handleInput(const sf::Event &event) {
+std::string Button::handleInput(const sf::Event &event, bool &consumed) {
     std::string codeReturn = "";
+    if (consumed) return codeReturn;
 
     if (event.type == sf::Event::MouseMoved) {
         sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
-        if (background.getGlobalBounds().contains(mousePos))
+        if (background.getGlobalBounds().contains(mousePos)) {
             currentState = HOVER;
-        else
+            consumed = true;
+        } else {
             currentState = IDLE;
+        }
     }
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
@@ -82,6 +85,7 @@ std::string Button::handleInput(const sf::Event &event) {
             if (background.getGlobalBounds().contains(mousePos)) {
                 currentState = ACTIVE;
                 codeReturn = code;
+                consumed = true;
             } else {
                 currentState = IDLE;
             }

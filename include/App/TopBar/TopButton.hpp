@@ -17,7 +17,7 @@ class TopButton {
         std::vector<std::pair<std::string, std::string>> items = {});
     ~TopButton() = default;
     void draw(sf::RenderWindow &window);
-    std::string handleInput(const sf::Event &event);
+    std::string handleInput(const sf::Event &event, bool &consumed);
 
     void setPosition(float x, float y);
     float getWidth() const;

@@ -47,13 +47,13 @@ void CalqueMenu::update(std::vector<Calque> &calques, int actualCalqueId) {
     }
 }
 
-std::string CalqueMenu::handleInput(const sf::Event &event) {
+std::string CalqueMenu::handleInput(const sf::Event &event, bool &consumed) {
     std::string codeReturn = "";
 
-    codeReturn += addCalqueButton.handleInput(event);
-    codeReturn += deleteCalqueButton.handleInput(event);
+    codeReturn += addCalqueButton.handleInput(event, consumed);
+    codeReturn += deleteCalqueButton.handleInput(event, consumed);
     for (size_t i = 0; i < calqueButtons.size(); i++) {
-        std::string code = calqueButtons[i]->handleInput(event);
+        std::string code = calqueButtons[i]->handleInput(event, consumed);
         if (code != "")
             codeReturn += code + "_" + std::to_string(i);
     }

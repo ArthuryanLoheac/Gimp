@@ -13,6 +13,7 @@ const float ZOOM_STEP = 0.1f;
 namespace MyGimp {
 void DrawApp::handleInput(sf::Event &event) {
     try {
+        bool consumed = false;
         if (event.type == sf::Event::KeyReleased &&
             event.key.code == sf::Keyboard::E
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
@@ -23,10 +24,11 @@ void DrawApp::handleInput(sf::Event &event) {
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
             saveFile();
         }
+        handleCommandCalques(calqueMenu.handleInput(event, consumed));
+        handleCommand(topBar.handleInput(event, consumed));
+        if (consumed) return;
         handleZooming(event);
         handleDragging(event);
-        handleCommandCalques(calqueMenu.handleInput(event));
-        handleCommand(topBar.handleInput(event));
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }

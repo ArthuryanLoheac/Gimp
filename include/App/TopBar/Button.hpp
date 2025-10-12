@@ -16,7 +16,7 @@ class Button {
     Button() = default;
     ~Button() = default;
     void draw(sf::RenderWindow &window);
-    std::string handleInput(const sf::Event &event);
+    std::string handleInput(const sf::Event &event, bool &consumed);
 
     void init(std::string title, std::string code = "", int widthForced = 200);
     void initIcon(const std::string &iconPath,

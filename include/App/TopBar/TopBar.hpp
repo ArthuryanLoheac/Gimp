@@ -13,7 +13,7 @@ class TopBar {
     TopBar();
     ~TopBar();
     void draw(sf::RenderWindow &window);
-    std::string handleInput(const sf::Event &event);
+    std::string handleInput(const sf::Event &event, bool &consumed);
 
  private:
     sf::RectangleShape background;

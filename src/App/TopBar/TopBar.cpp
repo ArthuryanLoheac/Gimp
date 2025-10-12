@@ -39,13 +39,16 @@ void TopBar::draw(sf::RenderWindow &window) {
         button->draw(window);
 }
 
-std::string TopBar::handleInput(const sf::Event &event) {
+std::string TopBar::handleInput(const sf::Event &event, bool &consumed) {
     std::string codeReturn = "";
 
     // Handle top bar specific input here
     for (auto &button : buttons) {
-        std::string code = button->handleInput(event);
-        if (code != "") codeReturn = code;
+        std::string code = button->handleInput(event, consumed);
+        if (code != "") {
+            codeReturn = code;
+            consumed = true;
+        }
     }
     return codeReturn;
 }

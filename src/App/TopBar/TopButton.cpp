@@ -42,8 +42,9 @@ void TopButton::draw(sf::RenderWindow &window) {
         dropDown->draw(window);
 }
 
-std::string TopButton::handleInput(const sf::Event &event) {
+std::string TopButton::handleInput(const sf::Event &event, bool &consumed) {
     std::string codeReturn = "";
+    if (consumed) return codeReturn;
 
     if (event.type == sf::Event::MouseMoved) {
         sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
@@ -54,7 +55,7 @@ std::string TopButton::handleInput(const sf::Event &event) {
     }
     if (isDown) {
         for (auto &dropDown : buttonsDropDown) {
-            std::string code = dropDown->handleInput(event);
+            std::string code = dropDown->handleInput(event, consumed);
             if (code != "") codeReturn = code;
         }
     }
@@ -64,6 +65,7 @@ std::string TopButton::handleInput(const sf::Event &event) {
             if (background.getGlobalBounds().contains(mousePos)) {
                 isDown = !isDown;
                 activateDropDowns(isDown);
+                consumed = true;
             } else {
                 isDown = false;
                 activateDropDowns(false);
