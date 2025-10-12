@@ -33,9 +33,8 @@ void Logger::shutdown() {
 }
 
 void Logger::log(Level level, const std::string& message) {
-    if (!initialized) {
+    if (!initialized)
         initialize();
-    }
 
     // Fallback to console output
     static std::mutex console_mutex;

@@ -22,8 +22,6 @@ void App::init() {
     resetCursor();
     window.setVerticalSyncEnabled(true);
     drawApp.init("tests/Images/Img.jpg");
-    drawApp.newCalque("Calque 2", sf::Color(0, 0, 255, 50));
-    drawApp.newCalque("Calque 3", sf::Color(255, 0, 0, 50));
     LOG_INFO("Window initialization completed");
 }
 
