@@ -1,4 +1,5 @@
 #include <string>
+#include <algorithm>
 #include <vector>
 
 #include "App/Logger.hpp"
@@ -64,11 +65,11 @@ std::vector<Calque>& DrawApp::getCalques() {
     return calques;
 }
 
-bool DrawApp::deleteCalque()
-{
+bool DrawApp::deleteCalque() {
     if (calques.size() <= 1)
         return false;
-    if (actualCalqueId >= 0 && actualCalqueId < static_cast<int>(calques.size())) {
+    if (actualCalqueId >= 0 &&
+        actualCalqueId < static_cast<int>(calques.size())) {
         calques.erase(calques.begin() + actualCalqueId);
         actualCalqueId = std::max(0, actualCalqueId - 1);
         calqueMenu.update(calques, actualCalqueId);
@@ -77,8 +78,7 @@ bool DrawApp::deleteCalque()
     return false;
 }
 
-sf::Vector2u DrawApp::getDimensions() const
-{
+sf::Vector2u DrawApp::getDimensions() const {
     return dimensions;
 }
 
