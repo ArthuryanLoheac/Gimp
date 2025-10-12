@@ -1,17 +1,17 @@
 #include <iostream>
 #include <string>
 
-#include "App/TopBar/TopButtonsDropDown.hpp"
+#include "App/TopBar/Button.hpp"
 
 namespace MyGimp {
-TopButtonsDropDown::TopButtonsDropDown(std::string title, std::string code) {
+Button::Button(std::string title, std::string code) {
     background.setSize(sf::Vector2f(200, 30));
     background.setFillColor(sf::Color(70, 70, 70));
     background.setPosition(200, 100);
     currentState = IDLE;
 
     if (!font.loadFromFile("Assets/Fonts/Inter.ttf"))
-        std::cerr << "Failed to load font for TopButtonsDropDown" << std::endl;
+        std::cerr << "Failed to load font for Button" << std::endl;
 
     text.setFont(font);
     text.setString(title);
@@ -22,7 +22,7 @@ TopButtonsDropDown::TopButtonsDropDown(std::string title, std::string code) {
     this->code = code;
 }
 
-void TopButtonsDropDown::draw(sf::RenderWindow &window) {
+void Button::draw(sf::RenderWindow &window) {
     if (currentState == HIDE)
         return;
     if (currentState == HOVER) {
@@ -36,7 +36,7 @@ void TopButtonsDropDown::draw(sf::RenderWindow &window) {
     window.draw(text);
 }
 
-std::string TopButtonsDropDown::handleInput(const sf::Event &event) {
+std::string Button::handleInput(const sf::Event &event) {
     std::string codeReturn = "";
 
     if (event.type == sf::Event::MouseMoved) {
@@ -60,24 +60,24 @@ std::string TopButtonsDropDown::handleInput(const sf::Event &event) {
     return codeReturn;
 }
 
-void TopButtonsDropDown::setPosition(float x, float y) {
+void Button::setPosition(float x, float y) {
     background.setPosition(x, y);
     text.setPosition(x + 10, y + 5);
 }
 
-TopButtonsDropDown::stateButton TopButtonsDropDown::getState() const {
+Button::stateButton Button::getState() const {
     return currentState;
 }
 
-void TopButtonsDropDown::setState(stateButton state) {
+void Button::setState(stateButton state) {
     currentState = state;
 }
 
-float TopButtonsDropDown::getHeight() const {
+float Button::getHeight() const {
     return background.getSize().y;
 }
 
-std::string TopButtonsDropDown::getCode() const {
+std::string Button::getCode() const {
     return code;
 }
 

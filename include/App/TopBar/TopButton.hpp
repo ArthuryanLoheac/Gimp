@@ -6,7 +6,7 @@
 #include <string>
 
 #include <SFML/Graphics.hpp>
-#include "App/TopBar/TopButtonsDropDown.hpp"
+#include "App/TopBar/Button.hpp"
 
 namespace MyGimp {
 class TopButton {
@@ -30,6 +30,6 @@ class TopButton {
     sf::RectangleShape background;
     sf::Text text;
     sf::Font font;
-    std::vector<std::shared_ptr<TopButtonsDropDown>> buttonsDropDown;
+    std::vector<std::shared_ptr<Button>> buttonsDropDown;
 };
 }  // namespace MyGimp

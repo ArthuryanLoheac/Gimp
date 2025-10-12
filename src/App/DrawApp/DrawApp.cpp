@@ -1,7 +1,7 @@
 #include <string>
 #include <vector>
 
-#include "Logger.h"
+#include "Logger.hpp"
 
 #include "App/DrawApp/DrawApp.hpp"
 #include "Exceptions/DrawAppExceptions.hpp"

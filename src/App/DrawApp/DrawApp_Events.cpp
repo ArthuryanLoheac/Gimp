@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "Logger.h"
+#include "Logger.hpp"
 
 #include "App/DrawApp/DrawApp.hpp"
 
@@ -25,9 +25,8 @@ void DrawApp::handleInput(sf::Event &event) {
         }
         handleZooming(event);
         handleDragging(event);
-        std::string topBarCode = topBar.handleInput(event);
-        if (topBarCode != "")
-            handleCommand(topBarCode);
+        handleCommandCalques(calqueMenu.handleInput(event));
+        handleCommandFile(topBar.handleInput(event));
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }

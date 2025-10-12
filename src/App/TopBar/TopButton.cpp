@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "App/TopBar/TopButton.hpp"
-#include "Logger.h"
+#include "Logger.hpp"
 
 namespace MyGimp {
 TopButton::TopButton(std::string title,
@@ -21,9 +21,9 @@ std::vector<std::pair<std::string, std::string>> items) {
     text.setFillColor(sf::Color::White);
 
     for (const auto &item : items) {
-        std::shared_ptr<TopButtonsDropDown> dropDown =
-            std::make_shared<TopButtonsDropDown>(item.first, item.second);
-        dropDown->setState(TopButtonsDropDown::stateButton::HIDE);
+        std::shared_ptr<Button> dropDown =
+            std::make_shared<Button>(item.first, item.second);
+        dropDown->setState(Button::stateButton::HIDE);
         buttonsDropDown.push_back(dropDown);
     }
     setPosition(100, 100);
@@ -76,9 +76,9 @@ std::string TopButton::handleInput(const sf::Event &event) {
 void TopButton::activateDropDowns(bool activate) {
     for (auto &dropDown : buttonsDropDown) {
         if (activate)
-            dropDown->setState(TopButtonsDropDown::stateButton::IDLE);
+            dropDown->setState(Button::stateButton::IDLE);
         else
-            dropDown->setState(TopButtonsDropDown::stateButton::HIDE);
+            dropDown->setState(Button::stateButton::HIDE);
     }
 }
 

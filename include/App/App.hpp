@@ -12,8 +12,6 @@ class App {
     ~App() = default;
     void run();
     void init();
-    static const int WIDTH = 1920;
-    static const int HEIGHT = 1080;
 
  private:
     void processEvents();

@@ -7,13 +7,13 @@
 #include <SFML/Graphics.hpp>
 
 namespace MyGimp {
-class TopButtonsDropDown {
+class Button {
  public:
     enum stateButton { HIDE, IDLE, HOVER, ACTIVE };
 
-    explicit TopButtonsDropDown(std::string title = "Button",
+    explicit Button(std::string title = "Button",
        std::string code = "");
-    ~TopButtonsDropDown() = default;
+    ~Button() = default;
     void draw(sf::RenderWindow &window);
     std::string handleInput(const sf::Event &event);
 

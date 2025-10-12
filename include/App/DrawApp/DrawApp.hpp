@@ -5,6 +5,7 @@
 
 #include "App/Calque.hpp"
 #include "App/TopBar/TopBar.hpp"
+#include "App/CalqueMenu/CalqueMenu.hpp"
 
 
 namespace MyGimp {
@@ -35,8 +36,11 @@ class DrawApp {
     bool dragging = false;
     sf::Vector2i lastMousePos;
     TopBar topBar;
+    CalqueMenu calqueMenu;
 
     void handleCommand(const std::string& command);
+    void handleCommandCalques(const std::string& command);
+    void handleCommandFile(const std::string& command);
 
     void handleDragging(sf::Event &event);
     void handleZooming(sf::Event &event);

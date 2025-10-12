@@ -1,6 +1,6 @@
 #include <string>
 
-#include "Logger.h"
+#include "Logger.hpp"
 
 #include "App/DrawApp/DrawApp.hpp"
 
@@ -14,5 +14,6 @@ void DrawApp::draw(sf::RenderWindow& window) {
         calque.draw(window, zoom, pos);
     }
     topBar.draw(window);
+    calqueMenu.draw(window);
 }
 }  // namespace MyGimp
