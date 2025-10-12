@@ -25,7 +25,7 @@ class DrawApp {
         sf::Color col = sf::Color::Transparent);
     void newCalque(const std::string& name, const std::string& filepath);
     std::vector<Calque>& getCalques();
-
+    bool deleteCalque();
     bool isDragging() const { return dragging; }
 
  private:

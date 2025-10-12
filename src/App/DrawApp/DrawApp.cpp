@@ -64,7 +64,21 @@ std::vector<Calque>& DrawApp::getCalques() {
     return calques;
 }
 
-sf::Vector2u DrawApp::getDimensions() const {
+bool DrawApp::deleteCalque()
+{
+    if (calques.size() <= 1)
+        return false;
+    if (actualCalqueId >= 0 && actualCalqueId < static_cast<int>(calques.size())) {
+        calques.erase(calques.begin() + actualCalqueId);
+        actualCalqueId = std::max(0, actualCalqueId - 1);
+        calqueMenu.update(calques, actualCalqueId);
+        return true;
+    }
+    return false;
+}
+
+sf::Vector2u DrawApp::getDimensions() const
+{
     return dimensions;
 }
 

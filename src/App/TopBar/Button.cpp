@@ -88,6 +88,10 @@ void Button::setHeight(float height) {
     background.setSize(sf::Vector2f(background.getSize().x, height));
 }
 
+float Button::getWidth() const {
+    return background.getSize().x;
+}
+
 std::string Button::getCode() const {
     return code;
 }

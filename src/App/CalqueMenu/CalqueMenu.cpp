@@ -10,9 +10,13 @@ const int MENU_HEIGHT = 300;
 
 namespace MyGimp {
 CalqueMenu::CalqueMenu() {
-    addCalqueButton.setPosition(WIDTH - MENU_WIDTH + 10,
-        HEIGHT - MENU_HEIGHT + 10);
+    int x = WIDTH - MENU_WIDTH + 10;
+    addCalqueButton.setPosition(x, HEIGHT - MENU_HEIGHT + 10);
     addCalqueButton.setState(Button::IDLE);
+    x += addCalqueButton.getWidth() + 10;
+
+    deleteCalqueButton.setPosition(x, HEIGHT - MENU_HEIGHT + 10);
+    deleteCalqueButton.setState(Button::IDLE);
 
     background.setSize(sf::Vector2f(MENU_WIDTH, MENU_HEIGHT));
     background.setFillColor(sf::Color(50, 50, 50, 200));
@@ -22,6 +26,7 @@ CalqueMenu::CalqueMenu() {
 void CalqueMenu::draw(sf::RenderWindow &window) {
     window.draw(background);
     addCalqueButton.draw(window);
+    deleteCalqueButton.draw(window);
     int id = 0;
     for (auto &button : calqueButtons) {
         button->setActive(id == actualCalqueId);
@@ -47,6 +52,8 @@ std::string CalqueMenu::handleInput(const sf::Event &event) {
 
     if (addCalqueButton.handleInput(event) == "add_calque")
         codeReturn = "add_calque";
+    if (deleteCalqueButton.handleInput(event) == "delete_calque")
+        codeReturn = "delete_calque";
     for (size_t i = 0; i < calqueButtons.size(); i++) {
         if (calqueButtons[i]->handleInput(event) == "select_calque")
             codeReturn = "select_calque_" + std::to_string(i);

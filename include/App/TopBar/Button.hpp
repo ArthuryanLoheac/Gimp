@@ -24,9 +24,10 @@ class Button {
     // - State
     stateButton getState() const;
     void setState(stateButton state);
-    // - Height
+    // - Size
     float getHeight() const;
     void setHeight(float height);
+    float getWidth() const;
     // - Code
     std::string getCode() const;
     // - Title
