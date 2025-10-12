@@ -26,6 +26,7 @@ class DrawApp {
     void newCalque(const std::string& name, const std::string& filepath);
     std::vector<Calque>& getCalques();
     bool deleteCalque();
+    bool deleteCalque(int id);
     bool isDragging() const { return dragging; }
 
  private:
@@ -48,6 +49,7 @@ class DrawApp {
     void handleDragging(sf::Event &event);
     void handleZooming(sf::Event &event);
 
+    void updateCalques();
     void saveFile();
     void exportFile();
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,

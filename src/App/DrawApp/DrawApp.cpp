@@ -24,7 +24,7 @@ void DrawApp::init(const std::string& filepath) {
         calques.clear();
         calques.emplace_back("Calque 1");
         calques.back().createFromFile(filepath);
-        calqueMenu.update(calques, actualCalqueId);
+        updateCalques();
         dimensions = calques.back().getImage().getSize();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
@@ -34,24 +34,6 @@ void DrawApp::init(const std::string& filepath) {
 
 // Calque Management
 
-void DrawApp::newCalque(const std::string& name, sf::Color col) {
-    try {
-        calques.emplace_back(name);
-        calques.back().createEmpty(dimensions.x, dimensions.y, col);
-        calqueMenu.update(calques, actualCalqueId);
-    } catch (const Calque_Error &e) {
-        LOG_ERROR(e.what());
-    }
-}
-
-void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
-    try {
-        calques.emplace_back(name);
-        calques.back().createFromFile(filepath);
-    } catch (const Calque_Error &e) {
-        LOG_ERROR(e.what());
-    }
-}
 
 void DrawApp::newFile() {
     calques.clear();
@@ -61,22 +43,7 @@ void DrawApp::newFile() {
 
 // Getters & Setters
 
-std::vector<Calque>& DrawApp::getCalques() {
-    return calques;
-}
 
-bool DrawApp::deleteCalque() {
-    if (calques.size() <= 1)
-        return false;
-    if (actualCalqueId >= 0 &&
-        actualCalqueId < static_cast<int>(calques.size())) {
-        calques.erase(calques.begin() + actualCalqueId);
-        actualCalqueId = std::max(0, actualCalqueId - 1);
-        calqueMenu.update(calques, actualCalqueId);
-        return true;
-    }
-    return false;
-}
 
 sf::Vector2u DrawApp::getDimensions() const {
     return dimensions;
@@ -85,6 +52,6 @@ sf::Vector2u DrawApp::getDimensions() const {
 void DrawApp::setId(int id) {
     if (id >= 0 && id < static_cast<int>(calques.size()))
         actualCalqueId = id;
-    calqueMenu.update(calques, actualCalqueId);
+    updateCalques();
 }
 }  // namespace MyGimp

@@ -19,21 +19,23 @@ class Button {
     std::string handleInput(const sf::Event &event);
 
     void init(std::string title, std::string code = "", int widthForced = 200);
+    void initIcon(const std::string &iconPath,
+      std::string code = "", int iconSize = 20);
     // Getters
     void setPosition(float x, float y);
-    // - State
+
     stateButton getState() const;
     void setState(stateButton state);
-    // - Size
+
     float getHeight() const;
     void setHeight(float height);
     float getWidth() const;
-    // - Code
+
     std::string getCode() const;
-    // - Title
+
     std::string getTitle() const;
     void setTitle(const std::string &title);
-    // - Color
+
     sf::Color getColor() const;
     void setColor(const sf::Color &color, stateButton state = IDLE);
 
@@ -43,6 +45,8 @@ class Button {
     sf::Font font;
     stateButton currentState;
     std::string code;
+    sf::Texture iconTexture;
+    sf::Sprite icon;
 
     sf::Color idleColor = sf::Color(70, 70, 70);
     sf::Color hoverColor = sf::Color(90, 90, 90);

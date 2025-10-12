@@ -15,5 +15,6 @@ class CalqueButton {
 
  private:
     Button calqueButton;
+    Button deleteButton;
 };
 }  // namespace MyGimp

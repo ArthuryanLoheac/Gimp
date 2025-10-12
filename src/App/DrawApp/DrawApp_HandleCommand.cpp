@@ -23,6 +23,12 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         } catch (const std::exception &e) {
             LOG_ERROR("Invalid calque selection command: " + command);
         }
+    } else if (command.rfind("delete_calque_id_", 0) == 0) {
+        try {
+            deleteCalque(std::stoi(command.substr(17)));
+        } catch (const std::exception &e) {
+            LOG_ERROR("Invalid calque deletion command: " + command);
+        }
     } else if (command == "delete_calque") {
         deleteCalque();
     }

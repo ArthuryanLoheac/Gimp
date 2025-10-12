@@ -29,6 +29,26 @@ void Button::init(std::string title, std::string code, int widthForced) {
     this->code = code;
 }
 
+void Button::initIcon(const std::string &iconPath, std::string code,
+int iconSize) {
+    background.setSize(sf::Vector2f(iconSize + 10, iconSize + 10));
+    background.setFillColor(sf::Color(70, 70, 70));
+    background.setPosition(200, 100);
+
+    if (!iconTexture.loadFromFile(iconPath)) {
+        std::cerr << "Failed to load icon for Button" << std::endl;
+        return;
+    }
+    icon.setTexture(iconTexture);
+    float scaleX = static_cast<float>(iconSize) / iconTexture.getSize().x;
+    float scaleY = static_cast<float>(iconSize) / iconTexture.getSize().y;
+    icon.setScale(scaleX, scaleY);
+    icon.setPosition(
+        background.getPosition().x + 5,
+        background.getPosition().y + (background.getSize().y - iconSize) / 2);
+    this->code = code;
+}
+
 void Button::draw(sf::RenderWindow &window) {
     if (currentState == HIDE)
         return;
@@ -40,7 +60,10 @@ void Button::draw(sf::RenderWindow &window) {
         background.setFillColor(idleColor);
     }
     window.draw(background);
-    window.draw(text);
+    if (text.getString() != "")
+        window.draw(text);
+    if (icon.getTexture() != nullptr)
+        window.draw(icon);
 }
 
 std::string Button::handleInput(const sf::Event &event) {
@@ -70,6 +93,10 @@ std::string Button::handleInput(const sf::Event &event) {
 void Button::setPosition(float x, float y) {
     background.setPosition(x, y);
     text.setPosition(x + 10, y + 5);
+    if (icon.getTexture() != nullptr)
+        icon.setPosition(
+            x + 5,
+            y + (background.getSize().y - icon.getGlobalBounds().height) / 2);
 }
 
 Button::stateButton Button::getState() const {

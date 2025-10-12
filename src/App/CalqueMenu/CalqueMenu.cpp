@@ -50,13 +50,12 @@ void CalqueMenu::update(std::vector<Calque> &calques, int actualCalqueId) {
 std::string CalqueMenu::handleInput(const sf::Event &event) {
     std::string codeReturn = "";
 
-    if (addCalqueButton.handleInput(event) == "add_calque")
-        codeReturn = "add_calque";
-    if (deleteCalqueButton.handleInput(event) == "delete_calque")
-        codeReturn = "delete_calque";
+    codeReturn += addCalqueButton.handleInput(event);
+    codeReturn += deleteCalqueButton.handleInput(event);
     for (size_t i = 0; i < calqueButtons.size(); i++) {
-        if (calqueButtons[i]->handleInput(event) == "select_calque")
-            codeReturn = "select_calque_" + std::to_string(i);
+        std::string code = calqueButtons[i]->handleInput(event);
+        if (code != "")
+            codeReturn += code + "_" + std::to_string(i);
     }
     return codeReturn;
 }
