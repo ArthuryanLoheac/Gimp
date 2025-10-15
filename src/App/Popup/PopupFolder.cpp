@@ -6,46 +6,38 @@ namespace MyGimp {
 std::string PopupFolder::openPopup(const std::string& name,
 std::vector<std::string> _extensions, bool _isSelectFolder,
 bool _isSelectNameFile) {
-    selectedPath = "/home";
-    window.create(sf::VideoMode(400, 400), "Popup Folder");
-    window.setFramerateLimit(60);
-    nameFile = "";
-    isSelectFolder =_isSelectFolder;
-    isSelectNameFile =_isSelectNameFile;
+    isSelectFolder = _isSelectFolder;
+    isSelectNameFile = _isSelectNameFile;
     extensions = _extensions;
 
-    font.loadFromFile("Assets/Fonts/Inter.ttf");
-    title.setFont(font);
-    title.setString(name);
-    title.setCharacterSize(24);
-    title.setFillColor(sf::Color::White);
-    title.setPosition(20, 10);
-    nameFileText.setFont(font);
-    nameFileText.setString(nameFile);
-    nameFileText.setCharacterSize(16);
-    nameFileText.setFillColor(sf::Color::White);
-    nameFileText.setPosition(20, 360);
+    init(name);
+    if (!run()) return "";
+    return returnPath();
+}
+
+void PopupFolder::init(const std::string& name)
+{
+    window.create(sf::VideoMode(400, 400), "Popup Folder");
+    window.setFramerateLimit(60);
+
+    selectedPath = "/home";
     nameFile = "";
+
+    font.loadFromFile("Assets/Fonts/Inter.ttf");
+    setupText(title, name, 20, 10, 24, sf::Color::White);
+    setupText(nameFileText, nameFile, 20, 360, 16, sf::Color::White);
 
     buttonValidate.init("Confirm", "validate", 80);
     buttonValidate.setPosition(310, 360);
 
-    backgroundTop.setSize(sf::Vector2f(400, 50));
-    backgroundTop.setFillColor(sf::Color(50, 50, 50));
-    backgroundTop.setPosition(0, 0);
+    setupRectangle(backgroundTop, 0, 0, 400, 50, sf::Color(50, 50, 50));
+    setupRectangle(backgroundBottom, 0, 350, 400, 50, sf::Color(50, 50, 50));
+    setupRectangle(nameFileField, 20, 385, 275, 2, sf::Color(70, 70, 70));
+    setupRectangle(cursorIndicator, 20, 360, 2, 20, sf::Color(170, 170, 170));
+}
 
-    backgroundBottom.setSize(sf::Vector2f(400, 50));
-    backgroundBottom.setFillColor(sf::Color(50, 50, 50));
-    backgroundBottom.setPosition(0, 350);
-
-    nameFileField.setSize(sf::Vector2f(275, 2));
-    nameFileField.setFillColor(sf::Color(70, 70, 70));
-    nameFileField.setPosition(20, 385);
-
-    cursorIndicator.setSize(sf::Vector2f(2, 20));
-    cursorIndicator.setFillColor(sf::Color(170, 170, 170));
-    cursorIndicator.setPosition(20, 360);
-
+bool PopupFolder::run()
+{
     updatePaths();
 
     cursorClock.restart();
@@ -59,7 +51,7 @@ bool _isSelectNameFile) {
                 handleInput(event);
             } catch (std::exception e) {
                 window.close();
-                return "";
+                return false;
             }
         }
 
@@ -67,15 +59,42 @@ bool _isSelectNameFile) {
         draw();
         window.display();
     }
+    return true;
+}
 
-    if (selectedPath.back() != '/' && selectedPath.back() != '\\' && !isGoodExtension(selectedPath))
+std::string PopupFolder::returnPath()
+{
+    if (selectedPath.back() != '/' && selectedPath.back() != '\\' &&
+        !isGoodExtension(selectedPath))
         selectedPath += '/';
-    if (nameFile.empty()) nameFile = "NewFile";
-    if (!isGoodExtension(nameFile)) nameFile += ".png";
+    if (nameFile.empty())
+        nameFile = "NewFile";
+    if (!isGoodExtension(nameFile))
+        nameFile += ".png";
+
     if (isSelectNameFile)
-        return selectedPath + nameFile; // Example return value
+        return selectedPath + nameFile;
     else
         return selectedPath;
+}
+
+void PopupFolder::setupRectangle(sf::RectangleShape &rect,
+    float x, float y, float width, float height, sf::Color color)
+{
+    rect.setSize(sf::Vector2f(width, height));
+    rect.setFillColor(color);
+    rect.setPosition(x, y);
+}
+
+void PopupFolder::setupText(sf::Text &text,
+    const std::string &str, float x, float y, unsigned int size,
+    sf::Color color)
+{
+    text.setFont(font);
+    text.setString(str);
+    text.setCharacterSize(size);
+    text.setFillColor(color);
+    text.setPosition(x, y);
 }
 
 bool PopupFolder::isGoodExtension(const std::string& filename) {
