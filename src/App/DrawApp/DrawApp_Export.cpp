@@ -9,7 +9,8 @@
 namespace MyGimp {
 void DrawApp::exportFile() {
     sf::Image exportedImage;
-    std::string path = popupFolder.openPopup("Select Folder");
+    std::string path = popupFolder.openPopup("Select Folder",
+        {".png", ".jpg", ".bmp"});
 
     if (calques.empty())
         throw DrawApp_NoCalque("No calques to export");

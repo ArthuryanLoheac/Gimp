@@ -3,11 +3,13 @@
 #include <algorithm>
 
 namespace MyGimp {
-std::string PopupFolder::openPopup(const std::string& name, std::vector<std::string> _extensions, bool _isSelectFolder, bool _isSelectNameFile)
-{
+std::string PopupFolder::openPopup(const std::string& name,
+std::vector<std::string> _extensions, bool _isSelectFolder,
+bool _isSelectNameFile) {
     selectedPath = "/home";
     window.create(sf::VideoMode(400, 400), "Popup Folder");
     window.setFramerateLimit(60);
+    nameFile = "";
     isSelectFolder =_isSelectFolder;
     isSelectNameFile =_isSelectNameFile;
     extensions = _extensions;
@@ -61,18 +63,20 @@ std::string PopupFolder::openPopup(const std::string& name, std::vector<std::str
         window.display();
     }
 
-    if (selectedPath.back() != '/' && selectedPath.back() != '\\')
+    if (selectedPath.back() != '/' && selectedPath.back() != '\\' && !isGoodExtension(selectedPath))
         selectedPath += '/';
-    if (nameFile.empty())
-        nameFile = "NewFile";
-    if (isGoodExtension(nameFile))
-        nameFile += ".png";
-    return selectedPath + nameFile; // Example return value
+    if (nameFile.empty()) nameFile = "NewFile";
+    if (!isGoodExtension(nameFile)) nameFile += ".png";
+    if (isSelectNameFile)
+        return selectedPath + nameFile; // Example return value
+    else
+        return selectedPath;
 }
 
 bool PopupFolder::isGoodExtension(const std::string& filename) {
-    std::string ext = getExtension(nameFile);
-    if (std::find(extensions.begin(), extensions.end(), ext) == extensions.end() || ext.empty())
+    std::string ext = getExtension(filename);
+    if (std::find(extensions.begin(), extensions.end(), ext)
+        == extensions.end() || ext.empty())
         return false;
     return true;
 }
@@ -95,23 +99,26 @@ void PopupFolder::draw()
     window.draw(title);
     if (isSelectNameFile) {
         window.draw(nameFileField);
-        if (cursorClock.getElapsedTime().asSeconds() < 0.5f || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2) % 2 == 0))
+        if (cursorClock.getElapsedTime().asSeconds() < 0.5f || (static_cast<int>
+            (cursorClock.getElapsedTime().asSeconds() * 2) % 2 == 0))
             window.draw(cursorIndicator);
         window.draw(nameFileText);
+        buttonValidate.draw(window);
     }
-    buttonValidate.draw(window);
 }
 
 void PopupFolder::updatePaths()
 {
     options.clear();
-    options.push_back(std::make_shared<Button>("..", std::filesystem::path(selectedPath).parent_path().string(), 365));
+    options.push_back(std::make_shared<Button>("..",
+        std::filesystem::path(selectedPath).parent_path().string(), 365));
     options.back()->setPosition(20, 20 + options.size() * separationY);
     for (const auto& entry : std::filesystem::directory_iterator(selectedPath)) {
         if (!entry.is_directory() && isSelectFolder)
             continue;
-        options.push_back(std::make_shared<Button>(entry.path().filename().string(),
-                                entry.path().string(), 365));
+        options.push_back(std::make_shared<Button>(
+            entry.path().filename().string(),
+            entry.path().string(), 365));
         options.back()->setPosition(20, 20 + options.size() * separationY);
     }
     scrollOffset = 0.0f;
@@ -128,10 +135,14 @@ void PopupFolder::handleInput(sf::Event &event)
         if (option->handleInput(event, consumed) != "") {
             selectedPath = option->getCode();
             // is directory ?
-            if (!std::filesystem::is_directory(std::filesystem::path(selectedPath)) && !isSelectFolder && isGoodExtension(selectedPath))
+            if (!std::filesystem::is_directory(std::filesystem::path(
+                selectedPath)) && !isSelectFolder &&
+                isGoodExtension(selectedPath)) {
                 window.close();
-            else
+                return;
+            } else {
                 pathChanged = true;
+            }
             break;
         }
     }
@@ -156,12 +167,13 @@ void PopupFolder::handleInput(sf::Event &event)
         if (event.text.unicode == 8) { // Backspace
             if (!nameFile.empty())
                 nameFile.pop_back();
-        } else if (event.text.unicode < 128 && event.text.unicode >= 32) { // Printable characters
+        } else if (event.text.unicode < 128 && event.text.unicode >= 32) {
             nameFile += static_cast<char>(event.text.unicode);
         }
         cursorIndicator.setPosition(20 + nameFileField.getSize().x + 5, 360);
         nameFileText.setString(nameFile);
-        cursorIndicator.setPosition(20 + nameFileText.getLocalBounds().width, 360);
+        cursorIndicator.setPosition(20 + nameFileText.getLocalBounds().width,
+            360);
     }
 }
 }  // namespace MyGimp

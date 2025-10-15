@@ -55,7 +55,6 @@ class DrawApp {
     void updateCalques();
     void saveFile();
     void exportFile();
-    std::string getExtension(const std::string& filepath);
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
         const sf::Vector2u dimensionstoCopy);
     void newFile();
