@@ -1,6 +1,9 @@
-#include "App/Popup/PopupFolder.hpp"
 #include <filesystem>
 #include <algorithm>
+#include <string>
+#include <vector>
+
+#include "App/Popup/PopupFolder.hpp"
 
 namespace MyGimp {
 std::string PopupFolder::openPopup(const std::string& name,
@@ -15,8 +18,7 @@ bool _isSelectNameFile) {
     return returnPath();
 }
 
-void PopupFolder::init(const std::string& name)
-{
+void PopupFolder::init(const std::string& name) {
     window.create(sf::VideoMode(400, 400), "Popup Folder");
     window.setFramerateLimit(60);
 
@@ -36,15 +38,13 @@ void PopupFolder::init(const std::string& name)
     setupRectangle(cursorIndicator, 20, 360, 2, 20, sf::Color(170, 170, 170));
 }
 
-bool PopupFolder::run()
-{
+bool PopupFolder::run() {
     updatePaths();
 
     cursorClock.restart();
-    while (window.isOpen())
-    {
+    while (window.isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event)){
+        while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)
                 window.close();
             try {
@@ -62,8 +62,7 @@ bool PopupFolder::run()
     return true;
 }
 
-std::string PopupFolder::returnPath()
-{
+std::string PopupFolder::returnPath() {
     if (selectedPath.back() != '/' && selectedPath.back() != '\\' &&
         !isGoodExtension(selectedPath))
         selectedPath += '/';
@@ -79,17 +78,15 @@ std::string PopupFolder::returnPath()
 }
 
 void PopupFolder::setupRectangle(sf::RectangleShape &rect,
-    float x, float y, float width, float height, sf::Color color)
-{
+    float x, float y, float width, float height, sf::Color color) {
     rect.setSize(sf::Vector2f(width, height));
     rect.setFillColor(color);
     rect.setPosition(x, y);
 }
 
 void PopupFolder::setupText(sf::Text &text,
-    const std::string &str, float x, float y, unsigned int size,
-    sf::Color color)
-{
+const std::string &str, float x, float y, unsigned int size,
+sf::Color color) {
     text.setFont(font);
     text.setString(str);
     text.setCharacterSize(size);
@@ -116,8 +113,7 @@ void PopupFolder::setExtensions(const std::vector<std::string>& exts) {
     extensions = exts;
 }
 
-void PopupFolder::draw()
-{
+void PopupFolder::draw() {
     // Draw the options
     for (auto& option : options)
         option->draw(window);
@@ -135,13 +131,12 @@ void PopupFolder::draw()
     }
 }
 
-void PopupFolder::updatePaths()
-{
+void PopupFolder::updatePaths() {
     options.clear();
     options.push_back(std::make_shared<Button>("..",
         std::filesystem::path(selectedPath).parent_path().string(), 365));
     options.back()->setPosition(20, 20 + options.size() * separationY);
-    for (const auto& entry : std::filesystem::directory_iterator(selectedPath)) {
+    for (auto& entry : std::filesystem::directory_iterator(selectedPath)) {
         if (!entry.is_directory() && isSelectFolder)
             continue;
         options.push_back(std::make_shared<Button>(
@@ -152,52 +147,70 @@ void PopupFolder::updatePaths()
     scrollOffset = 0.0f;
 }
 
-void PopupFolder::handleInput(sf::Event &event)
-{
+void PopupFolder::handleInput(sf::Event &event) {
+    if (handleClick(event))
+        return;
+    if (event.type == sf::Event::MouseWheelScrolled)
+        handleScroll(event);
+    if (event.type == sf::Event::TextEntered && isSelectNameFile)
+        handleNameFileInput(event);
+}
+
+bool PopupFolder::handleClick(sf::Event &event) {
     bool consumed = false;
-    // Handle user input for the popup folder
+    bool pathChanged = false;
+
     if (buttonValidate.handleInput(event, consumed) == "validate")
         window.close();
-    bool pathChanged = false;
+
     for (auto& option : options) {
         if (option->handleInput(event, consumed) != "") {
             selectedPath = option->getCode();
-            // is directory ?
-            if (!std::filesystem::is_directory(std::filesystem::path(
-                selectedPath)) && !isSelectFolder &&
-                isGoodExtension(selectedPath)) {
-                window.close();
-                printf("B\n");
-                return;
-            } else if (!std::filesystem::is_directory(std::filesystem::path(
-                selectedPath)) && !isSelectFolder &&
-                !isGoodExtension(selectedPath)) {
-                throw std::runtime_error("Invalid file");
-            } else {
-                pathChanged = true;
-            }
+            if (handleClickButton(selectedPath, pathChanged))
+                return true;
             break;
         }
     }
     if (pathChanged)
         updatePaths();
-    if (event.type == sf::Event::MouseWheelScrolled) {
-        if (event.mouseWheelScroll.delta > 0)
-            scrollOffset += 15.0f;
-        else
-            scrollOffset -= 15.0f;
-        if (scrollOffset > 0.0f)
-            scrollOffset = 0.0f;
-        if (options.size() * separationY <= 300)
-            scrollOffset = 0.0f;
-        else if (scrollOffset <= options.size() * -separationY + 300 - 2)
-            scrollOffset = options.size() * -separationY + 300 - 2;
-        for (int i = 0; i < options.size(); i++)
-            options[i]->setPosition(20, 20 + (i + 1) * separationY + scrollOffset);
-    }
+    return false;
+}
 
-    if (event.type == sf::Event::TextEntered && isSelectNameFile) {
-        if (event.text.unicode == 8) { // Backspace
+bool PopupFolder::handleClickButton(const std::string &selectedPath,
+bool &pathChanged) {
+    if (!std::filesystem::is_directory(std::filesystem::path(
+        selectedPath)) && !isSelectFolder &&
+        isGoodExtension(selectedPath)) {
+        window.close();
+        return true;
+    } else if (!std::filesystem::is_directory(std::filesystem::path(
+        selectedPath)) && !isSelectFolder &&
+        !isGoodExtension(selectedPath)) {
+        throw std::runtime_error("Invalid file");
+    } else {
+        pathChanged = true;
+    }
+    return false;
+}
+
+void PopupFolder::handleScroll(sf::Event &event) {
+    if (event.mouseWheelScroll.delta > 0)
+        scrollOffset += 15.0f;
+    else
+        scrollOffset -= 15.0f;
+    if (scrollOffset > 0.0f)
+        scrollOffset = 0.0f;
+    if (options.size() * separationY <= 300)
+        scrollOffset = 0.0f;
+    else if (scrollOffset <= options.size() * -separationY + 300 - 2)
+        scrollOffset = options.size() * -separationY + 300 - 2;
+    for (int i = 0; i < options.size(); i++)
+        options[i]->setPosition(20, 20 + (i + 1) * separationY + scrollOffset);
+}
+
+void PopupFolder::handleNameFileInput(sf::Event &event) {
+    if (event.type == sf::Event::TextEntered) {
+        if (event.text.unicode == 8) {  // Backspace
             if (!nameFile.empty())
                 nameFile.pop_back();
         } else if (event.text.unicode < 128 && event.text.unicode >= 32) {
@@ -209,4 +222,5 @@ void PopupFolder::handleInput(sf::Event &event)
             360);
     }
 }
+
 }  // namespace MyGimp

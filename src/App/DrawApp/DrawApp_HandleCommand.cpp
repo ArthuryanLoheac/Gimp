@@ -36,7 +36,8 @@ void DrawApp::handleCommandCalques(const std::string& command) {
     } else if (command == "move_calque_down") {
         moveCalquePos(false);
     } else if (command == "import_image") {
-        std::string path = popupFolder.openPopup("Choose Image", {".png", ".jpg", ".bmp"}, false, false);
+        std::string path = popupFolder.openPopup("Choose Image",
+            {".png", ".jpg", ".bmp"}, false, false);
         std::string namePath = path.substr(path.find_last_of("/\\") + 1);
         if (path.empty())
             return;

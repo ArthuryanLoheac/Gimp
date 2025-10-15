@@ -1,13 +1,14 @@
 #pragma once
 
 #include <string>
+#include <memory>
+#include <vector>
+
 #include <SFML/Graphics.hpp>
 #include "App/TopBar/Button.hpp"
-#include <memory>
 
 namespace MyGimp {
-class PopupFolder
-{
+class PopupFolder {
  public:
     PopupFolder() = default;
     ~PopupFolder() = default;
@@ -27,6 +28,10 @@ class PopupFolder
     void draw();
     void updatePaths();
     void handleInput(sf::Event &event);
+    bool handleClick(sf::Event &event);
+    bool handleClickButton(const std::string &selectedPath, bool &pathChanged);
+    void handleScroll(sf::Event &event);
+    void handleNameFileInput(sf::Event &event);
     void setupRectangle(sf::RectangleShape &rect,
         float x, float y, float width, float height, sf::Color color);
     void setupText(sf::Text &text,
