@@ -55,7 +55,12 @@ bool _isSelectNameFile) {
         while (window.pollEvent(event)){
             if (event.type == sf::Event::Closed)
                 window.close();
-            handleInput(event);
+            try {
+                handleInput(event);
+            } catch (std::exception e) {
+                window.close();
+                return "";
+            }
         }
 
         window.clear(sf::Color(20, 20, 20));
@@ -139,7 +144,12 @@ void PopupFolder::handleInput(sf::Event &event)
                 selectedPath)) && !isSelectFolder &&
                 isGoodExtension(selectedPath)) {
                 window.close();
+                printf("B\n");
                 return;
+            } else if (!std::filesystem::is_directory(std::filesystem::path(
+                selectedPath)) && !isSelectFolder &&
+                !isGoodExtension(selectedPath)) {
+                throw std::runtime_error("Invalid file");
             } else {
                 pathChanged = true;
             }
