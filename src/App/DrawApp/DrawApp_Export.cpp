@@ -9,6 +9,7 @@
 namespace MyGimp {
 void DrawApp::exportFile() {
     sf::Image exportedImage;
+    std::string path = popupFolder.openPopup("Export File");
 
     if (calques.empty())
         throw DrawApp_NoCalque("No calques to export");
@@ -22,7 +23,7 @@ void DrawApp::exportFile() {
             dimensionstoCopy.y = c.getImage().getSize().y;
         mixCalqueForExport(exportedImage, c, dimensionstoCopy);
     }
-    if (!exportedImage.saveToFile("Saves/Img.jpg"))
+    if (!exportedImage.saveToFile(path + "Img.jpg"))
         throw DrawApp_ExportError("Failed to export");
 }
 

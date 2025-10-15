@@ -6,6 +6,7 @@
 #include "App/Calque.hpp"
 #include "App/TopBar/TopBar.hpp"
 #include "App/CalqueMenu/CalqueMenu.hpp"
+#include "App/Popup/PopupFolder.hpp"
 
 
 namespace MyGimp {
@@ -40,6 +41,7 @@ class DrawApp {
     TopBar topBar;
     int actualCalqueId = 0;
     CalqueMenu calqueMenu;
+    PopupFolder popupFolder;
 
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);
