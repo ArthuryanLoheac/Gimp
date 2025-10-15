@@ -10,6 +10,10 @@ class CalqueButton {
     void draw(sf::RenderWindow &window);
     void setPosition(float x, float y);
     void setName(const std::string &name);
+    std::string getTitle() const { return calqueButton.getTitle(); }
+    std::string getCode() const { return calqueButton.getCode(); }
+    Button::stateButton getState() const { return calqueButton.getState(); }
+    void setState(Button::stateButton state) { calqueButton.setState(state); }
     void setActive(bool active);
     std::string handleInput(const sf::Event &event, bool &consumed);
 

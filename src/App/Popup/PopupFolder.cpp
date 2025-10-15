@@ -112,6 +112,10 @@ std::string PopupFolder::getExtension(const std::string& filename) {
     return filename.substr(dotPos);
 }
 
+void PopupFolder::setExtensions(const std::vector<std::string>& exts) {
+    extensions = exts;
+}
+
 void PopupFolder::draw()
 {
     // Draw the options

@@ -16,6 +16,9 @@ class PopupFolder
       std::vector<std::string> _extensions,
       bool _isSelectFolder = true,
       bool _isSelectNameFile = true);
+    bool isGoodExtension(const std::string& filename);
+    std::string getExtension(const std::string& filename);
+    void setExtensions(const std::vector<std::string>& exts);
 
  private:
     void init(const std::string& name);
@@ -24,8 +27,6 @@ class PopupFolder
     void draw();
     void updatePaths();
     void handleInput(sf::Event &event);
-    std::string getExtension(const std::string& filename);
-    bool isGoodExtension(const std::string& filename);
     void setupRectangle(sf::RectangleShape &rect,
         float x, float y, float width, float height, sf::Color color);
     void setupText(sf::Text &text,

@@ -31,6 +31,10 @@ class DrawApp {
     void moveCalquePos(bool up);
     bool isDragging() const { return dragging; }
 
+    void setId(int id);
+    void saveFile();
+    void exportFile();
+
  private:
     std::vector<Calque> calques;
     sf::Vector2u dimensions;
@@ -47,14 +51,10 @@ class DrawApp {
     void handleCommandCalques(const std::string& command);
     void handleCommandFile(const std::string& command);
 
-    void setId(int id);
-
     void handleDragging(sf::Event &event);
     void handleZooming(sf::Event &event);
 
     void updateCalques();
-    void saveFile();
-    void exportFile();
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
         const sf::Vector2u dimensionstoCopy);
     void newFile();
