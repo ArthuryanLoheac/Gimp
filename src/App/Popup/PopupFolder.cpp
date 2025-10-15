@@ -1,12 +1,16 @@
 #include "App/Popup/PopupFolder.hpp"
 #include <filesystem>
+#include <algorithm>
 
 namespace MyGimp {
-std::string PopupFolder::openPopup(const std::string& name)
+std::string PopupFolder::openPopup(const std::string& name, std::vector<std::string> _extensions, bool _isSelectFolder, bool _isSelectNameFile)
 {
     selectedPath = "/home";
     window.create(sf::VideoMode(400, 400), "Popup Folder");
     window.setFramerateLimit(60);
+    isSelectFolder =_isSelectFolder;
+    isSelectNameFile =_isSelectNameFile;
+    extensions = _extensions;
 
     font.loadFromFile("Assets/Fonts/Inter.ttf");
     title.setFont(font);
@@ -61,7 +65,23 @@ std::string PopupFolder::openPopup(const std::string& name)
         selectedPath += '/';
     if (nameFile.empty())
         nameFile = "NewFile";
+    if (isGoodExtension(nameFile))
+        nameFile += ".png";
     return selectedPath + nameFile; // Example return value
+}
+
+bool PopupFolder::isGoodExtension(const std::string& filename) {
+    std::string ext = getExtension(nameFile);
+    if (std::find(extensions.begin(), extensions.end(), ext) == extensions.end() || ext.empty())
+        return false;
+    return true;
+}
+
+std::string PopupFolder::getExtension(const std::string& filename) {
+    size_t dotPos = filename.find_last_of('.');
+    if (dotPos == std::string::npos)
+        return "";
+    return filename.substr(dotPos);
 }
 
 void PopupFolder::draw()
@@ -73,10 +93,12 @@ void PopupFolder::draw()
     window.draw(backgroundTop);
     window.draw(backgroundBottom);
     window.draw(title);
-    window.draw(nameFileField);
-    if (cursorClock.getElapsedTime().asSeconds() < 0.5f || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2) % 2 == 0))
-        window.draw(cursorIndicator);
-    window.draw(nameFileText);
+    if (isSelectNameFile) {
+        window.draw(nameFileField);
+        if (cursorClock.getElapsedTime().asSeconds() < 0.5f || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2) % 2 == 0))
+            window.draw(cursorIndicator);
+        window.draw(nameFileText);
+    }
     buttonValidate.draw(window);
 }
 
@@ -86,7 +108,7 @@ void PopupFolder::updatePaths()
     options.push_back(std::make_shared<Button>("..", std::filesystem::path(selectedPath).parent_path().string(), 365));
     options.back()->setPosition(20, 20 + options.size() * separationY);
     for (const auto& entry : std::filesystem::directory_iterator(selectedPath)) {
-        if (!entry.is_directory())
+        if (!entry.is_directory() && isSelectFolder)
             continue;
         options.push_back(std::make_shared<Button>(entry.path().filename().string(),
                                 entry.path().string(), 365));
@@ -105,7 +127,11 @@ void PopupFolder::handleInput(sf::Event &event)
     for (auto& option : options) {
         if (option->handleInput(event, consumed) != "") {
             selectedPath = option->getCode();
-            pathChanged = true;
+            // is directory ?
+            if (!std::filesystem::is_directory(std::filesystem::path(selectedPath)) && !isSelectFolder && isGoodExtension(selectedPath))
+                window.close();
+            else
+                pathChanged = true;
             break;
         }
     }
@@ -126,7 +152,7 @@ void PopupFolder::handleInput(sf::Event &event)
             options[i]->setPosition(20, 20 + (i + 1) * separationY + scrollOffset);
     }
 
-    if (event.type == sf::Event::TextEntered) {
+    if (event.type == sf::Event::TextEntered && isSelectNameFile) {
         if (event.text.unicode == 8) { // Backspace
             if (!nameFile.empty())
                 nameFile.pop_back();

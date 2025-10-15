@@ -12,12 +12,14 @@ class PopupFolder
     PopupFolder() = default;
     ~PopupFolder() = default;
 
-    std::string openPopup(const std::string& name);
+    std::string openPopup(const std::string& name, std::vector<std::string> _extensions, bool _isSelectFolder = true, bool _isSelectNameFile = true);
 
  private:
     void draw();
     void updatePaths();
     void handleInput(sf::Event &event);
+    std::string getExtension(const std::string& filename);
+    bool isGoodExtension(const std::string& filename);
 
     Button buttonValidate;
     sf::RenderWindow window;
@@ -33,8 +35,11 @@ class PopupFolder
     sf::RectangleShape nameFileField;
     sf::RectangleShape cursorIndicator;
     sf::Clock cursorClock;
+    std::vector<std::string> extensions;
     bool open;
     float scrollOffset = 0.0f;
     const float separationY = 32.0f;
+    bool isSelectFolder = true;
+    bool isSelectNameFile = true;
 };
 }  // namespace MyGimp
