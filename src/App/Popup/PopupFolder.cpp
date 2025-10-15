@@ -14,9 +14,15 @@ std::string PopupFolder::openPopup(const std::string& name)
     title.setCharacterSize(24);
     title.setFillColor(sf::Color::White);
     title.setPosition(20, 10);
+    nameFileText.setFont(font);
+    nameFileText.setString(nameFile);
+    nameFileText.setCharacterSize(16);
+    nameFileText.setFillColor(sf::Color::White);
+    nameFileText.setPosition(20, 360);
+    nameFile = "";
 
-    buttonValidate.init("Choose Current Folder", "validate");
-    buttonValidate.setPosition(200 - (buttonValidate.getWidth() / 2.f), 355);
+    buttonValidate.init("Confirm", "validate", 80);
+    buttonValidate.setPosition(310, 360);
 
     backgroundTop.setSize(sf::Vector2f(400, 50));
     backgroundTop.setFillColor(sf::Color(50, 50, 50));
@@ -26,8 +32,17 @@ std::string PopupFolder::openPopup(const std::string& name)
     backgroundBottom.setFillColor(sf::Color(50, 50, 50));
     backgroundBottom.setPosition(0, 350);
 
+    nameFileField.setSize(sf::Vector2f(275, 2));
+    nameFileField.setFillColor(sf::Color(70, 70, 70));
+    nameFileField.setPosition(20, 385);
+
+    cursorIndicator.setSize(sf::Vector2f(2, 20));
+    cursorIndicator.setFillColor(sf::Color(170, 170, 170));
+    cursorIndicator.setPosition(20, 360);
+
     updatePaths();
 
+    cursorClock.restart();
     while (window.isOpen())
     {
         sf::Event event;
@@ -42,7 +57,11 @@ std::string PopupFolder::openPopup(const std::string& name)
         window.display();
     }
 
-    return selectedPath; // Example return value
+    if (selectedPath.back() != '/' && selectedPath.back() != '\\')
+        selectedPath += '/';
+    if (nameFile.empty())
+        nameFile = "NewFile";
+    return selectedPath + nameFile; // Example return value
 }
 
 void PopupFolder::draw()
@@ -54,6 +73,10 @@ void PopupFolder::draw()
     window.draw(backgroundTop);
     window.draw(backgroundBottom);
     window.draw(title);
+    window.draw(nameFileField);
+    if (cursorClock.getElapsedTime().asSeconds() < 0.5f || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2) % 2 == 0))
+        window.draw(cursorIndicator);
+    window.draw(nameFileText);
     buttonValidate.draw(window);
 }
 
@@ -101,6 +124,18 @@ void PopupFolder::handleInput(sf::Event &event)
             scrollOffset = options.size() * -separationY + 300 - 2;
         for (int i = 0; i < options.size(); i++)
             options[i]->setPosition(20, 20 + (i + 1) * separationY + scrollOffset);
+    }
+
+    if (event.type == sf::Event::TextEntered) {
+        if (event.text.unicode == 8) { // Backspace
+            if (!nameFile.empty())
+                nameFile.pop_back();
+        } else if (event.text.unicode < 128 && event.text.unicode >= 32) { // Printable characters
+            nameFile += static_cast<char>(event.text.unicode);
+        }
+        cursorIndicator.setPosition(20 + nameFileField.getSize().x + 5, 360);
+        nameFileText.setString(nameFile);
+        cursorIndicator.setPosition(20 + nameFileText.getLocalBounds().width, 360);
     }
 }
 }  // namespace MyGimp

@@ -22,12 +22,17 @@ class PopupFolder
     Button buttonValidate;
     sf::RenderWindow window;
     std::string name;
+    std::string nameFile;
     std::string selectedPath;
     sf::Text title;
+    sf::Text nameFileText;
     sf::Font font;
     std::vector<std::shared_ptr<Button>> options;
     sf::RectangleShape backgroundTop;
     sf::RectangleShape backgroundBottom;
+    sf::RectangleShape nameFileField;
+    sf::RectangleShape cursorIndicator;
+    sf::Clock cursorClock;
     bool open;
     float scrollOffset = 0.0f;
     const float separationY = 32.0f;

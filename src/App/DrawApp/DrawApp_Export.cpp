@@ -10,6 +10,9 @@ namespace MyGimp {
 void DrawApp::exportFile() {
     sf::Image exportedImage;
     std::string path = popupFolder.openPopup("Select Folder");
+    std::string ext = getExtension(path);
+    if (ext != ".png" && ext != ".jpg" && ext != ".bmp")
+        return;
 
     if (calques.empty())
         throw DrawApp_NoCalque("No calques to export");
@@ -23,10 +26,15 @@ void DrawApp::exportFile() {
             dimensionstoCopy.y = c.getImage().getSize().y;
         mixCalqueForExport(exportedImage, c, dimensionstoCopy);
     }
-    if (path.back() != '/' && path.back() != '\\')
-        path += '/';
-    if (!exportedImage.saveToFile(path + "Img.jpg"))
+    if (!exportedImage.saveToFile(path))
         throw DrawApp_ExportError("Failed to export");
+}
+
+std::string DrawApp::getExtension(const std::string& filename) {
+    size_t dotPos = filename.find_last_of('.');
+    if (dotPos == std::string::npos)
+        return "";
+    return filename.substr(dotPos);
 }
 
 void DrawApp::mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
