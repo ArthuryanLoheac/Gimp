@@ -1,7 +1,7 @@
 #include <string>
+#include <algorithm>
 
 #include "App/Logger.hpp"
-
 #include "App/DrawApp/DrawApp.hpp"
 
 namespace MyGimp {
@@ -44,7 +44,13 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         if (path.empty())
             return;
         newCalque(namePath, path);
-    } else if (command.rfind("see_calque_id_", 0) == 0) {
+    } else {
+        handleCommandOpacity(command);
+    }
+}
+
+void DrawApp::handleCommandOpacity(const std::string& command) {
+    if (command.rfind("see_calque_id_", 0) == 0) {
         try {
             int id = std::stoi(command.substr(14));
             if (id < 0 || id >= static_cast<int>(calques.size()))

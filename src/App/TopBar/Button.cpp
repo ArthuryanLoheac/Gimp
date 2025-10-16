@@ -104,7 +104,8 @@ void Button::setPosition(float x, float y) {
     if (icon.getTexture() != nullptr)
         icon.setPosition(
             x + 5 + deltaPosText.x,
-            y + (background.getSize().y - icon.getGlobalBounds().height) / 2 + deltaPosText.y);
+            y + (background.getSize().y -
+                icon.getGlobalBounds().height) / 2 + deltaPosText.y);
 }
 
 Button::stateButton Button::getState() const {
@@ -131,20 +132,17 @@ void Button::setWidth(float width) {
     background.setSize(sf::Vector2f(width, background.getSize().y));
 }
 
-void Button::setDeltaPosText(float x, float y)
-{
+void Button::setDeltaPosText(float x, float y) {
     deltaPosText = {x, y};
     setPosition(position.x, position.y);
 }
 
-void Button::setSize(float width, float height)
-{
+void Button::setSize(float width, float height) {
     setWidth(width);
     setHeight(height);
 }
 
-std::string Button::getCode() const
-{
+std::string Button::getCode() const {
     return code;
 }
 

@@ -1,10 +1,10 @@
 #include "App/CalqueMenu/PercentageSelector.hpp"
 #include <algorithm>
+#include <string>
 
 namespace MyGimp {
 
-PercentageSelector::PercentageSelector(const std::string &code)
-{
+PercentageSelector::PercentageSelector(const std::string &code) {
     if (!font.loadFromFile("Assets/Fonts/Inter.ttf"))
         return;
     text.setFont(font);
@@ -24,26 +24,28 @@ PercentageSelector::PercentageSelector(const std::string &code)
     setSelected(false);
 }
 
-void PercentageSelector::draw(sf::RenderWindow &window)
-{
+void PercentageSelector::draw(sf::RenderWindow &window) {
     window.draw(text);
     buttonUp.draw(window);
     buttonDown.draw(window);
-    if (cursorClock.getElapsedTime().asSeconds() < 0.5f && selected || (static_cast<int>
-        (cursorClock.getElapsedTime().asSeconds() * 2) % 2 == 0) && selected)
+    if (cursorClock.getElapsedTime().asSeconds() < 0.5f && selected
+        || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2)
+            % 2 == 0) && selected)
         window.draw(cursor);
 }
 
-std::string PercentageSelector::handleInput(const sf::Event &event, bool &consumed)
-{
+std::string PercentageSelector::handleInput(const sf::Event &event,
+bool &consumed) {
     if (consumed)
         return "";
     if (event.type == sf::Event::MouseButtonPressed) {
         if (event.mouseButton.button == sf::Mouse::Left) {
-            if (event.mouseButton.x >= text.getPosition().x - text.getLocalBounds().width &&
+            if (event.mouseButton.x >= text.getPosition().x -
+                    text.getLocalBounds().width &&
                 event.mouseButton.x <= text.getPosition().x + 5 &&
                 event.mouseButton.y >= text.getPosition().y &&
-                event.mouseButton.y <= text.getPosition().y + text.getCharacterSize()) {
+                event.mouseButton.y <= text.getPosition().y +
+                    text.getCharacterSize()) {
                 setSelected(true);
                 consumed = true;
             } else {
@@ -72,16 +74,14 @@ std::string PercentageSelector::handleInput(const sf::Event &event, bool &consum
     return codeReturn;
 }
 
-void PercentageSelector::setPosition(float x, float y)
-{
+void PercentageSelector::setPosition(float x, float y) {
     text.setPosition(x + 45, y + 5);
     cursor.setPosition(x + 30, y + 5);
     buttonUp.setPosition(x + 55, y);
     buttonDown.setPosition(x + 55, y + 15);
 }
 
-void PercentageSelector::setSelected(bool value)
-{
+void PercentageSelector::setSelected(bool value) {
     selected = value;
     if (selected)
         cursor.setOutlineColor(sf::Color::White);
@@ -89,16 +89,14 @@ void PercentageSelector::setSelected(bool value)
         cursor.setOutlineColor(sf::Color::Transparent);
 }
 
-void PercentageSelector::setPercentage(int value)
-{
+void PercentageSelector::setPercentage(int value) {
     percentage = std::clamp(value, 0, 100);
     text.setString(std::to_string(percentage) + "%");
     text.setOrigin(text.getLocalBounds().width, 0);
     currentInput = std::to_string(percentage);
 }
 
-int PercentageSelector::getPercentage() const
-{
+int PercentageSelector::getPercentage() const {
     return percentage;
 }
 

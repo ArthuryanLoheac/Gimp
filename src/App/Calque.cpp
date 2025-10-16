@@ -31,13 +31,11 @@ const sf::Image& Calque::getImage() const {
     return image;
 }
 
-float Calque::getOpacity() const
-{
+float Calque::getOpacity() const {
     return opacity;
 }
 
-void Calque::setOpacity(float opacity)
-{
+void Calque::setOpacity(float opacity) {
     if (opacity < 0.0f)
         this->opacity = 0.0f;
     else if (opacity > 1.0f)
@@ -46,14 +44,14 @@ void Calque::setOpacity(float opacity)
         this->opacity = opacity;
 }
 
-void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos)
-{
+void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
     if (visible) {
         texture.loadFromImage(image);
         sprite.setTexture(texture);
         sprite.setScale(zoom, zoom);
         sprite.setPosition(pos);
-        sprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(opacity * 255)));
+        sprite.setColor(sf::Color(255, 255, 255,
+            static_cast<sf::Uint8>(opacity * 255)));
         window.draw(sprite);
     }
 }

@@ -6,7 +6,7 @@
 namespace MyGimp {
 class PercentageSelector {
  public:
-    PercentageSelector(const std::string &code);
+    explicit PercentageSelector(const std::string &code);
     ~PercentageSelector() = default;
 
     void draw(sf::RenderWindow &window);

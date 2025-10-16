@@ -15,7 +15,7 @@ void DrawApp::exportFile() {
     if (calques.empty())
         throw DrawApp_NoCalque("No calques to export");
     exportedImage.create(calques[0].getImage().getSize().x,
-                        calques[0].getImage().getSize().y, sf::Color(0, 0, 0, 0));
+        calques[0].getImage().getSize().y, sf::Color(0, 0, 0, 0));
     for (int i = calques.size() - 1; i >= 0; --i) {
         Calque &c = calques[i];
         if (!c.isVisible())
@@ -49,14 +49,14 @@ const sf::Vector2u dimensionstoCopy) {
                 exportedImage.setPixel(x, y, sf::Color(0, 0, 0, 0));
                 continue;
             }
-            const sf::Uint8 finalR = static_cast<sf::Uint8>(((newPixel.r * a)
+            const sf::Uint8 fnlR = static_cast<sf::Uint8>(((newPixel.r * a)
                 + (pixel.r * pixelAlpha * (1 - a))) / outAlpha);
-            const sf::Uint8 finalG = static_cast<sf::Uint8>(((newPixel.g * a)
+            const sf::Uint8 fnlG = static_cast<sf::Uint8>(((newPixel.g * a)
                 + (pixel.g * pixelAlpha * (1 - a))) / outAlpha);
-            const sf::Uint8 finalB = static_cast<sf::Uint8>(((newPixel.b * a)
+            const sf::Uint8 fnlB = static_cast<sf::Uint8>(((newPixel.b * a)
                 + (pixel.b * pixelAlpha * (1 - a))) / outAlpha);
-            const sf::Uint8 finalA = static_cast<sf::Uint8>(outAlpha * 255);
-            exportedImage.setPixel(x, y, sf::Color(finalR, finalG, finalB, finalA));
+            const sf::Uint8 fnlA = static_cast<sf::Uint8>(outAlpha * 255);
+            exportedImage.setPixel(x, y, sf::Color(fnlR, fnlG, fnlB, fnlA));
         }
     }
 }

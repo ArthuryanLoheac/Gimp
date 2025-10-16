@@ -49,6 +49,7 @@ class DrawApp {
 
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);
+    void handleCommandOpacity(const std::string& command);
     void handleCommandFile(const std::string& command);
 
     void handleDragging(sf::Event &event);
