@@ -1,7 +1,8 @@
 #include <string>
+#include <algorithm>
 #include <vector>
 
-#include "Logger.h"
+#include "App/Logger.hpp"
 
 #include "App/DrawApp/DrawApp.hpp"
 #include "Exceptions/DrawAppExceptions.hpp"
@@ -23,6 +24,7 @@ void DrawApp::init(const std::string& filepath) {
         calques.clear();
         calques.emplace_back("Calque 1");
         calques.back().createFromFile(filepath);
+        updateCalques();
         dimensions = calques.back().getImage().getSize();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
@@ -32,31 +34,24 @@ void DrawApp::init(const std::string& filepath) {
 
 // Calque Management
 
-void DrawApp::newCalque(const std::string& name, sf::Color col) {
-    try {
-        calques.emplace_back(name);
-        calques.back().createEmpty(dimensions.x, dimensions.y, col);
-    } catch (const Calque_Error &e) {
-        LOG_ERROR(e.what());
-    }
-}
 
-void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
-    try {
-        calques.emplace_back(name);
-        calques.back().createFromFile(filepath);
-    } catch (const Calque_Error &e) {
-        LOG_ERROR(e.what());
-    }
+void DrawApp::newFile() {
+    calques.clear();
+    dimensions = sf::Vector2u(800, 600);
+    newCalque("Calque 1", sf::Color::White);
 }
 
 // Getters & Setters
 
-std::vector<Calque>& DrawApp::getCalques() {
-    return calques;
-}
+
 
 sf::Vector2u DrawApp::getDimensions() const {
     return dimensions;
+}
+
+void DrawApp::setId(int id) {
+    if (id >= 0 && id < static_cast<int>(calques.size()))
+        actualCalqueId = id;
+    updateCalques();
 }
 }  // namespace MyGimp

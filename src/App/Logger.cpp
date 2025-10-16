@@ -1,4 +1,4 @@
-#include "Logger.h"
+#include "App/Logger.hpp"
 #include <iostream>
 #include <sstream>
 #include <mutex>
@@ -8,33 +8,15 @@
 namespace MyGimp {
 bool Logger::initialized = false;
 
-#ifdef USE_SPDLOG
-std::shared_ptr<spdlog::logger> Logger::logger = nullptr;
-#endif
-
 void Logger::initialize() {
     if (initialized) {
         return;
     }
 
-#ifdef USE_SPDLOG
-    try {
-        // Create a colored console logger with spdlog
-        logger = spdlog::stdout_color_mt("MyGimp");
-        logger->set_level(spdlog::level::debug);
-        logger->set_pattern("[%Y-%m-%d %H:%M:%S.%e] [%n] [%^%l%$] %v");
-        logger->info("Logger initialized with spdlog");
-    } catch (const spdlog::spdlog_ex& ex) {
-        std::cerr << "Log initialization failed: " << ex.what() << std::endl;
-        // Fallback to console logging
-        logger = nullptr;
-    }
-#else
     // Console fallback initialization message
     std::cout << "[" << getCurrentTimestamp()
         << "] [MyGimp] [INFO] Logger initialized with console fallback"
         << std::endl;
-#endif
 
     initialized = true;
 }
@@ -44,46 +26,15 @@ void Logger::shutdown() {
         return;
     }
 
-#ifdef USE_SPDLOG
-    if (logger) {
-        logger->info("Logger shutting down");
-        spdlog::shutdown();
-    } else {
-        std::cout << "[" << getCurrentTimestamp() <<
-            "] [MyGimp] [INFO] Logger shutting down" << std::endl;
-    }
-#else
     std::cout << "[" << getCurrentTimestamp()
         << "] [MyGimp] [INFO] Logger shutting down" << std::endl;
-#endif
 
     initialized = false;
 }
 
 void Logger::log(Level level, const std::string& message) {
-    if (!initialized) {
+    if (!initialized)
         initialize();
-    }
-
-#ifdef USE_SPDLOG
-    if (logger) {
-        switch (level) {
-            case Level::INFO:
-                logger->info(message);
-                break;
-            case Level::WARN:
-                logger->warn(message);
-                break;
-            case Level::ERROR:
-                logger->error(message);
-                break;
-            case Level::DEBUG:
-                logger->debug(message);
-                break;
-        }
-        return;
-    }
-#endif
 
     // Fallback to console output
     static std::mutex console_mutex;

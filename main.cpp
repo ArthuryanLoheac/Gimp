@@ -1,7 +1,7 @@
 # include <iostream>
 # include <string>
 # include <SFML/Graphics.hpp>
-# include "Logger.h"
+# include "App/Logger.hpp"
 # include "App/App.hpp"
 
 

@@ -4,12 +4,7 @@
 #include <string>
 #include <ctime>
 #include <iomanip>
-
-#ifdef USE_SPDLOG
-    #include <spdlog/spdlog.h>
-    #include <spdlog/sinks/stdout_color_sinks.h>
-    #define LOGGER_AVAILABLE
-#endif
+#include <memory>
 
 namespace MyGimp {
 class Logger {
@@ -38,12 +33,8 @@ class Logger {
     static bool initialized;
     static std::string getCurrentTimestamp();
     static std::string levelToString(Level level);
-
-#ifdef USE_SPDLOG
-    static std::shared_ptr<spdlog::logger> logger;
-#endif
-    };
-}
+};
+}  // namespace MyGimp
 
 #define LOG_INFO(msg) MyGimp::Logger::info(msg)
 #define LOG_DEBUG(msg) MyGimp::Logger::debug(msg)
