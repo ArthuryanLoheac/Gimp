@@ -68,7 +68,10 @@ void Button::draw(sf::RenderWindow &window) {
 
 std::string Button::handleInput(const sf::Event &event, bool &consumed) {
     std::string codeReturn = "";
-    if (consumed) return codeReturn;
+    if (consumed) {
+        currentState = IDLE;
+        return codeReturn;
+    }
 
     if (event.type == sf::Event::MouseMoved) {
         sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
@@ -150,6 +153,20 @@ void Button::setColor(const sf::Color &color, stateButton state) {
 
     if (currentState == state)
         background.setFillColor(color);
+}
+
+void Button::setIcon(const std::string &iconPath, int iconSize) {
+    if (!iconTexture.loadFromFile(iconPath)) {
+        std::cerr << "Failed to load icon for Button" << std::endl;
+        return;
+    }
+    icon.setTexture(iconTexture);
+    float scaleX = static_cast<float>(iconSize) / iconTexture.getSize().x;
+    float scaleY = static_cast<float>(iconSize) / iconTexture.getSize().y;
+    icon.setScale(scaleX, scaleY);
+    icon.setPosition(
+        background.getPosition().x + 5,
+        background.getPosition().y + (background.getSize().y - iconSize) / 2);
 }
 
 }  // namespace MyGimp

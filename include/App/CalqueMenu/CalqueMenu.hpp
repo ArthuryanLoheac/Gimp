@@ -16,6 +16,7 @@ class CalqueMenu {
     void update(std::vector<Calque> &calques, int actualCalqueId);
     std::string handleInput(const sf::Event &event, bool &consumed);
 
+    std::vector<std::shared_ptr<CalqueButton>> &getCalqueButtons();
  private:
     int actualCalqueId = 0;
     std::vector<std::shared_ptr<CalqueButton>> calqueButtons;

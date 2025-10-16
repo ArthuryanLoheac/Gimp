@@ -11,6 +11,8 @@ void DrawApp::draw(sf::RenderWindow& window) {
         viewOffset.y + window.getSize().y / 2.f - dimensions.y * zoom / 2.f};
 
     for (auto &calque : calques) {
+        if (!calque.isVisible())
+            continue;
         calque.draw(window, zoom, pos);
     }
     topBar.draw(window);

@@ -39,6 +39,8 @@ class Button {
     sf::Color getColor() const;
     void setColor(const sf::Color &color, stateButton state = IDLE);
 
+    void setIcon(const std::string &iconPath, int iconSize = 20);
+
  private:
     sf::RectangleShape background;
     sf::Text text;

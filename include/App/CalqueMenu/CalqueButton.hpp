@@ -16,9 +16,11 @@ class CalqueButton {
     void setState(Button::stateButton state) { calqueButton.setState(state); }
     void setActive(bool active);
     std::string handleInput(const sf::Event &event, bool &consumed);
+    void setSee(bool see);
 
  private:
     Button calqueButton;
     Button deleteButton;
+    Button seeButton;
 };
 }  // namespace MyGimp

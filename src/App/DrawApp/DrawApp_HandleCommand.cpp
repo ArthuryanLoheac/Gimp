@@ -42,6 +42,16 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         if (path.empty())
             return;
         newCalque(namePath, path);
+    } else if (command.rfind("see_calque_id_", 0) == 0) {
+        try {
+            int id = std::stoi(command.substr(14));
+            if (id < 0 || id >= static_cast<int>(calques.size()))
+                return;
+            calques[id].setVisible(!calques[id].isVisible());
+            calqueMenu.getCalqueButtons()[id]->setSee(calques[id].isVisible());
+        } catch (const std::exception &e) {
+            LOG_ERROR("Invalid calque see command: " + command);
+        }
     }
 }
 

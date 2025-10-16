@@ -15,14 +15,14 @@ TopBar::TopBar() {
         std::vector<std::pair<std::string, std::string>>{
                     {"New", "new_file"},
                     {"Save", "save_file"},
-                    {"Import Image", "import_image"},
                     {"Export", "export_file"}}));
     buttons.push_back(std::make_shared<TopButton>("Calque",
         std::vector<std::pair<std::string, std::string>>{
                     {"New Calque", "add_calque"},
                     {"Delete Calque", "delete_calque"},
                     {"Move Up", "move_calque_up"},
-                    {"Move Down", "move_calque_down"}}));
+                    {"Move Down", "move_calque_down"},
+                    {"Import Image", "import_image"}}));
 
     float x = 10.0f;
 

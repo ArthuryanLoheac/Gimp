@@ -17,6 +17,9 @@ void DrawApp::exportFile() {
     exportedImage.create(calques[0].getImage().getSize().x,
                         calques[0].getImage().getSize().y);
     for (Calque &c : calques) {
+        if (!c.isVisible())
+            continue;
+
         sf::Vector2u dimensionstoCopy = exportedImage.getSize();
         if (c.getImage().getSize().x < dimensionstoCopy.x)
             dimensionstoCopy.x = c.getImage().getSize().x;

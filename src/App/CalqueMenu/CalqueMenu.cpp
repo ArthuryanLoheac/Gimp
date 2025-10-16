@@ -75,4 +75,8 @@ std::string CalqueMenu::handleInput(const sf::Event &event, bool &consumed) {
     }
     return codeReturn;
 }
+
+std::vector<std::shared_ptr<CalqueButton>> &CalqueMenu::getCalqueButtons() {
+    return calqueButtons;
+}
 }  // namespace MyGimp
