@@ -55,6 +55,7 @@ void CalqueMenu::update(std::vector<Calque> &calques, int actualCalqueId) {
             std::make_shared<CalqueButton>(calque.getName());
         button->setPosition(WIDTH - MENU_WIDTH + 10,
             HEIGHT - MENU_HEIGHT + 50 + calqueButtons.size() * 35);
+        button->setSee(calque.isVisible());
         calqueButtons.emplace_back(button);
     }
 }

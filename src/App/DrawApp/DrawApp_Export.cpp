@@ -15,8 +15,9 @@ void DrawApp::exportFile() {
     if (calques.empty())
         throw DrawApp_NoCalque("No calques to export");
     exportedImage.create(calques[0].getImage().getSize().x,
-                        calques[0].getImage().getSize().y);
-    for (Calque &c : calques) {
+                        calques[0].getImage().getSize().y, sf::Color(0, 0, 0, 0));
+    for (int i = calques.size() - 1; i >= 0; --i) {
+        Calque &c = calques[i];
         if (!c.isVisible())
             continue;
 
@@ -37,15 +38,25 @@ const sf::Vector2u dimensionstoCopy) {
         for (unsigned int y = 0; y < dimensionstoCopy.y; y++) {
             const sf::Color pixel = exportedImage.getPixel(x, y);
             const sf::Color newPixel = c.getImage().getPixel(x, y);
-            const float a = newPixel.a / 255.f;
+            const float calqueOpacity = c.getOpacity(); // Doit être entre 0 et 1
+            const float a = (newPixel.a / 255.f) * calqueOpacity;
             if (a == 0) continue;
 
-            const sf::Color finalPixel = sf::Color(
-                (pixel.r * (1 - a)) + (newPixel.r * a),
-                (pixel.g * (1 - a)) + (newPixel.g * a),
-                (pixel.b * (1 - a)) + (newPixel.b * a),
-                255);
-            exportedImage.setPixel(x, y, finalPixel);
+            // Calculer la nouvelle transparence (alpha)
+            const float pixelAlpha = pixel.a / 255.f;
+            const float outAlpha = a + pixelAlpha * (1 - a);
+            if (outAlpha == 0) {
+                exportedImage.setPixel(x, y, sf::Color(0, 0, 0, 0));
+                continue;
+            }
+            const sf::Uint8 finalR = static_cast<sf::Uint8>(((newPixel.r * a)
+                + (pixel.r * pixelAlpha * (1 - a))) / outAlpha);
+            const sf::Uint8 finalG = static_cast<sf::Uint8>(((newPixel.g * a)
+                + (pixel.g * pixelAlpha * (1 - a))) / outAlpha);
+            const sf::Uint8 finalB = static_cast<sf::Uint8>(((newPixel.b * a)
+                + (pixel.b * pixelAlpha * (1 - a))) / outAlpha);
+            const sf::Uint8 finalA = static_cast<sf::Uint8>(outAlpha * 255);
+            exportedImage.setPixel(x, y, sf::Color(finalR, finalG, finalB, finalA));
         }
     }
 }

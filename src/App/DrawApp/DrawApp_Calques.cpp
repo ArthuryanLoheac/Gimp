@@ -11,8 +11,8 @@
 namespace MyGimp {
 void DrawApp::newCalque(const std::string& name, sf::Color col) {
     try {
-        calques.emplace_back(name);
-        calques.back().createEmpty(dimensions.x, dimensions.y, col);
+        calques.emplace(calques.begin(), name);
+        calques.front().createEmpty(dimensions.x, dimensions.y, col);
         updateCalques();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
@@ -21,8 +21,8 @@ void DrawApp::newCalque(const std::string& name, sf::Color col) {
 
 void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
     try {
-        calques.emplace_back(name);
-        calques.back().createFromFile(filepath);
+        calques.emplace(calques.begin(), name);
+        calques.front().createFromFile(filepath);
         updateCalques();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());

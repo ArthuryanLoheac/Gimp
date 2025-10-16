@@ -53,6 +53,7 @@ void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos)
         sprite.setTexture(texture);
         sprite.setScale(zoom, zoom);
         sprite.setPosition(pos);
+        sprite.setColor(sf::Color(255, 255, 255, static_cast<sf::Uint8>(opacity * 255)));
         window.draw(sprite);
     }
 }
