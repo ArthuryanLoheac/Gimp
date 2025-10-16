@@ -32,6 +32,7 @@ class DrawApp {
     bool isDragging() const { return dragging; }
 
     void setId(int id);
+    int getId() const { return actualCalqueId; }
     void saveFile();
     void exportFile();
 

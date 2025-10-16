@@ -24,9 +24,9 @@ Test(DrawApp, add_empty_calque) {
     app.init(800, 600);
     app.newCalque("EmptyLayer", sf::Color::Red);
     cr_assert_eq(app.getCalques().size(), 2);
-    cr_assert_eq(app.getCalques()[1].getName(), "EmptyLayer");
-    cr_assert_eq(app.getCalques()[1].getImage().getSize().x, 800);
-    cr_assert_eq(app.getCalques()[1].getImage().getSize().y, 600);
+    cr_assert_eq(app.getCalques()[0].getName(), "EmptyLayer");
+    cr_assert_eq(app.getCalques()[0].getImage().getSize().x, 800);
+    cr_assert_eq(app.getCalques()[0].getImage().getSize().y, 600);
 }
 
 Test(DrawApp, add_file_calque) {
@@ -34,9 +34,9 @@ Test(DrawApp, add_file_calque) {
     app.init(800, 600);
     app.newCalque("FileLayer", "tests/Images/Img.jpg");
     cr_assert_eq(app.getCalques().size(), 2);
-    cr_assert_eq(app.getCalques()[1].getName(), "FileLayer");
-    cr_assert_eq(app.getCalques()[1].getImage().getSize().x, 612);
-    cr_assert_eq(app.getCalques()[1].getImage().getSize().y, 408);
+    cr_assert_eq(app.getCalques()[0].getName(), "FileLayer");
+    cr_assert_eq(app.getCalques()[0].getImage().getSize().x, 612);
+    cr_assert_eq(app.getCalques()[0].getImage().getSize().y, 408);
 }
 
 Test(DrawApp, delete_calque) {
@@ -57,12 +57,14 @@ Test(DrawApp, move_calque_up_down) {
     app.init(800, 600);
     app.newCalque("Layer2", sf::Color::Blue);
     app.setId(1);
-    app.moveCalquePos(true); // up
     cr_assert_eq(app.getCalques()[0].getName(), "Layer2");
     cr_assert_eq(app.getCalques()[1].getName(), "Calque 1");
-    app.moveCalquePos(false); // down
+    app.moveCalquePos(true); // up
     cr_assert_eq(app.getCalques()[0].getName(), "Calque 1");
     cr_assert_eq(app.getCalques()[1].getName(), "Layer2");
+    app.moveCalquePos(false); // down
+    cr_assert_eq(app.getCalques()[0].getName(), "Layer2");
+    cr_assert_eq(app.getCalques()[1].getName(), "Calque 1");
 }
 
 Test(DrawApp, set_get_id) {
@@ -70,7 +72,11 @@ Test(DrawApp, set_get_id) {
     app.init(800, 600);
     app.newCalque("Layer2", sf::Color::Yellow);
     app.setId(1);
-    cr_assert_eq(app.getCalques()[app.getCalques().size()-1].getName(), "Layer2");
+    cr_assert_eq(app.getId(), 1);
+    app.setId(0);
+    cr_assert_eq(app.getId(), 0);
+    app.setId(5); // invalide
+    cr_assert_eq(app.getId(), 0);
 }
 
 Test(DrawApp, save_export_file_mock) {
