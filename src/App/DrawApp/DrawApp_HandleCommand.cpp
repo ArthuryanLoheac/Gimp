@@ -20,6 +20,8 @@ void DrawApp::handleCommandCalques(const std::string& command) {
     } else if (command.rfind("select_calque_", 0) == 0) {
         try {
             setId(std::stoi(command.substr(14)));
+            calqueMenu.getPercentageSelector().setPercentage(
+                static_cast<int>(calques[actualCalqueId].getOpacity() * 100));
         } catch (const std::exception &e) {
             LOG_ERROR("Invalid calque selection command: " + command);
         }
@@ -52,6 +54,22 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         } catch (const std::exception &e) {
             LOG_ERROR("Invalid calque see command: " + command);
         }
+    } else if (command == "opacity_selector_up") {
+        int opacity = calqueMenu.getPercentageSelector().getPercentage();
+        opacity = std::min(100, opacity + 5);
+        calqueMenu.getPercentageSelector().setPercentage(opacity);
+        if (calques.empty() || actualCalqueId < 0 ||
+            actualCalqueId >= static_cast<int>(calques.size()))
+            return;
+        calques[actualCalqueId].setOpacity(opacity / 100.f);
+    } else if (command == "opacity_selector_down") {
+        int opacity = calqueMenu.getPercentageSelector().getPercentage();
+        opacity = std::max(0, opacity - 5);
+        calqueMenu.getPercentageSelector().setPercentage(opacity);
+        if (calques.empty() || actualCalqueId < 0 ||
+            actualCalqueId >= static_cast<int>(calques.size()))
+            return;
+        calques[actualCalqueId].setOpacity(opacity / 100.f);
     }
 }
 

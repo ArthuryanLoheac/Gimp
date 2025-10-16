@@ -30,6 +30,9 @@ class Button {
     float getHeight() const;
     void setHeight(float height);
     float getWidth() const;
+    void setWidth(float width);
+    void setDeltaPosText(float x, float y);
+    void setSize(float width, float height);
 
     std::string getCode() const;
 
@@ -42,6 +45,9 @@ class Button {
     void setIcon(const std::string &iconPath, int iconSize = 20);
 
  private:
+    sf::Vector2f deltaPosText = {0, 0};
+    sf::Vector2f position = {0, 0};
+
     sf::RectangleShape background;
     sf::Text text;
     sf::Font font;

@@ -98,12 +98,13 @@ std::string Button::handleInput(const sf::Event &event, bool &consumed) {
 }
 
 void Button::setPosition(float x, float y) {
+    position = {x, y};
     background.setPosition(x, y);
-    text.setPosition(x + 10, y + 5);
+    text.setPosition(x + 10 + deltaPosText.x, y + 5 + deltaPosText.y);
     if (icon.getTexture() != nullptr)
         icon.setPosition(
-            x + 5,
-            y + (background.getSize().y - icon.getGlobalBounds().height) / 2);
+            x + 5 + deltaPosText.x,
+            y + (background.getSize().y - icon.getGlobalBounds().height) / 2 + deltaPosText.y);
 }
 
 Button::stateButton Button::getState() const {
@@ -126,7 +127,24 @@ float Button::getWidth() const {
     return background.getSize().x;
 }
 
-std::string Button::getCode() const {
+void Button::setWidth(float width) {
+    background.setSize(sf::Vector2f(width, background.getSize().y));
+}
+
+void Button::setDeltaPosText(float x, float y)
+{
+    deltaPosText = {x, y};
+    setPosition(position.x, position.y);
+}
+
+void Button::setSize(float width, float height)
+{
+    setWidth(width);
+    setHeight(height);
+}
+
+std::string Button::getCode() const
+{
     return code;
 }
 

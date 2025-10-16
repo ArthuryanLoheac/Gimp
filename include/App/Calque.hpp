@@ -20,8 +20,11 @@ class Calque {
     bool isVisible() const;
     const std::string& getName() const;
     const sf::Image& getImage() const;
+    float getOpacity() const;
+    void setOpacity(float opacity);
 
  private:
+    float opacity = 1.0f;
     std::string name;
     sf::Image image;
 

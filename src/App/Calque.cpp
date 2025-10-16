@@ -31,7 +31,23 @@ const sf::Image& Calque::getImage() const {
     return image;
 }
 
-void Calque::draw(sf::RenderWindow& window, float zoom, sf::Vector2f pos) {
+float Calque::getOpacity() const
+{
+    return opacity;
+}
+
+void Calque::setOpacity(float opacity)
+{
+    if (opacity < 0.0f)
+        this->opacity = 0.0f;
+    else if (opacity > 1.0f)
+        this->opacity = 1.0f;
+    else
+        this->opacity = opacity;
+}
+
+void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos)
+{
     if (visible) {
         texture.loadFromImage(image);
         sprite.setTexture(texture);
