@@ -38,7 +38,7 @@ const sf::Vector2u dimensionstoCopy) {
         for (unsigned int y = 0; y < dimensionstoCopy.y; y++) {
             const sf::Color pixel = exportedImage.getPixel(x, y);
             const sf::Color newPixel = c.getImage().getPixel(x, y);
-            const float calqueOpacity = c.getOpacity(); // Doit être entre 0 et 1
+            const float calqueOpacity = c.getOpacity();
             const float a = (newPixel.a / 255.f) * calqueOpacity;
             if (a == 0) continue;
 

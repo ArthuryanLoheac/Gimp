@@ -70,6 +70,18 @@ void DrawApp::handleCommandCalques(const std::string& command) {
             actualCalqueId >= static_cast<int>(calques.size()))
             return;
         calques[actualCalqueId].setOpacity(opacity / 100.f);
+    } else if (command.rfind("opacity_selector_input", 0) == 0) {
+        try {
+            int opacity = std::stoi(command.substr(23));
+            opacity = std::clamp(opacity, 0, 100);
+            calqueMenu.getPercentageSelector().setPercentage(opacity);
+            if (calques.empty() || actualCalqueId < 0 ||
+                actualCalqueId >= static_cast<int>(calques.size()))
+                return;
+            calques[actualCalqueId].setOpacity(opacity / 100.f);
+        } catch (const std::exception &e) {
+            LOG_ERROR("Invalid opacity input command: " + command);
+        }
     }
 }
 
