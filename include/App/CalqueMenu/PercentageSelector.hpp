@@ -15,6 +15,7 @@ class PercentageSelector {
     void setPercentage(int value);
     void setPosition(float x, float y);
     void setSelected(bool value);
+    bool isSelected() const { return selected; }
 
  private:
     bool selected = false;

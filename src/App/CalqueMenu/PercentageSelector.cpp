@@ -63,9 +63,7 @@ bool &consumed) {
                 currentInput += static_cast<char>(event.text.unicode);
         }
         consumed = true;
-        if (currentInput.empty())
-            currentInput = "0";
-        return code + "_input_" + currentInput;
+        return code + "_input_" + (currentInput.empty() ? "0" : currentInput);
     }
 
     std::string codeReturn = "";

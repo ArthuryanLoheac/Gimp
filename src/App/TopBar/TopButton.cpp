@@ -11,9 +11,8 @@ std::vector<std::pair<std::string, std::string>> items) {
     background.setSize(sf::Vector2f(title.length() * 10 + 20, 30));
     background.setFillColor(sf::Color(50, 50, 50));
 
-    if (!font.loadFromFile("Assets/Fonts/Inter.ttf")) {
+    if (!font.loadFromFile("Assets/Fonts/Inter.ttf"))
         Logger::error("Failed to load font for TopButton");
-    }
 
     text.setFont(font);
     text.setString(title);
@@ -30,11 +29,10 @@ std::vector<std::pair<std::string, std::string>> items) {
 }
 
 void TopButton::draw(sf::RenderWindow &window) {
-    if (currentState == HOVER || isDown) {
+    if (currentState == HOVER || isDown)
         background.setFillColor(sf::Color(70, 70, 70));
-    } else {
+    else
         background.setFillColor(sf::Color(50, 50, 50));
-    }
 
     window.draw(background);
     window.draw(text);

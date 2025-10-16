@@ -34,6 +34,8 @@ file(GLOB_RECURSE HEADERS
 
 # Create executable
 add_executable(${PROJECT_NAME} ${SOURCES} main.cpp)
+target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
+target_link_libraries(${PROJECT_NAME} PRIVATE --coverage)
 
 # Include directories
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
@@ -116,6 +118,8 @@ if(CRITERION_FOUND)
 
     # Create a single test executable containing all tests
     add_executable(MyGimp_tests ${TEST_SOURCES} ${SOURCES})
+    target_compile_options(MyGimp_tests PRIVATE -fprofile-arcs -ftest-coverage)
+    target_link_libraries(MyGimp_tests PRIVATE --coverage)
 
     # Include directories for tests
     target_include_directories(MyGimp_tests PRIVATE
