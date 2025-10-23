@@ -55,6 +55,7 @@ class DrawApp {
 
     void handleDragging(sf::Event &event);
     void handleZooming(sf::Event &event);
+    void handlePainting(sf::Event &event);
 
     void updateCalques();
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,

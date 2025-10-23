@@ -29,6 +29,7 @@ void DrawApp::handleInput(sf::Event &event) {
         if (consumed) return;
         handleZooming(event);
         handleDragging(event);
+        handlePainting(event);
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }

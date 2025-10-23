@@ -1,4 +1,5 @@
 #include <string>
+#include <cmath>
 
 #include "App/Calque.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
@@ -17,6 +18,8 @@ void Calque::createEmpty(int width, int height, sf::Color col) {
 
 void Calque::setVisible(bool isVisible) {
     visible = isVisible;
+    if (!visible)
+        stopPainting();
 }
 
 bool Calque::isVisible() const {
@@ -55,4 +58,44 @@ void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
         window.draw(sprite);
     }
 }
+
+void Calque::startPainting() {
+    painting = true;
+}
+
+void Calque::continuePainting(const sf::Vector2f& position) {
+    if (!painting)
+        return;
+
+    if (lastPaintPos == sf::Vector2f(0, 0))
+        lastPaintPos = position - sprite.getPosition();
+    sf::Vector2f start = lastPaintPos;
+    sf::Vector2f end = position - sprite.getPosition();
+
+    // Simple Bresenham's line algorithm for painting between points
+    sf::Vector2f delta = end - start;
+    float length = std::sqrt(delta.x * delta.x + delta.y * delta.y);
+    int steps = static_cast<int>(length);
+    for (int i = 0; i <= steps; ++i) {
+        float t = static_cast<float>(i) / steps;
+        sf::Vector2f point = start + t * delta;
+        if (point.x >= 0 && point.y >= 0 &&
+            point.x < image.getSize().x && point.y < image.getSize().y) {
+            image.setPixel(static_cast<unsigned int>(point.x),
+                           static_cast<unsigned int>(point.y),
+                           sf::Color::White); // Painting with black color
+        }
+    }
+    lastPaintPos = position - sprite.getPosition();
+}
+
+void Calque::stopPainting() {
+    painting = false;
+    lastPaintPos = sf::Vector2f(0, 0);
+}
+
+bool Calque::isPainting() const {
+    return painting;
+}
+
 }  // namespace MyGimp

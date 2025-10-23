@@ -23,6 +23,12 @@ class Calque {
     float getOpacity() const;
     void setOpacity(float opacity);
 
+    // Painting methods
+    void startPainting();
+    void continuePainting(const sf::Vector2f& position);
+    void stopPainting();
+    bool isPainting() const;
+
  private:
     float opacity = 1.0f;
     std::string name;
@@ -31,5 +37,8 @@ class Calque {
     sf::Texture texture;
     sf::Sprite sprite;
     bool visible = true;
+
+    bool painting = false;
+    sf::Vector2f lastPaintPos;
 };
 }  // namespace MyGimp
