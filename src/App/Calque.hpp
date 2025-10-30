@@ -33,7 +33,7 @@ class Calque {
     bool isPainting() const;
 
  private:
-    void paintOnePixel(const unsigned int x, const unsigned int y);
+    void paintOnePixel(const Pencil_I::Pixel pixel);
 
     float opacity = 1.0f;
     std::string name;

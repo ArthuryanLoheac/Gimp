@@ -19,6 +19,7 @@ void DrawApp::init(int width, int height) {
     dimensions = sf::Vector2u(width, height);
     newCalque("Calque 1", sf::Color::White);
     currentPencil = std::make_shared<Pencil_Simple>();
+    currentPencil->init(5, sf::Color::Black);
 }
 
 void DrawApp::init(const std::string& filepath) {
@@ -29,6 +30,7 @@ void DrawApp::init(const std::string& filepath) {
         updateCalques();
         dimensions = calques.back().getImage().getSize();
         currentPencil = std::make_shared<Pencil_Simple>();
+        currentPencil->init(5, sf::Color::Black);
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
         init(800, 600);

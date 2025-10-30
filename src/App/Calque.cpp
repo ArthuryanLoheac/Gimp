@@ -81,20 +81,20 @@ void Calque::continuePainting(const sf::Vector2f& position, float zoom, std::sha
         float t = static_cast<float>(i) / steps;
         sf::Vector2f point = start + t * delta;
         point = point / zoom;
-        std::vector<Pencil_I::Pixel> pixelsPaint = pencil->use(point.x, point.y);
+        std::vector<Pencil_I::Pixel> pixelsPaint = pencil->use(point.x, point.y, image);
         for (const Pencil_I::Pixel pixel : pixelsPaint) {
-            paintOnePixel(static_cast<unsigned int>(pixel.x), static_cast<unsigned int>(pixel.y));
+            paintOnePixel(pixel);
         }
     }
     lastPaintPos = position - sprite.getPosition();
 }
 
-void Calque::paintOnePixel(const unsigned int x, const unsigned int y) {
-    if (x >= 0 && y >= 0 &&
-        x < image.getSize().x && y < image.getSize().y) {
-        image.setPixel(static_cast<unsigned int>(x),
-                        static_cast<unsigned int>(y),
-                        sf::Color::White); // Painting with black color
+void Calque::paintOnePixel(const Pencil_I::Pixel pixel) {
+    if (pixel.x >= 0 && pixel.y >= 0 &&
+        pixel.x < image.getSize().x && pixel.y < image.getSize().y) {
+        image.setPixel(static_cast<unsigned int>(pixel.x),
+                        static_cast<unsigned int>(pixel.y),
+                        pixel.color); // Painting with black color
     }
 }
 
