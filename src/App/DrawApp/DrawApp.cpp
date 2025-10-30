@@ -27,6 +27,7 @@ void DrawApp::init(int width, int height) {
         static_cast<float>(50)));
     background.setPosition(0.f, 38.f);
     background.setFillColor(sf::Color(200, 200, 200, 30));
+    colorPicker.setPosition(5.f, 100.f);
 }
 
 void DrawApp::init(const std::string& filepath) {
@@ -44,6 +45,7 @@ void DrawApp::init(const std::string& filepath) {
             static_cast<float>(50)));
         background.setPosition(0.f, 38.f);
         background.setFillColor(sf::Color(200, 200, 200, 30));
+        colorPicker.setPosition(5.f, 100.f);
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
         init(800, 600);

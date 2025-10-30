@@ -8,6 +8,7 @@
 #include "App/CalqueMenu/CalqueMenu.hpp"
 #include "App/Popup/PopupFolder.hpp"
 #include "App/Pencil/Pencil_I.hpp"
+#include "App/ColorPicker/ColorPicker.hpp"
 
 
 namespace MyGimp {
@@ -51,6 +52,7 @@ class DrawApp {
     std::shared_ptr<Pencil_I> currentPencil;
     PercentageSelector sizeSelector{"size_selector", false};
     sf::RectangleShape background;
+    ColorPicker colorPicker;
 
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);

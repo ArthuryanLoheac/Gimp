@@ -17,6 +17,7 @@ void DrawApp::draw(sf::RenderWindow& window) {
     }
     window.draw(background);
     sizeSelector.draw(window);
+    colorPicker.draw(window);
     topBar.draw(window);
     calqueMenu.draw(window);
 }

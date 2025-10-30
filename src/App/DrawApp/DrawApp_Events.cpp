@@ -24,6 +24,11 @@ void DrawApp::handleInput(sf::Event &event) {
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
             saveFile();
         }
+        sf::Color pickedColor = colorPicker.handleInput(event);
+        if (pickedColor != sf::Color::Transparent) {
+            currentPencil->setColor(pickedColor);
+            consumed = true;
+        }
         handleCommandCalques(calqueMenu.handleInput(event, consumed));
         handleCommand(sizeSelector.handleInput(event, consumed));
         handleCommand(topBar.handleInput(event, consumed));
