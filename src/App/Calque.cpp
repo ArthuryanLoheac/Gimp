@@ -63,7 +63,7 @@ void Calque::startPainting() {
     painting = true;
 }
 
-void Calque::continuePainting(const sf::Vector2f& position) {
+void Calque::continuePainting(const sf::Vector2f& position, float zoom) {
     if (!painting)
         return;
 
@@ -79,6 +79,7 @@ void Calque::continuePainting(const sf::Vector2f& position) {
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
         sf::Vector2f point = start + t * delta;
+        point = point / zoom;
         if (point.x >= 0 && point.y >= 0 &&
             point.x < image.getSize().x && point.y < image.getSize().y) {
             image.setPixel(static_cast<unsigned int>(point.x),

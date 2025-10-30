@@ -25,7 +25,7 @@ class Calque {
 
     // Painting methods
     void startPainting();
-    void continuePainting(const sf::Vector2f& position);
+    void continuePainting(const sf::Vector2f& position, float zoom = 1.f);
     void stopPainting();
     bool isPainting() const;
 
