@@ -44,6 +44,25 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         if (path.empty())
             return;
         newCalque(namePath, path);
+    } else if (command == "size_selector_up") {
+        int size = sizeSelector.getPercentage();
+        size += 1;
+        sizeSelector.setPercentage(size);
+        currentPencil->setSize(size);
+    } else if (command == "size_selector_down") {
+        int size = sizeSelector.getPercentage();
+        size = std::max(1, size - 1);
+        sizeSelector.setPercentage(size);
+        currentPencil->setSize(size);
+    } else if (command.rfind("size_selector_input", 0) == 0) {
+        try {
+            int size = std::stoi(command.substr(20));
+            size = std::max(1, size);
+            sizeSelector.setPercentage(size);
+            currentPencil->setSize(size);
+        } catch (const std::exception &e) {
+            LOG_ERROR("Invalid size input command: " + command);
+        }
     } else {
         handleCommandOpacity(command);
     }

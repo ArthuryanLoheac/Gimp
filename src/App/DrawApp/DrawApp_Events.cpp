@@ -25,6 +25,7 @@ void DrawApp::handleInput(sf::Event &event) {
             saveFile();
         }
         handleCommandCalques(calqueMenu.handleInput(event, consumed));
+        handleCommand(sizeSelector.handleInput(event, consumed));
         handleCommand(topBar.handleInput(event, consumed));
         if (consumed) return;
         handleZooming(event);

@@ -49,6 +49,8 @@ class DrawApp {
     CalqueMenu calqueMenu;
     PopupFolder popupFolder;
     std::shared_ptr<Pencil_I> currentPencil;
+    PercentageSelector sizeSelector{"size_selector", false};
+    sf::RectangleShape background;
 
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);

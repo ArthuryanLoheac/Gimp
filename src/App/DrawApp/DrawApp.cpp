@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "App/Logger.hpp"
+#include "App/const.hpp"
 
 #include "App/DrawApp/DrawApp.hpp"
 #include "Exceptions/DrawAppExceptions.hpp"
@@ -19,7 +20,13 @@ void DrawApp::init(int width, int height) {
     dimensions = sf::Vector2u(width, height);
     newCalque("Calque 1", sf::Color::White);
     currentPencil = std::make_shared<Pencil_Simple>();
-    currentPencil->init(5, sf::Color::Black);
+    currentPencil->init(1, sf::Color::Black);
+    sizeSelector.setPosition(5.f, 50.f);
+    background = sf::RectangleShape(sf::Vector2f(
+        static_cast<float>(WIDTH),
+        static_cast<float>(50)));
+    background.setPosition(0.f, 38.f);
+    background.setFillColor(sf::Color(200, 200, 200, 30));
 }
 
 void DrawApp::init(const std::string& filepath) {
@@ -30,7 +37,13 @@ void DrawApp::init(const std::string& filepath) {
         updateCalques();
         dimensions = calques.back().getImage().getSize();
         currentPencil = std::make_shared<Pencil_Simple>();
-        currentPencil->init(5, sf::Color::Black);
+        currentPencil->init(1, sf::Color::Black);
+        sizeSelector.setPosition(5.f, 50.f);
+        background = sf::RectangleShape(sf::Vector2f(
+            static_cast<float>(WIDTH),
+            static_cast<float>(50)));
+        background.setPosition(0.f, 38.f);
+        background.setFillColor(sf::Color(200, 200, 200, 30));
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
         init(800, 600);
