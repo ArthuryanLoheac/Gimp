@@ -21,7 +21,6 @@ void DrawApp::init(int width, int height) {
     newCalque("Calque 1", sf::Color::White);
     currentPencil = std::make_shared<Pencil_Simple>();
     currentPencil->init(1, sf::Color::Black);
-    commonInit();
 }
 
 void DrawApp::init(const std::string& filepath) {
@@ -33,22 +32,10 @@ void DrawApp::init(const std::string& filepath) {
         dimensions = calques.back().getImage().getSize();
         currentPencil = std::make_shared<Pencil_Simple>();
         currentPencil->init(1, sf::Color::Black);
-        commonInit();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
         init(800, 600);
     }
-}
-
-void DrawApp::commonInit() {
-    background = sf::RectangleShape(sf::Vector2f(
-        static_cast<float>(250),
-        static_cast<float>(200)));
-    background.setPosition(WIDTH - 250, HEIGHT - 500);
-    background.setFillColor(sf::Color(200, 200, 200, 30));
-    colorPicker.setPosition(WIDTH - 240.f, HEIGHT - 490.f);
-    sizeSelector.setPosition(WIDTH - 215.f, HEIGHT - 335.f);
-    sizeSelector.setTitle("Size:");
 }
 
 // Calque Management

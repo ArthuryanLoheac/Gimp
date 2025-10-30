@@ -28,8 +28,9 @@ sf::Color ColorPicker::handleInput(sf::Event &event) {
                 mouseY >= static_cast<int>(spritePos.y) && mouseY <= static_cast<int>(spritePos.y) + static_cast<int>(textureSize.y)) {
                 sf::Image img = colorTexture.copyToImage();
                 sf::Color pickedColor = img.getPixel(
-                    mouseX - static_cast<int>(spritePos.x),
-                    mouseY - static_cast<int>(spritePos.y));
+                    static_cast<unsigned int>((mouseX - static_cast<int>(spritePos.x)) / colorSprite.getScale().x),
+                    static_cast<unsigned int>((mouseY - static_cast<int>(spritePos.y)) / colorSprite.getScale().y)
+                );
                 return pickedColor;
             }
         }

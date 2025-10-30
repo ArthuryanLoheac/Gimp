@@ -8,7 +8,7 @@
 #include "App/CalqueMenu/CalqueMenu.hpp"
 #include "App/Popup/PopupFolder.hpp"
 #include "App/Pencil/Pencil_I.hpp"
-#include "App/ColorPicker/ColorPicker.hpp"
+#include "App/PencilMenu/PencilMenu.hpp"
 
 
 namespace MyGimp {
@@ -50,15 +50,12 @@ class DrawApp {
     CalqueMenu calqueMenu;
     PopupFolder popupFolder;
     std::shared_ptr<Pencil_I> currentPencil;
-    PercentageSelector sizeSelector{"size_selector", false};
-    sf::RectangleShape background;
-    ColorPicker colorPicker;
-
-    void commonInit();
+    PencilMenu pencilMenu;
 
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);
     void handleCommandOpacity(const std::string& command);
+    void handleCommandPencils(const std::string& command);
     void handleCommandFile(const std::string& command);
 
     void handleDragging(sf::Event &event, bool &consumed);
