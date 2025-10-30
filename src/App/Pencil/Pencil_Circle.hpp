@@ -4,10 +4,10 @@
 #include "Pencil_A.hpp"
 
 namespace MyGimp {
-class Pencil_Simple final : public Pencil_A {
+class Pencil_Circle final : public Pencil_A {
  public:
-    Pencil_Simple() : Pencil_A("Simple Pencil") {};
-    ~Pencil_Simple() override = default;
+    Pencil_Circle() : Pencil_A("Circle Pencil") {};
+    ~Pencil_Circle() override = default;
 
     std::vector<Pixel> use(int x, int y, [[maybe_unused]] const sf::Image &img) final;
 };
