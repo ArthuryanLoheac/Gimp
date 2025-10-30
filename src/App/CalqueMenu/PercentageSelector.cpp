@@ -34,6 +34,8 @@ void PercentageSelector::draw(sf::RenderWindow &window) {
         || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2)
             % 2 == 0) && selected)
         window.draw(cursor);
+    if (title.getString() != "")
+        window.draw(title);
 }
 
 std::string PercentageSelector::handleInput(const sf::Event &event,
@@ -79,6 +81,7 @@ void PercentageSelector::setPosition(float x, float y) {
     cursor.setPosition(x + (isPercentageInput ? 30 : 50), y + 5);
     buttonUp.setPosition(x + 55, y);
     buttonDown.setPosition(x + 55, y + 15);
+    title.setPosition(x + 5, y + 6);
 }
 
 void PercentageSelector::setSelected(bool value) {
@@ -104,6 +107,14 @@ void PercentageSelector::setIsPercentageInput(bool b) {
     isPercentageInput = b;
     characterPercentageInput = isPercentageInput ? "%" : "";
     setPercentage(isPercentageInput ? std::min(percentage, 100) : percentage);
+}
+
+void PercentageSelector::setTitle(const std::string &titleStr) {
+    title.setFont(font);
+    title.setCharacterSize(14);
+    title.setFillColor(sf::Color::White);
+    title.setString(titleStr);
+    title.setOrigin(title.getLocalBounds().width, 0);
 }
 
 }  // namespace MyGimp

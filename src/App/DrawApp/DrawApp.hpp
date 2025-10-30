@@ -54,6 +54,8 @@ class DrawApp {
     sf::RectangleShape background;
     ColorPicker colorPicker;
 
+    void commonInit();
+
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);
     void handleCommandOpacity(const std::string& command);

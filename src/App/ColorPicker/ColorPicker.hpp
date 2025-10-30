@@ -10,6 +10,7 @@ class ColorPicker {
     void draw(sf::RenderWindow& window);
     sf::Color handleInput(sf::Event& event);
     void setPosition(float x, float y);
+    void setScale(float scaleX, float scaleY);
 
  private:
     sf::Texture colorTexture;

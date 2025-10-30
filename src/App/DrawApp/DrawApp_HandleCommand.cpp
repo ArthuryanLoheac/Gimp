@@ -51,13 +51,13 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         currentPencil->setSize(size);
     } else if (command == "size_selector_down") {
         int size = sizeSelector.getPercentage();
-        size = std::max(1, size - 1);
+        size = std::max(0, size - 1);
         sizeSelector.setPercentage(size);
         currentPencil->setSize(size);
     } else if (command.rfind("size_selector_input", 0) == 0) {
         try {
             int size = std::stoi(command.substr(20));
-            size = std::max(1, size);
+            size = std::max(0, size);
             sizeSelector.setPercentage(size);
             currentPencil->setSize(size);
         } catch (const std::exception &e) {
