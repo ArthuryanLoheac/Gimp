@@ -25,7 +25,7 @@ void DrawApp::handlePainting(sf::Event &event) {
     if (event.type == sf::Event::MouseMoved) {
         if (currentCalque.isPainting()) {
             sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
-            currentCalque.continuePainting(mousePos, zoom);
+            currentCalque.continuePainting(mousePos, zoom, currentPencil);
         }
     }
 }

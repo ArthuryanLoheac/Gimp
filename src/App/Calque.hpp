@@ -2,6 +2,9 @@
 #include <string>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <memory>
+
+#include "App/Pencil/Pencil_I.hpp"
 
 namespace MyGimp {
 class Calque {
@@ -25,11 +28,13 @@ class Calque {
 
     // Painting methods
     void startPainting();
-    void continuePainting(const sf::Vector2f& position, float zoom = 1.f);
+    void continuePainting(const sf::Vector2f& position, float zoom = 1.f, std::shared_ptr<Pencil_I> pencil = nullptr);
     void stopPainting();
     bool isPainting() const;
 
  private:
+    void paintOnePixel(const unsigned int x, const unsigned int y);
+
     float opacity = 1.0f;
     std::string name;
     sf::Image image;

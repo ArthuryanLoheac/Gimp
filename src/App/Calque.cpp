@@ -1,5 +1,6 @@
 #include <string>
 #include <cmath>
+#include <memory>
 
 #include "App/Calque.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
@@ -63,8 +64,8 @@ void Calque::startPainting() {
     painting = true;
 }
 
-void Calque::continuePainting(const sf::Vector2f& position, float zoom) {
-    if (!painting)
+void Calque::continuePainting(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
+    if (!painting || !pencil)
         return;
 
     if (lastPaintPos == sf::Vector2f(0, 0))
@@ -80,14 +81,21 @@ void Calque::continuePainting(const sf::Vector2f& position, float zoom) {
         float t = static_cast<float>(i) / steps;
         sf::Vector2f point = start + t * delta;
         point = point / zoom;
-        if (point.x >= 0 && point.y >= 0 &&
-            point.x < image.getSize().x && point.y < image.getSize().y) {
-            image.setPixel(static_cast<unsigned int>(point.x),
-                           static_cast<unsigned int>(point.y),
-                           sf::Color::White); // Painting with black color
+        std::vector<Pencil_I::Pixel> pixelsPaint = pencil->use(point.x, point.y);
+        for (const Pencil_I::Pixel pixel : pixelsPaint) {
+            paintOnePixel(static_cast<unsigned int>(pixel.x), static_cast<unsigned int>(pixel.y));
         }
     }
     lastPaintPos = position - sprite.getPosition();
+}
+
+void Calque::paintOnePixel(const unsigned int x, const unsigned int y) {
+    if (x >= 0 && y >= 0 &&
+        x < image.getSize().x && y < image.getSize().y) {
+        image.setPixel(static_cast<unsigned int>(x),
+                        static_cast<unsigned int>(y),
+                        sf::Color::White); // Painting with black color
+    }
 }
 
 void Calque::stopPainting() {
