@@ -17,6 +17,8 @@ class Pencil_A : public Pencil_I {
     std::string getName() const override { return pencilName; }
     sf::Color getColor() const override { return color; }
     void setColor(const sf::Color& color) override { this->color = color; }
+    void setOpacity(int opacity) override { color.a = static_cast<sf::Uint8>(opacity); }
+    int getOpacity() const override { return color.a; }
 
  protected:
     int size = 1;

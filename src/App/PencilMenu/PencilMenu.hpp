@@ -16,8 +16,10 @@ class PencilMenu {
     void draw(sf::RenderWindow &window);
     std::string handleInput(sf::Event &event, bool &consumed, std::shared_ptr<Pencil_I> &currentPencil);
     PercentageSelector& getSizeSelector() { return sizeSelector; }
+    PercentageSelector& getOpacitySelector() { return opacitySelector; }
  private:
     PercentageSelector sizeSelector{"size_selector", false};
+    PercentageSelector opacitySelector{"opacity_pencil_selector", true};
     sf::RectangleShape background;
     ColorPicker colorPicker;
 };

@@ -23,5 +23,7 @@ class Pencil_I {
     virtual void setSize(int size) = 0;
     virtual sf::Color getColor() const = 0;
     virtual void setColor(const sf::Color& color) = 0;
+    virtual void setOpacity(int opacity) = 0;
+    virtual int getOpacity() const = 0;
 };
 }  // namespace MyGimp

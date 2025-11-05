@@ -81,7 +81,7 @@ void PercentageSelector::setPosition(float x, float y) {
     cursor.setPosition(x + (isPercentageInput ? 30 : 50), y + 5);
     buttonUp.setPosition(x + 55, y);
     buttonDown.setPosition(x + 55, y + 15);
-    title.setPosition(x + 5, y + 6);
+    title.setPosition(x + 5.f - (isPercentageInput ? 10 : 0), y + 6);
 }
 
 void PercentageSelector::setSelected(bool value) {

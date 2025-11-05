@@ -69,6 +69,25 @@ void DrawApp::handleCommandPencils(const std::string& command) {
         } catch (const std::exception &e) {
             LOG_ERROR("Invalid size input command: " + command);
         }
+    } else if (command == "opacity_pencil_selector_up") {
+        int opacity = pencilMenu.getOpacitySelector().getPercentage();
+        opacity = std::min(100, opacity + 5);
+        pencilMenu.getOpacitySelector().setPercentage(opacity);
+        currentPencil->setOpacity(opacity * 255 / 100);
+    } else if (command == "opacity_pencil_selector_down") {
+        int opacity = pencilMenu.getOpacitySelector().getPercentage();
+        opacity = std::max(0, opacity - 5);
+        pencilMenu.getOpacitySelector().setPercentage(opacity);
+        currentPencil->setOpacity(opacity * 255 / 100);
+    } else if (command.rfind("opacity_pencil_selector_input", 0) == 0) {
+        try {
+            int opacity = std::stoi(command.substr(30));
+            opacity = std::clamp(opacity, 0, 100);
+            pencilMenu.getOpacitySelector().setPercentage(opacity);
+            currentPencil->setOpacity(opacity * 255 / 100);
+        } catch (const std::exception &e) {
+            printf("Invalid opacity input command: %s\n", e.what());
+        }
     }
 }
 

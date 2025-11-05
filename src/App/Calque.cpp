@@ -87,12 +87,31 @@ void Calque::continuePainting(const sf::Vector2f& position, float zoom, std::sha
     lastPaintPos = position - sprite.getPosition();
 }
 
-void Calque::paintOnePixel(const Pencil_I::Pixel pixel) {
-    if (pixel.x >= 0 && pixel.y >= 0 &&
-        pixel.x < image.getSize().x && pixel.y < image.getSize().y) {
-        image.setPixel(static_cast<unsigned int>(pixel.x),
-                        static_cast<unsigned int>(pixel.y),
-                        pixel.color); // Painting with black color
+void Calque::paintOnePixel(const Pencil_I::Pixel pixelData) {
+    if (pixelData.x >= 0 && pixelData.y >= 0 &&
+        pixelData.x < image.getSize().x && pixelData.y < image.getSize().y) {
+
+        const sf::Color pixel = image.getPixel(pixelData.x, pixelData.y);
+        const sf::Color newPixel = pixelData.color;
+        const float calqueOpacity = pixel.a / 255.f * opacity;
+        const float a = (newPixel.a / 255.f) * calqueOpacity;
+        if (a == 0) return;
+
+        // Calculer la nouvelle transparence (alpha)
+        const float pixelAlpha = pixel.a / 255.f;
+        const float outAlpha = a + pixelAlpha * (1 - a);
+        if (outAlpha == 0) {
+            image.setPixel(pixelData.x, pixelData.y, sf::Color(0, 0, 0, 0));
+            return;
+        }
+        const sf::Uint8 fnlR = static_cast<sf::Uint8>(((newPixel.r * a)
+            + (pixel.r * pixelAlpha * (1 - a))) / outAlpha);
+        const sf::Uint8 fnlG = static_cast<sf::Uint8>(((newPixel.g * a)
+            + (pixel.g * pixelAlpha * (1 - a))) / outAlpha);
+        const sf::Uint8 fnlB = static_cast<sf::Uint8>(((newPixel.b * a)
+            + (pixel.b * pixelAlpha * (1 - a))) / outAlpha);
+        const sf::Uint8 fnlA = static_cast<sf::Uint8>(outAlpha * 255);
+        image.setPixel(pixelData.x, pixelData.y, sf::Color(fnlR, fnlG, fnlB, fnlA));
     }
 }
 
