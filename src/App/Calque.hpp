@@ -27,10 +27,12 @@ class Calque {
     void setOpacity(float opacity);
 
     // Painting methods
-    void startPainting();
+    void startPainting(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil);
     void continuePainting(const sf::Vector2f& position, float zoom = 1.f, std::shared_ptr<Pencil_I> pencil = nullptr);
     void stopPainting();
     bool isPainting() const;
+
+    void paintAt(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil);
 
  private:
     void paintOnePixel(const Pencil_I::Pixel pixel);

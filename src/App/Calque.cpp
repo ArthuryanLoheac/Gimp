@@ -60,8 +60,10 @@ void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
     }
 }
 
-void Calque::startPainting() {
+void Calque::startPainting(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
     painting = true;
+    sf::Vector2f pos = position - sprite.getPosition();
+    paintAt(pos, zoom, pencil);
 }
 
 void Calque::continuePainting(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
@@ -80,11 +82,7 @@ void Calque::continuePainting(const sf::Vector2f& position, float zoom, std::sha
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
         sf::Vector2f point = start + t * delta;
-        point = point / zoom;
-        std::vector<Pencil_I::Pixel> pixelsPaint = pencil->use(point.x, point.y, image);
-        for (const Pencil_I::Pixel pixel : pixelsPaint) {
-            paintOnePixel(pixel);
-        }
+        paintAt(point, zoom, pencil);
     }
     lastPaintPos = position - sprite.getPosition();
 }
@@ -107,4 +105,13 @@ bool Calque::isPainting() const {
     return painting;
 }
 
+void Calque::paintAt(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
+    if (!pencil)
+        return;
+    sf::Vector2f point(position);
+    point = point / zoom;
+    std::vector<Pencil_I::Pixel> pixelsPaint = pencil->use(point.x, point.y, image);
+    for (const Pencil_I::Pixel pixel : pixelsPaint)
+        paintOnePixel(pixel);
+}
 }  // namespace MyGimp
