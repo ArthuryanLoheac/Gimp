@@ -11,7 +11,7 @@ PencilMenu::PencilMenu()
         static_cast<float>(250),
         static_cast<float>(200)));
     background.setPosition(WIDTH - 250, HEIGHT - 500);
-    background.setFillColor(sf::Color(200, 200, 200, 30));
+    background.setFillColor(sf::Color(50, 50, 50, 200));
     sizeSelector.setTitle("Size:");
     colorPicker.setPosition(WIDTH - 240.f, HEIGHT - 490.f);
     sizeSelector.setPosition(WIDTH - 215.f, HEIGHT - 335.f);
@@ -30,6 +30,14 @@ std::shared_ptr<Pencil_I> &currentPencil)
     sf::Color pickedColor = colorPicker.handleInput(event);
     if (pickedColor != sf::Color::Transparent) {
         currentPencil->setColor(pickedColor);
+        consumed = true;
+    }
+    if (event.type == sf::Event::MouseWheelScrolled && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && !consumed) {
+        int newSize = currentPencil->getSize() +
+            static_cast<int>(event.mouseWheelScroll.delta);
+        newSize = std::clamp(newSize, 1, 999);
+        currentPencil->setSize(newSize);
+        sizeSelector.setPercentage(newSize);
         consumed = true;
     }
     return sizeSelector.handleInput(event, consumed);
