@@ -1,12 +1,15 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
+#include <memory>
 
+#include <SFML/Graphics.hpp>
 #include "App/Calque.hpp"
 #include "App/TopBar/TopBar.hpp"
 #include "App/CalqueMenu/CalqueMenu.hpp"
 #include "App/Popup/PopupFolder.hpp"
+#include "App/Pencil/Pencil_I.hpp"
+#include "App/PencilMenu/PencilMenu.hpp"
 
 
 namespace MyGimp {
@@ -47,14 +50,18 @@ class DrawApp {
     int actualCalqueId = 0;
     CalqueMenu calqueMenu;
     PopupFolder popupFolder;
+    std::shared_ptr<Pencil_I> currentPencil;
+    PencilMenu pencilMenu;
 
     void handleCommand(const std::string& command);
     void handleCommandCalques(const std::string& command);
     void handleCommandOpacity(const std::string& command);
+    void handleCommandPencils(const std::string& command);
     void handleCommandFile(const std::string& command);
 
-    void handleDragging(sf::Event &event);
+    void handleDragging(sf::Event &event, bool &consumed);
     void handleZooming(sf::Event &event);
+    void handlePainting(sf::Event &event);
 
     void updateCalques();
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,

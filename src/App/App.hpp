@@ -3,7 +3,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-#include "App/DrawApp/DrawApp.hpp"
+#include "DrawApp/DrawApp.hpp"
 
 namespace MyGimp {
 class App {

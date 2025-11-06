@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 project(MyGimp LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Find required dependencies
@@ -38,7 +38,10 @@ target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
 target_link_libraries(${PROJECT_NAME} PRIVATE --coverage)
 
 # Include directories
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/include
+    ${CMAKE_SOURCE_DIR}/src
+)
 
 # Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics sfml-window sfml-system)
@@ -124,6 +127,7 @@ if(CRITERION_FOUND)
     # Include directories for tests
     target_include_directories(MyGimp_tests PRIVATE
         ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/src
         ${CRITERION_INCLUDE_DIRS}
     )
 

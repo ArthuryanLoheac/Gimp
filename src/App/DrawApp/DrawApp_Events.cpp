@@ -25,21 +25,26 @@ void DrawApp::handleInput(sf::Event &event) {
             saveFile();
         }
         handleCommandCalques(calqueMenu.handleInput(event, consumed));
+        handleCommandPencils(pencilMenu.handleInput(event, consumed,
+            currentPencil));
         handleCommand(topBar.handleInput(event, consumed));
         if (consumed) return;
         handleZooming(event);
-        handleDragging(event);
+        handleDragging(event, consumed);
+        if (consumed) return;
+        handlePainting(event);
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }
 }
 
-void DrawApp::handleDragging(sf::Event &event) {
+void DrawApp::handleDragging(sf::Event &event, bool &consumed) {
     if (event.type == sf::Event::MouseButtonPressed &&
         event.mouseButton.button == sf::Mouse::Left &&
         sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         dragging = true;
         lastMousePos = sf::Mouse::getPosition();
+        consumed = true;
     }
     if (event.type == sf::Event::MouseButtonReleased &&
         event.mouseButton.button == sf::Mouse::Left && dragging) {

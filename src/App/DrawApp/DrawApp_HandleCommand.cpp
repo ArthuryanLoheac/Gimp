@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <cstdio>
 
 #include "App/Logger.hpp"
 #include "App/DrawApp/DrawApp.hpp"
@@ -46,6 +47,49 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         newCalque(namePath, path);
     } else {
         handleCommandOpacity(command);
+    }
+}
+
+void DrawApp::handleCommandPencils(const std::string& command) {
+    if (command == "size_selector_up") {
+        int size = pencilMenu.getSizeSelector().getPercentage();
+        size += 1;
+        pencilMenu.getSizeSelector().setPercentage(size);
+        currentPencil->setSize(size);
+    } else if (command == "size_selector_down") {
+        int size = pencilMenu.getSizeSelector().getPercentage();
+        size = std::max(0, size - 1);
+        pencilMenu.getSizeSelector().setPercentage(size);
+        currentPencil->setSize(size);
+    } else if (command.rfind("size_selector_input", 0) == 0) {
+        try {
+            int size = std::stoi(command.substr(20));
+            size = std::max(0, size);
+            pencilMenu.getSizeSelector().setPercentage(size);
+            currentPencil->setSize(size);
+        } catch (const std::exception &e) {
+            LOG_ERROR("Invalid size input command: " + command);
+        }
+    } else if (command == "opacity_pencil_selector_up") {
+        int opacity = pencilMenu.getOpacitySelector().getPercentage();
+        opacity = std::min(100, opacity + 5);
+        pencilMenu.getOpacitySelector().setPercentage(opacity);
+        currentPencil->setOpacity(opacity * 255 / 100);
+    } else if (command == "opacity_pencil_selector_down") {
+        int opacity = pencilMenu.getOpacitySelector().getPercentage();
+        opacity = std::max(0, opacity - 5);
+        pencilMenu.getOpacitySelector().setPercentage(opacity);
+        currentPencil->setOpacity(opacity * 255 / 100);
+    } else if (command.rfind("opacity_pencil_selector_input", 0) == 0) {
+        try {
+            int opacity = std::stoi(command.substr(30));
+            opacity = std::clamp(opacity, 0, 100);
+            pencilMenu.getOpacitySelector().setPercentage(opacity);
+            currentPencil->setOpacity(opacity * 255 / 100);
+        } catch (const std::exception &e) {
+            LOG_ERROR("Invalid opacity input command: " +
+                command + " (" + e.what() + ")");
+        }
     }
 }
 

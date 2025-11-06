@@ -15,6 +15,7 @@ void DrawApp::draw(sf::RenderWindow& window) {
             continue;
         calques[i].draw(window, zoom, pos);
     }
+    pencilMenu.draw(window);
     topBar.draw(window);
     calqueMenu.draw(window);
 }
