@@ -33,6 +33,7 @@ class Calque {
         std::shared_ptr<Pencil_I> pencil = nullptr);
     void stopPainting();
     bool isPainting() const;
+    const sf::Color pipetteAt(const sf::Vector2f& position, float zoom) const;
 
     void paintAt(const sf::Vector2f& position, float zoom,
         std::shared_ptr<Pencil_I> pencil, bool erase = false);

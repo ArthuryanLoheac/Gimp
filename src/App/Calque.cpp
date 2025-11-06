@@ -152,4 +152,17 @@ std::shared_ptr<Pencil_I> pencil, bool erase) {
         paintOnePixel(pixel, erase);
     }
 }
+
+const sf::Color Calque::pipetteAt(const sf::Vector2f& position, float zoom) const {
+    sf::Vector2f pos = position - sprite.getPosition();
+    pos = pos / zoom;
+
+    if (pos.x >= 0 && pos.y >= 0 &&
+        pos.x < image.getSize().x && pos.y < image.getSize().y) {
+        return image.getPixel(static_cast<unsigned int>(pos.x),
+            static_cast<unsigned int>(pos.y));
+    }
+    static sf::Color transparent = sf::Color::Transparent;
+    return transparent;
+}
 }  // namespace MyGimp
