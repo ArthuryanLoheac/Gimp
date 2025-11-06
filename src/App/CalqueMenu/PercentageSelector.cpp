@@ -35,7 +35,7 @@ void PercentageSelector::draw(sf::RenderWindow &window) {
         || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2)
             % 2 == 0) && selected)
         window.draw(cursor);
-    if (title.getString() != "")
+    if (!title.getString().isEmpty())
         window.draw(title);
 }
 
