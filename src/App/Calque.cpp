@@ -153,7 +153,8 @@ std::shared_ptr<Pencil_I> pencil, bool erase) {
     }
 }
 
-const sf::Color Calque::pipetteAt(const sf::Vector2f& position, float zoom) const {
+const sf::Color Calque::pipetteAt(const sf::Vector2f& position, float zoom)
+const {
     sf::Vector2f pos = position - sprite.getPosition();
     pos = pos / zoom;
 
