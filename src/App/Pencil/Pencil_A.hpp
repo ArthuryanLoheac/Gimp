@@ -32,6 +32,5 @@ class Pencil_A : public Pencil_I {
     sf::Color color = {0, 0, 0, 255};
     std::string pencilName;
     std::vector<Pixel> pixelsPainted;
-
 };
 }  // namespace MyGimp
