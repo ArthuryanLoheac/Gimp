@@ -15,7 +15,7 @@ env:
 
 jobs:
   block_merge_to_main:
-    if: github.ref == 'refs/heads/main' && github.head_ref != 'dev'
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' && github.head_ref != 'dev' }}
     runs-on: ubuntu-latest
     steps:
       - name: "Block merge to main unless from dev"
