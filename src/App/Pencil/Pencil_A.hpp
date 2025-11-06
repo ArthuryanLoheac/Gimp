@@ -25,6 +25,7 @@ class Pencil_A : public Pencil_I {
     const std::vector<Pixel>& getPixelsPainted() const override;
     void addPixelPainted(const Pixel& pixel) override;
     bool isPixelinList(int x, int y) const override;
+    sf::Color getPixelImage(const int x, const int y, const sf::Image& img);
 
  protected:
     int size = 1;
@@ -32,6 +33,5 @@ class Pencil_A : public Pencil_I {
     std::string pencilName;
     std::vector<Pixel> pixelsPainted;
 
-    sf::Color getPixelImage(const int x, const int y, const sf::Image& img);
 };
 }  // namespace MyGimp
