@@ -18,7 +18,7 @@ class Pencil_A : public Pencil_I {
     void setSize(int newSize) override { size = newSize; }
     std::string getName() const override { return pencilName; }
     sf::Color getColor() const override { return color; }
-    void setColor(const sf::Color& color) override { this->color = color; }
+    void setColor(const sf::Color& color) override;
     void setOpacity(int opacity) override;
     int getOpacity() const override { return color.a; }
     void clearPixelsPainted() override;

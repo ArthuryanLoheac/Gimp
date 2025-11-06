@@ -12,6 +12,12 @@ void Pencil_A::setOpacity(int opacity) {
         color.a = static_cast<sf::Uint8>(opacity);
 }
 
+void Pencil_A::setColor(const sf::Color &color) {
+    int prevAlpha = this->color.a;
+    this->color = color;
+    this->color.a = static_cast<sf::Uint8>(prevAlpha);
+}
+
 void Pencil_A::clearPixelsPainted() {
     pixelsPainted.clear();
 }
