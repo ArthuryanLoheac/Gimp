@@ -21,7 +21,8 @@ Test(Pencil, basic_init_and_setters) {
 
     p.setColor(sf::Color(1,2,3,4));
     cr_assert_eq(p.getColor().r, 1);
-    cr_assert_eq(p.getColor().a, 4);
+    // Pencil_A::setColor preserves the previous alpha value; ensure it stayed 200
+    cr_assert_eq(p.getColor().a, 200);
 }
 
 Test(Pencil, opacity_clamping) {
