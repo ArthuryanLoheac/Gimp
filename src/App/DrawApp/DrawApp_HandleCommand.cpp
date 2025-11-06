@@ -87,7 +87,8 @@ void DrawApp::handleCommandPencils(const std::string& command) {
             pencilMenu.getOpacitySelector().setPercentage(opacity);
             currentPencil->setOpacity(opacity * 255 / 100);
         } catch (const std::exception &e) {
-            LOG_ERROR("Invalid opacity input command: " + command + " (" + e.what() + ")");
+            LOG_ERROR("Invalid opacity input command: " +
+                command + " (" + e.what() + ")");
         }
     }
 }
