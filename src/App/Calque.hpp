@@ -28,17 +28,17 @@ class Calque {
 
     // Painting methods
     void startPainting(const sf::Vector2f& position, float zoom,
-        std::shared_ptr<Pencil_I> pencil);
+        std::shared_ptr<Pencil_I> pencil, bool erase = false);
     void continuePainting(const sf::Vector2f& position, float zoom = 1.f,
         std::shared_ptr<Pencil_I> pencil = nullptr);
     void stopPainting();
     bool isPainting() const;
 
     void paintAt(const sf::Vector2f& position, float zoom,
-        std::shared_ptr<Pencil_I> pencil);
+        std::shared_ptr<Pencil_I> pencil, bool erase = false);
 
  private:
-    void paintOnePixel(const Pencil_I::Pixel pixel);
+    void paintOnePixel(const Pencil_I::Pixel pixel, bool erase = false);
 
     float opacity = 1.0f;
     std::string name;
@@ -49,6 +49,7 @@ class Calque {
     bool visible = true;
 
     bool painting = false;
+    bool isErasing = false;
     sf::Vector2f lastPaintPos;
 };
 }  // namespace MyGimp

@@ -15,12 +15,15 @@ void DrawApp::handlePainting(sf::Event &event) {
         return;
 
     if (event.type == sf::Event::MouseButtonPressed &&
-        event.mouseButton.button == sf::Mouse::Left) {
+        (event.mouseButton.button == sf::Mouse::Left ||
+         event.mouseButton.button == sf::Mouse::Right)) {
         sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
-        currentCalque.startPainting(mousePos, zoom, currentPencil);
+        currentCalque.startPainting(mousePos, zoom, currentPencil,
+            event.mouseButton.button == sf::Mouse::Right);
     }
     if (event.type == sf::Event::MouseButtonReleased &&
-        event.mouseButton.button == sf::Mouse::Left) {
+        (event.mouseButton.button == sf::Mouse::Left ||
+         event.mouseButton.button == sf::Mouse::Right)) {
         currentCalque.stopPainting();
     }
     if (event.type == sf::Event::MouseMoved) {

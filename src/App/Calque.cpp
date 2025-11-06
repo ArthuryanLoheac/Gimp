@@ -62,11 +62,12 @@ void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
 }
 
 void Calque::startPainting(const sf::Vector2f& position, float zoom,
-std::shared_ptr<Pencil_I> pencil) {
+std::shared_ptr<Pencil_I> pencil, bool erase) {
     painting = true;
     pencil->clearPixelsPainted();
     sf::Vector2f pos = position - sprite.getPosition();
-    paintAt(pos, zoom, pencil);
+    isErasing = erase;
+    paintAt(pos, zoom, pencil, isErasing);
 }
 
 void Calque::continuePainting(const sf::Vector2f& position, float zoom,
@@ -86,18 +87,26 @@ std::shared_ptr<Pencil_I> pencil) {
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
         sf::Vector2f point = start + t * delta;
-        paintAt(point, zoom, pencil);
+        paintAt(point, zoom, pencil, isErasing);
     }
     lastPaintPos = position - sprite.getPosition();
 }
 
-void Calque::paintOnePixel(const Pencil_I::Pixel pixelData) {
+void Calque::paintOnePixel(const Pencil_I::Pixel pixelData, bool erase) {
     if (pixelData.x >= 0 && pixelData.y >= 0 &&
         pixelData.x < image.getSize().x && pixelData.y < image.getSize().y) {
         const sf::Color pixel = image.getPixel(pixelData.x, pixelData.y);
+        if (erase) {
+            if (pixel.a == 0) return;
+            float factorAlpha = 1.0f - (pixelData.color.a / 255.f);
+            sf::Uint8 newA = static_cast<sf::Uint8>(pixel.a * factorAlpha);
+            image.setPixel(pixelData.x, pixelData.y,
+                sf::Color(pixel.r, pixel.g, pixel.b, newA));
+            return;
+        }
         const sf::Color newPixel = pixelData.color;
         const float calqueOpacity = pixel.a / 255.f * opacity;
-        const float a = (newPixel.a / 255.f) * calqueOpacity;
+        const float a = (newPixel.a / 255.f) * opacity;
         if (a == 0) return;
 
         // Calculer la nouvelle transparence (alpha)
@@ -129,7 +138,7 @@ bool Calque::isPainting() const {
 }
 
 void Calque::paintAt(const sf::Vector2f& position, float zoom,
-std::shared_ptr<Pencil_I> pencil) {
+std::shared_ptr<Pencil_I> pencil, bool erase) {
     if (!pencil)
         return;
     sf::Vector2f point(position);
@@ -140,7 +149,7 @@ std::shared_ptr<Pencil_I> pencil) {
         if (pencil->isPixelinList(pixel.x, pixel.y))
             continue;
         pencil->addPixelPainted(pixel);
-        paintOnePixel(pixel);
+        paintOnePixel(pixel, erase);
     }
 }
 }  // namespace MyGimp
