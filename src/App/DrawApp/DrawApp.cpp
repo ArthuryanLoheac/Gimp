@@ -1,13 +1,16 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <memory>
 
 #include "App/Logger.hpp"
+#include "App/const.hpp"
 
 #include "App/DrawApp/DrawApp.hpp"
 #include "Exceptions/DrawAppExceptions.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
 
+#include "App/Pencil/Pencil_Circle.hpp"
 
 namespace MyGimp {
 
@@ -17,6 +20,8 @@ void DrawApp::init(int width, int height) {
     calques.clear();
     dimensions = sf::Vector2u(width, height);
     newCalque("Calque 1", sf::Color::White);
+    currentPencil = std::make_shared<Pencil_Circle>();
+    currentPencil->init(1, sf::Color::Black);
 }
 
 void DrawApp::init(const std::string& filepath) {
@@ -26,6 +31,8 @@ void DrawApp::init(const std::string& filepath) {
         calques.back().createFromFile(filepath);
         updateCalques();
         dimensions = calques.back().getImage().getSize();
+        currentPencil = std::make_shared<Pencil_Circle>();
+        currentPencil->init(1, sf::Color::Black);
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
         init(800, 600);
@@ -42,8 +49,6 @@ void DrawApp::newFile() {
 }
 
 // Getters & Setters
-
-
 
 sf::Vector2u DrawApp::getDimensions() const {
     return dimensions;

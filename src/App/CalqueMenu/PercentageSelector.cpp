@@ -4,7 +4,8 @@
 
 namespace MyGimp {
 
-PercentageSelector::PercentageSelector(const std::string &code) {
+PercentageSelector::PercentageSelector(const std::string &code,
+bool isPercentageInput) {
     if (!font.loadFromFile("Assets/Fonts/Inter.ttf"))
         return;
     text.setFont(font);
@@ -22,6 +23,8 @@ PercentageSelector::PercentageSelector(const std::string &code) {
     buttonDown.setState(Button::IDLE);
     cursor.setSize({2, 20});
     setSelected(false);
+    percentage = isPercentageInput ? 100 : 1;
+    setIsPercentageInput(isPercentageInput);
 }
 
 void PercentageSelector::draw(sf::RenderWindow &window) {
@@ -32,6 +35,8 @@ void PercentageSelector::draw(sf::RenderWindow &window) {
         || (static_cast<int>(cursorClock.getElapsedTime().asSeconds() * 2)
             % 2 == 0) && selected)
         window.draw(cursor);
+    if (title.getString() != "")
+        window.draw(title);
 }
 
 std::string PercentageSelector::handleInput(const sf::Event &event,
@@ -74,9 +79,10 @@ bool &consumed) {
 
 void PercentageSelector::setPosition(float x, float y) {
     text.setPosition(x + 45, y + 5);
-    cursor.setPosition(x + 30, y + 5);
+    cursor.setPosition(x + (isPercentageInput ? 30 : 50), y + 5);
     buttonUp.setPosition(x + 55, y);
     buttonDown.setPosition(x + 55, y + 15);
+    title.setPosition(x + 5.f - (isPercentageInput ? 10 : 0), y + 6);
 }
 
 void PercentageSelector::setSelected(bool value) {
@@ -88,14 +94,28 @@ void PercentageSelector::setSelected(bool value) {
 }
 
 void PercentageSelector::setPercentage(int value) {
-    percentage = std::clamp(value, 0, 100);
-    text.setString(std::to_string(percentage) + "%");
+    percentage = std::clamp(value, 0, isPercentageInput ? 100 : 999);
+    text.setString(std::to_string(percentage) + characterPercentageInput);
     text.setOrigin(text.getLocalBounds().width, 0);
     currentInput = std::to_string(percentage);
 }
 
 int PercentageSelector::getPercentage() const {
     return percentage;
+}
+
+void PercentageSelector::setIsPercentageInput(bool b) {
+    isPercentageInput = b;
+    characterPercentageInput = isPercentageInput ? "%" : "";
+    setPercentage(isPercentageInput ? std::min(percentage, 100) : percentage);
+}
+
+void PercentageSelector::setTitle(const std::string &titleStr) {
+    title.setFont(font);
+    title.setCharacterSize(14);
+    title.setFillColor(sf::Color::White);
+    title.setString(titleStr);
+    title.setOrigin(title.getLocalBounds().width, 0);
 }
 
 }  // namespace MyGimp

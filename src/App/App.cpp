@@ -21,7 +21,7 @@ void App::init() {
     window.setFramerateLimit(60);
     resetCursor();
     window.setVerticalSyncEnabled(true);
-    drawApp.init("tests/Images/Img.jpg");
+    drawApp.init(800, 600);
     LOG_INFO("Window initialization completed");
 }
 

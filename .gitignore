@@ -50,3 +50,4 @@ MyGimp_tests
 venv
 *.sh
 Saves/*
+*.gcov

@@ -23,7 +23,6 @@ jobs:
           echo "Merges to main are only allowed from the 'dev' branch."
           exit 1
   check_coding_style:
-    needs: block_merge_to_main
     if: github.repository != 'ArthuryanLoheac/Gimp_Mirrored'
     runs-on: ubuntu-latest
     steps:
@@ -84,7 +83,7 @@ jobs:
           LIST=$(echo $EXECUTABLES | tr ',' ' ')
           find $LIST
   run_tests_cmake:
-    needs: [check_cmake_compilation, check_coding_style, check_epitech_coding_style]
+    needs: [check_cmake_compilation, check_coding_style, check_epitech_coding_style, block_merge_to_main]
     runs-on: ubuntu-latest
     container:
       image: epitechcontent/epitest-docker:latest
