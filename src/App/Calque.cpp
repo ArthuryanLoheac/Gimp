@@ -163,7 +163,6 @@ const {
         return image.getPixel(static_cast<unsigned int>(pos.x),
             static_cast<unsigned int>(pos.y));
     }
-    static sf::Color transparent = sf::Color::Transparent;
-    return transparent;
+    return sf::Color::Transparent;
 }
 }  // namespace MyGimp
