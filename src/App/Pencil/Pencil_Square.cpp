@@ -1,9 +1,10 @@
-#include "Pencil_Square.hpp"
+#include <vector>
+
+#include "App/Pencil/Pencil_Square.hpp"
 
 namespace MyGimp {
-std::vector<Pencil_I::Pixel> MyGimp::Pencil_Square::use(const int x, const int y,
-[[maybe_unused]] const sf::Image &img)
-{
+std::vector<Pencil_I::Pixel> MyGimp::Pencil_Square::use(const int x,
+const int y, [[maybe_unused]] const sf::Image &img) {
     std::vector<Pixel> pixels;
 
     int halfSize = size / 2;

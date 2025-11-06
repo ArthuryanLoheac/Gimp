@@ -1,6 +1,29 @@
-#include "Pencil_A.hpp"
+#include <vector>
+
+#include "App/Pencil/Pencil_A.hpp"
 
 namespace MyGimp {
+void Pencil_A::setOpacity(int opacity) {
+    if (opacity < 0)
+        color.a = 0;
+    else if (opacity > 255)
+        color.a = 255;
+    else
+        color.a = static_cast<sf::Uint8>(opacity);
+}
+
+void Pencil_A::clearPixelsPainted() {
+    pixelsPainted.clear();
+}
+
+const std::vector<Pencil_I::Pixel> &Pencil_A::getPixelsPainted() const {
+    return pixelsPainted;
+}
+
+void Pencil_A::addPixelPainted(const Pixel &pixel) {
+    pixelsPainted.push_back(pixel);
+}
+
 bool Pencil_A::isPixelinList(int x, int y) const {
     for (const auto& pixel : pixelsPainted) {
         if (pixel.x == x && pixel.y == y) {

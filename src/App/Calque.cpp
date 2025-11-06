@@ -1,5 +1,6 @@
 #include <string>
 #include <cmath>
+#include <vector>
 #include <memory>
 
 #include "App/Calque.hpp"
@@ -60,14 +61,16 @@ void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
     }
 }
 
-void Calque::startPainting(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
+void Calque::startPainting(const sf::Vector2f& position, float zoom,
+std::shared_ptr<Pencil_I> pencil) {
     painting = true;
     pencil->clearPixelsPainted();
     sf::Vector2f pos = position - sprite.getPosition();
     paintAt(pos, zoom, pencil);
 }
 
-void Calque::continuePainting(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
+void Calque::continuePainting(const sf::Vector2f& position, float zoom,
+std::shared_ptr<Pencil_I> pencil) {
     if (!painting || !pencil)
         return;
 
@@ -91,7 +94,6 @@ void Calque::continuePainting(const sf::Vector2f& position, float zoom, std::sha
 void Calque::paintOnePixel(const Pencil_I::Pixel pixelData) {
     if (pixelData.x >= 0 && pixelData.y >= 0 &&
         pixelData.x < image.getSize().x && pixelData.y < image.getSize().y) {
-
         const sf::Color pixel = image.getPixel(pixelData.x, pixelData.y);
         const sf::Color newPixel = pixelData.color;
         const float calqueOpacity = pixel.a / 255.f * opacity;
@@ -112,7 +114,8 @@ void Calque::paintOnePixel(const Pencil_I::Pixel pixelData) {
         const sf::Uint8 fnlB = static_cast<sf::Uint8>(((newPixel.b * a)
             + (pixel.b * pixelAlpha * (1 - a))) / outAlpha);
         const sf::Uint8 fnlA = static_cast<sf::Uint8>(outAlpha * 255);
-        image.setPixel(pixelData.x, pixelData.y, sf::Color(fnlR, fnlG, fnlB, fnlA));
+        image.setPixel(pixelData.x, pixelData.y,
+            sf::Color(fnlR, fnlG, fnlB, fnlA));
     }
 }
 
@@ -125,12 +128,14 @@ bool Calque::isPainting() const {
     return painting;
 }
 
-void Calque::paintAt(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
+void Calque::paintAt(const sf::Vector2f& position, float zoom,
+std::shared_ptr<Pencil_I> pencil) {
     if (!pencil)
         return;
     sf::Vector2f point(position);
     point = point / zoom;
-    std::vector<Pencil_I::Pixel> pixelsPaint = pencil->use(point.x, point.y, image);
+    std::vector<Pencil_I::Pixel> pixelsPaint =
+        pencil->use(point.x, point.y, image);
     for (const Pencil_I::Pixel pixel : pixelsPaint) {
         if (pencil->isPixelinList(pixel.x, pixel.y))
             continue;

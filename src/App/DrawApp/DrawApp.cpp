@@ -1,6 +1,7 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <memory>
 
 #include "App/Logger.hpp"
 #include "App/const.hpp"

@@ -6,7 +6,6 @@
 namespace MyGimp {
 class Pencil_I {
  public:
-
     struct Pixel {
         int x;
         int y;
@@ -17,7 +16,8 @@ class Pencil_I {
     virtual ~Pencil_I() = default;
 
     virtual void init(const int size, const sf::Color& color) = 0;
-    virtual std::vector<Pixel> use(const int x, const int y, const sf::Image& img) = 0;
+    virtual std::vector<Pixel> use(const int x,
+        const int y, const sf::Image& img) = 0;
     virtual std::string getName() const = 0;
     virtual int getSize() const = 0;
     virtual void setSize(int size) = 0;

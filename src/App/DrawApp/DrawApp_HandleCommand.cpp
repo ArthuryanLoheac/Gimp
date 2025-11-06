@@ -1,5 +1,6 @@
 #include <string>
 #include <algorithm>
+#include <cstdio>
 
 #include "App/Logger.hpp"
 #include "App/DrawApp/DrawApp.hpp"

@@ -4,7 +4,8 @@
 
 namespace MyGimp {
 
-PercentageSelector::PercentageSelector(const std::string &code, bool isPercentageInput) {
+PercentageSelector::PercentageSelector(const std::string &code,
+bool isPercentageInput) {
     if (!font.loadFromFile("Assets/Fonts/Inter.ttf"))
         return;
     text.setFont(font);

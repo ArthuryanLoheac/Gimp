@@ -6,7 +6,8 @@
 namespace MyGimp {
 class PercentageSelector {
  public:
-    explicit PercentageSelector(const std::string &code, bool isPercentageInput = true);
+    explicit PercentageSelector(const std::string &code,
+       bool isPercentageInput = true);
     ~PercentageSelector() = default;
 
     void draw(sf::RenderWindow &window);
@@ -19,6 +20,7 @@ class PercentageSelector {
 
     void setTitle(const std::string &titleStr);
     void setIsPercentageInput(bool b);
+
  private:
     bool selected = false;
 

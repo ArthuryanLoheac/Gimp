@@ -1,11 +1,13 @@
 #pragma once
-#include "Pencil_I.hpp"
 #include <string>
+#include <vector>
+
+#include "App/Pencil/Pencil_I.hpp"
 
 namespace MyGimp {
 class Pencil_A : public Pencil_I {
  public:
-    Pencil_A(const std::string &name) : pencilName(name) {};
+    explicit Pencil_A(const std::string &name) : pencilName(name) {}
     ~Pencil_A() override = default;
 
     void init(const int size, const sf::Color& color) override {
@@ -17,11 +19,11 @@ class Pencil_A : public Pencil_I {
     std::string getName() const override { return pencilName; }
     sf::Color getColor() const override { return color; }
     void setColor(const sf::Color& color) override { this->color = color; }
-    void setOpacity(int opacity) override { color.a = static_cast<sf::Uint8>(opacity); }
+    void setOpacity(int opacity) override;
     int getOpacity() const override { return color.a; }
-    void clearPixelsPainted() override { pixelsPainted.clear(); }
-    const std::vector<Pixel>& getPixelsPainted() const override { return pixelsPainted; }
-    void addPixelPainted(const Pixel& pixel) override { pixelsPainted.push_back(pixel); }
+    void clearPixelsPainted() override;
+    const std::vector<Pixel>& getPixelsPainted() const override;
+    void addPixelPainted(const Pixel& pixel) override;
     bool isPixelinList(int x, int y) const override;
 
  protected:

@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <SFML/Graphics.hpp>
+#include <memory>
 
+#include <SFML/Graphics.hpp>
 #include "App/Calque.hpp"
 #include "App/TopBar/TopBar.hpp"
 #include "App/CalqueMenu/CalqueMenu.hpp"

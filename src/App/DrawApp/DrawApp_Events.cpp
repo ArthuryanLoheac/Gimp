@@ -25,7 +25,8 @@ void DrawApp::handleInput(sf::Event &event) {
             saveFile();
         }
         handleCommandCalques(calqueMenu.handleInput(event, consumed));
-        handleCommandPencils(pencilMenu.handleInput(event, consumed, currentPencil));
+        handleCommandPencils(pencilMenu.handleInput(event, consumed,
+            currentPencil));
         handleCommand(topBar.handleInput(event, consumed));
         if (consumed) return;
         handleZooming(event);
