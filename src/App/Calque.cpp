@@ -84,6 +84,7 @@ std::shared_ptr<Pencil_I> pencil) {
     sf::Vector2f delta = end - start;
     float length = std::sqrt(delta.x * delta.x + delta.y * delta.y);
     int steps = static_cast<int>(length);
+    if (steps == 0) steps = 1;
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
         sf::Vector2f point = start + t * delta;
