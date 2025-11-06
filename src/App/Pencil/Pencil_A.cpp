@@ -1,6 +1,15 @@
 #include "Pencil_A.hpp"
 
 namespace MyGimp {
+bool Pencil_A::isPixelinList(int x, int y) const {
+    for (const auto& pixel : pixelsPainted) {
+        if (pixel.x == x && pixel.y == y) {
+            return true;
+        }
+    }
+    return false;
+}
+
 sf::Color Pencil_A::getPixelImage(const int x, const int y,
 const sf::Image &img) {
     if (x < 0 || y < 0 ||

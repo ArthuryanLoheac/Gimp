@@ -19,11 +19,16 @@ class Pencil_A : public Pencil_I {
     void setColor(const sf::Color& color) override { this->color = color; }
     void setOpacity(int opacity) override { color.a = static_cast<sf::Uint8>(opacity); }
     int getOpacity() const override { return color.a; }
+    void clearPixelsPainted() override { pixelsPainted.clear(); }
+    const std::vector<Pixel>& getPixelsPainted() const override { return pixelsPainted; }
+    void addPixelPainted(const Pixel& pixel) override { pixelsPainted.push_back(pixel); }
+    bool isPixelinList(int x, int y) const override;
 
  protected:
     int size = 1;
     sf::Color color = {0, 0, 0, 255};
     std::string pencilName;
+    std::vector<Pixel> pixelsPainted;
 
     sf::Color getPixelImage(const int x, const int y, const sf::Image& img);
 };

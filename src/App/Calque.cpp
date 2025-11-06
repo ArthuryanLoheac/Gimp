@@ -62,6 +62,7 @@ void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
 
 void Calque::startPainting(const sf::Vector2f& position, float zoom, std::shared_ptr<Pencil_I> pencil) {
     painting = true;
+    pencil->clearPixelsPainted();
     sf::Vector2f pos = position - sprite.getPosition();
     paintAt(pos, zoom, pencil);
 }
@@ -130,7 +131,11 @@ void Calque::paintAt(const sf::Vector2f& position, float zoom, std::shared_ptr<P
     sf::Vector2f point(position);
     point = point / zoom;
     std::vector<Pencil_I::Pixel> pixelsPaint = pencil->use(point.x, point.y, image);
-    for (const Pencil_I::Pixel pixel : pixelsPaint)
+    for (const Pencil_I::Pixel pixel : pixelsPaint) {
+        if (pencil->isPixelinList(pixel.x, pixel.y))
+            continue;
+        pencil->addPixelPainted(pixel);
         paintOnePixel(pixel);
+    }
 }
 }  // namespace MyGimp

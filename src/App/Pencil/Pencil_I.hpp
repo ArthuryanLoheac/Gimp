@@ -25,5 +25,9 @@ class Pencil_I {
     virtual void setColor(const sf::Color& color) = 0;
     virtual void setOpacity(int opacity) = 0;
     virtual int getOpacity() const = 0;
+    virtual void clearPixelsPainted() = 0;
+    virtual const std::vector<Pixel>& getPixelsPainted() const = 0;
+    virtual void addPixelPainted(const Pixel& pixel) = 0;
+    virtual bool isPixelinList(int x, int y) const = 0;
 };
 }  // namespace MyGimp
