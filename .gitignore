@@ -51,3 +51,5 @@ venv
 *.sh
 Saves/*
 *.gcov
+
+libs/

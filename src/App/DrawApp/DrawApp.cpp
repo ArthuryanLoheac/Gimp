@@ -10,8 +10,6 @@
 #include "Exceptions/DrawAppExceptions.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
 
-#include "App/Pencil/Pencil_Circle.hpp"
-
 namespace MyGimp {
 
 // Initialization
@@ -20,8 +18,7 @@ void DrawApp::init(int width, int height) {
     calques.clear();
     dimensions = sf::Vector2u(width, height);
     newCalque("Calque 1", sf::Color::White);
-    currentPencil = std::make_shared<Pencil_Circle>();
-    currentPencil->init(1, sf::Color::Black);
+    loadPencils();
 }
 
 void DrawApp::init(const std::string& filepath) {
@@ -31,8 +28,7 @@ void DrawApp::init(const std::string& filepath) {
         calques.back().createFromFile(filepath);
         updateCalques();
         dimensions = calques.back().getImage().getSize();
-        currentPencil = std::make_shared<Pencil_Circle>();
-        currentPencil->init(1, sf::Color::Black);
+        loadPencils();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
         init(800, 600);

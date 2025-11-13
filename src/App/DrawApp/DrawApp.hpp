@@ -51,6 +51,7 @@ class DrawApp {
     CalqueMenu calqueMenu;
     PopupFolder popupFolder;
     std::shared_ptr<Pencil_I> currentPencil;
+    std::vector<std::shared_ptr<Pencil_I>> loadedPencils;
     PencilMenu pencilMenu;
 
     void handleCommand(const std::string& command);
@@ -67,5 +68,6 @@ class DrawApp {
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
         const sf::Vector2u dimensionstoCopy);
     void newFile();
+    void loadPencils();
 };
 }  // namespace MyGimp

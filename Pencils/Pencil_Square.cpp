@@ -1,6 +1,15 @@
 #include <vector>
+#include <memory>
 
-#include "App/Pencil/Pencil_Square.hpp"
+#include "Pencil_Square.hpp"
+
+extern "C" MyGimp::Pencil_I* createPencil() {
+    return new MyGimp::Pencil_Square();
+}
+
+extern "C" void destroyPencil(MyGimp::Pencil_I* p) {
+    delete p;
+}
 
 namespace MyGimp {
 std::vector<Pencil_I::Pixel> MyGimp::Pencil_Square::use(const int x,

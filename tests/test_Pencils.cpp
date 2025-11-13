@@ -2,8 +2,8 @@
 #include <SFML/Graphics.hpp>
 
 #include "App/Pencil/Pencil_A.hpp"
-#include "App/Pencil/Pencil_Circle.hpp"
-#include "App/Pencil/Pencil_Square.hpp"
+#include "Pencil_Circle.hpp"
+#include "Pencil_Square.hpp"
 
 using namespace MyGimp;
 
