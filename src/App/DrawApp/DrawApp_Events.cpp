@@ -33,6 +33,15 @@ void DrawApp::handleInput(sf::Event &event) {
         handleDragging(event, consumed);
         if (consumed) return;
         handlePainting(event);
+        if (consumed) return;
+        for (auto& button : pencilsButtons) {
+            if (!button) continue;
+            std::string code = button->handleInput(event, consumed);
+            if (consumed) {
+                handleCommandPencils(code);
+                return;
+            }
+        }
     } catch (const std::exception &e) {
         LOG_ERROR(e.what());
     }

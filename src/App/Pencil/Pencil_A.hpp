@@ -7,7 +7,8 @@
 namespace MyGimp {
 class Pencil_A : public Pencil_I {
  public:
-    explicit Pencil_A(const std::string &name) : pencilName(name) {}
+    explicit Pencil_A(const std::string &name, const std::string &icon = "")
+        : pencilName(name), nameIcon(icon) {}
     ~Pencil_A() override = default;
 
     void init(const int size, const sf::Color& color) override {
@@ -26,11 +27,13 @@ class Pencil_A : public Pencil_I {
     void addPixelPainted(const Pixel& pixel) override;
     bool isPixelinList(int x, int y) const override;
     sf::Color getPixelImage(const int x, const int y, const sf::Image& img);
+    std::string getNameIcon() const override { return nameIcon; }
 
  protected:
     int size = 1;
     sf::Color color = {0, 0, 0, 255};
     std::string pencilName;
+    std::string nameIcon;
     std::vector<Pixel> pixelsPainted;
 };
 }  // namespace MyGimp

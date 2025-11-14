@@ -7,7 +7,7 @@
 namespace MyGimp {
 class Pencil_Circle final : public Pencil_A {
  public:
-    Pencil_Circle() : Pencil_A("Circle Pencil") {}
+    Pencil_Circle() : Pencil_A("Circle Pencil", "Circle") {}
     ~Pencil_Circle() override = default;
 
     std::vector<Pixel> use(int x, int y,

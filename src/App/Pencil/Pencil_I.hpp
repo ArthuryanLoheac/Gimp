@@ -29,5 +29,6 @@ class Pencil_I {
     virtual const std::vector<Pixel>& getPixelsPainted() const = 0;
     virtual void addPixelPainted(const Pixel& pixel) = 0;
     virtual bool isPixelinList(int x, int y) const = 0;
+    virtual std::string getNameIcon() const = 0;
 };
 }  // namespace MyGimp
