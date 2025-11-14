@@ -11,7 +11,6 @@
 #include "App/Pencil/Pencil_I.hpp"
 #include "App/PencilMenu/PencilMenu.hpp"
 #include "App/TopBar/Button.hpp"
-#include <memory>
 
 
 namespace MyGimp {

@@ -21,13 +21,13 @@ endif()
 
 # Source files (recursively find all .cpp files in src)
 file(GLOB_RECURSE SOURCES
-    ${CMAKE_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/MainApp/*.cpp
 )
 
 # Header files (recursively find all .h and .hpp files in src and include)
 file(GLOB_RECURSE HEADERS
-    ${CMAKE_SOURCE_DIR}/src/*.h
-    ${CMAKE_SOURCE_DIR}/src/*.hpp
+    ${CMAKE_SOURCE_DIR}/src/MainApp/*.h
+    ${CMAKE_SOURCE_DIR}/src/MainApp/*.hpp
     ${CMAKE_SOURCE_DIR}/include/*.h
     ${CMAKE_SOURCE_DIR}/include/*.hpp
 )
@@ -44,12 +44,12 @@ endif()
 # Include directories
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/MainApp
 )
 
 # Ensure top-level Pencils headers are visible to the main target
 target_include_directories(${PROJECT_NAME} PRIVATE
-    ${CMAKE_SOURCE_DIR}/Pencils
+    ${CMAKE_SOURCE_DIR}/src/Plugins/Pencils
 )
 
 # Link libraries
@@ -67,7 +67,7 @@ endif()
 # Build each Pencil as a shared library (.so) so pencils can be loaded/packaged separately
 # This will create one SHARED target per .cpp file found in the top-level `Pencils/` folder.
 file(GLOB PENCIL_SOURCES
-    ${CMAKE_SOURCE_DIR}/Pencils/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/Plugins/Pencils/*.cpp
 )
 set(PENCIL_LIB_TARGETS "")
 if(PENCIL_SOURCES)
@@ -83,8 +83,10 @@ if(PENCIL_SOURCES)
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
         )
         target_include_directories(${p_name} PRIVATE
-            ${CMAKE_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}
             ${CMAKE_SOURCE_DIR}/src
+            ${CMAKE_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/src/MainApp
         )
         target_link_libraries(${p_name} PRIVATE sfml-graphics sfml-window sfml-system)
         list(APPEND PENCIL_LIB_TARGETS ${p_name})
@@ -109,7 +111,7 @@ if(PENCIL_SOURCES)
         endif()
     endif()
 else()
-    message(STATUS "No Pencil sources found in ${CMAKE_SOURCE_DIR}/Pencils; skipping shared lib creation")
+    message(STATUS "No Pencil sources found in ${CMAKE_SOURCE_DIR}src/Plugins/Pencils; skipping shared lib creation")
 endif()
 
 # Compilation options
@@ -188,13 +190,13 @@ if(CRITERION_FOUND)
     # Include directories for tests
     target_include_directories(MyGimp_tests PRIVATE
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/MainApp
         ${CRITERION_INCLUDE_DIRS}
     )
 
     # Ensure pencils headers are visible to the tests as well
     target_include_directories(MyGimp_tests PRIVATE
-        ${CMAKE_SOURCE_DIR}/Pencils
+        ${CMAKE_SOURCE_DIR}/src/Plugins/Pencils
     )
 
     # If pencil shared libs were created earlier, link them into the tests executable as well
