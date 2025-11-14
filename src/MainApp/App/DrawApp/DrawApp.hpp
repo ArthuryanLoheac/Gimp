@@ -10,6 +10,7 @@
 #include "App/Popup/PopupFolder.hpp"
 #include "App/Pencil/Pencil_I.hpp"
 #include "App/PencilMenu/PencilMenu.hpp"
+#include "App/TopBar/Button.hpp"
 
 
 namespace MyGimp {
@@ -50,7 +51,10 @@ class DrawApp {
     int actualCalqueId = 0;
     CalqueMenu calqueMenu;
     PopupFolder popupFolder;
+    // Pencils
     std::shared_ptr<Pencil_I> currentPencil;
+    std::vector<std::shared_ptr<Pencil_I>> loadedPencils;
+    std::vector<std::unique_ptr<Button>> pencilsButtons;
     PencilMenu pencilMenu;
 
     void handleCommand(const std::string& command);
@@ -67,5 +71,8 @@ class DrawApp {
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
         const sf::Vector2u dimensionstoCopy);
     void newFile();
+
+    void loadPencils();
+    void addPencil(std::shared_ptr<Pencil_I>& pencil);
 };
 }  // namespace MyGimp

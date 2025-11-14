@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "App/Calque.hpp"
-#include "App/Pencil/Pencil_Square.hpp"
+#include "Pencil_Square.hpp"
 
 using namespace MyGimp;
 

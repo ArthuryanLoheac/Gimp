@@ -21,13 +21,13 @@ endif()
 
 # Source files (recursively find all .cpp files in src)
 file(GLOB_RECURSE SOURCES
-    ${CMAKE_SOURCE_DIR}/src/*.cpp
+    ${CMAKE_SOURCE_DIR}/src/MainApp/*.cpp
 )
 
 # Header files (recursively find all .h and .hpp files in src and include)
 file(GLOB_RECURSE HEADERS
-    ${CMAKE_SOURCE_DIR}/src/*.h
-    ${CMAKE_SOURCE_DIR}/src/*.hpp
+    ${CMAKE_SOURCE_DIR}/src/MainApp/*.h
+    ${CMAKE_SOURCE_DIR}/src/MainApp/*.hpp
     ${CMAKE_SOURCE_DIR}/include/*.h
     ${CMAKE_SOURCE_DIR}/include/*.hpp
 )
@@ -36,11 +36,20 @@ file(GLOB_RECURSE HEADERS
 add_executable(${PROJECT_NAME} ${SOURCES} main.cpp)
 target_compile_options(${PROJECT_NAME} PRIVATE -fprofile-arcs -ftest-coverage)
 target_link_libraries(${PROJECT_NAME} PRIVATE --coverage)
+# Export all symbols from the executable so dlopen'd plugins can resolve symbols
+if(UNIX)
+    target_link_options(${PROJECT_NAME} PRIVATE "-rdynamic")
+endif()
 
 # Include directories
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/src
+    ${CMAKE_SOURCE_DIR}/src/MainApp
+)
+
+# Ensure top-level Pencils headers are visible to the main target
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_SOURCE_DIR}/src/Plugins/Pencils
 )
 
 # Link libraries
@@ -53,6 +62,56 @@ if(spdlog_FOUND)
     target_compile_definitions(${PROJECT_NAME} PRIVATE USE_SPDLOG)
 else()
     message(STATUS "spdlog not found - using console fallback logging")
+endif()
+
+# Build each Pencil as a shared library (.so) so pencils can be loaded/packaged separately
+# This will create one SHARED target per .cpp file found in the top-level `Pencils/` folder.
+file(GLOB PENCIL_SOURCES
+    ${CMAKE_SOURCE_DIR}/src/Plugins/Pencils/*.cpp
+)
+set(PENCIL_LIB_TARGETS "")
+if(PENCIL_SOURCES)
+    message(STATUS "Found Pencil source files: ${PENCIL_SOURCES}")
+    foreach(p_src IN LISTS PENCIL_SOURCES)
+        get_filename_component(p_name ${p_src} NAME_WE)
+        # Name the target after the source file (e.g. Pencil_Circle -> Pencil_Circle)
+        add_library(${p_name} SHARED ${p_src})
+        set_target_properties(${p_name} PROPERTIES
+            POSITION_INDEPENDENT_CODE ON
+            OUTPUT_NAME ${p_name}
+            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/libs"
+        )
+        target_include_directories(${p_name} PRIVATE
+            ${CMAKE_SOURCE_DIR}
+            ${CMAKE_SOURCE_DIR}/src
+            ${CMAKE_SOURCE_DIR}/include
+            ${CMAKE_SOURCE_DIR}/src/MainApp
+        )
+        target_link_libraries(${p_name} PRIVATE sfml-graphics sfml-window sfml-system)
+        list(APPEND PENCIL_LIB_TARGETS ${p_name})
+    endforeach()
+
+    # Link created pencil shared libs into main executable (and tests if present)
+    if(PENCIL_LIB_TARGETS)
+        message(STATUS "Created pencil shared libs: ${PENCIL_LIB_TARGETS}")
+        # After building the main executable, copy all generated .so files into a `libs/` folder
+        # located next to the executable (e.g. `/path/to/MyGimp/libs/`) so runtime loader
+        # can use a dedicated directory.
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/libs"
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${CMAKE_BINARY_DIR}/libs"
+                "$<TARGET_FILE_DIR:${PROJECT_NAME}>/libs"
+            COMMENT "Copying Pencil .so files to $<TARGET_FILE_DIR:${PROJECT_NAME}>/libs for ${PROJECT_NAME}"
+        )
+        if(TARGET MyGimp_tests)
+            target_link_libraries(MyGimp_tests PRIVATE ${PENCIL_LIB_TARGETS})
+        endif()
+    endif()
+else()
+    message(STATUS "No Pencil sources found in ${CMAKE_SOURCE_DIR}src/Plugins/Pencils; skipping shared lib creation")
 endif()
 
 # Compilation options
@@ -123,13 +182,27 @@ if(CRITERION_FOUND)
     add_executable(MyGimp_tests ${TEST_SOURCES} ${SOURCES})
     target_compile_options(MyGimp_tests PRIVATE -fprofile-arcs -ftest-coverage)
     target_link_libraries(MyGimp_tests PRIVATE --coverage)
+    # Ensure tests executable exports symbols too so dynamically-loaded libs can resolve references
+    if(UNIX)
+        target_link_options(MyGimp_tests PRIVATE "-rdynamic")
+    endif()
 
     # Include directories for tests
     target_include_directories(MyGimp_tests PRIVATE
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/MainApp
         ${CRITERION_INCLUDE_DIRS}
     )
+
+    # Ensure pencils headers are visible to the tests as well
+    target_include_directories(MyGimp_tests PRIVATE
+        ${CMAKE_SOURCE_DIR}/src/Plugins/Pencils
+    )
+
+    # If pencil shared libs were created earlier, link them into the tests executable as well
+    if(DEFINED PENCIL_LIB_TARGETS AND PENCIL_LIB_TARGETS)
+        target_link_libraries(MyGimp_tests PRIVATE ${PENCIL_LIB_TARGETS})
+    endif()
 
     # Link libraries for tests
     target_link_libraries(MyGimp_tests PRIVATE
@@ -156,6 +229,17 @@ if(CRITERION_FOUND)
     # Set test output directory
     set_target_properties(MyGimp_tests PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}"
+    )
+
+    # After building the tests executable, copy all generated .so files into a `libs/` folder
+    # located next to the test executable (e.g. `/path/to/MyGimp_tests/libs/`).
+    add_custom_command(TARGET MyGimp_tests POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_FILE_DIR:MyGimp_tests>/libs"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+            "${CMAKE_BINARY_DIR}/libs"
+            "$<TARGET_FILE_DIR:MyGimp_tests>/libs"
+        COMMENT "Copying Pencil .so files to $<TARGET_FILE_DIR:MyGimp_tests>/libs for MyGimp_tests"
     )
 
     message(STATUS "Created single test executable MyGimp_tests with sources: ${TEST_SOURCES}")
