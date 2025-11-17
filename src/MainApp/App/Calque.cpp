@@ -166,4 +166,17 @@ const {
     }
     return sf::Color::Transparent;
 }
+
+void Calque::copyCalque(const Calque& other) {
+    name = other.getName();
+    image = other.getImage();
+    opacity = other.getOpacity();
+    visible = other.getCalqueVisible();
+    painting = other.getCalquePainting();
+    isErasing = other.getCalqueIsErasing();
+    lastPaintPos = other.getCalqueLastPaintPos();
+    sprite = other.getCalqueSprite();
+    sprite.setPosition(other.getCalqueSprite().getPosition());
+    texture = other.getCalqueTexture();
+}
 }  // namespace MyGimp

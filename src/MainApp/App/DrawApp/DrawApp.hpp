@@ -30,6 +30,8 @@ class DrawApp {
         sf::Color col = sf::Color::Transparent);
     void newCalque(const std::string& name, const std::string& filepath);
     std::vector<Calque>& getCalques();
+    Calque &getCalque();
+    Calque &getCalque(int id);
     bool deleteCalque();
     bool deleteCalque(int id);
     void moveCalquePos(bool up);
@@ -40,8 +42,13 @@ class DrawApp {
     void saveFile();
     void exportFile();
 
+    void makeSaveCalques();
+    void loadPreviousCalques();
+
  private:
-    std::vector<Calque> calques;
+    std::vector<std::vector<Calque>> calquesSaves;
+    int currentCalquesId = -1;
+
     sf::Vector2u dimensions;
     float zoom = 1.0f;
     sf::Vector2f viewOffset = {0.0f, 0.0f};

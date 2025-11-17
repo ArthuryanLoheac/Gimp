@@ -10,10 +10,10 @@ void DrawApp::draw(sf::RenderWindow& window) {
         viewOffset.x + window.getSize().x / 2.f - dimensions.x * zoom / 2.f,
         viewOffset.y + window.getSize().y / 2.f - dimensions.y * zoom / 2.f};
 
-    for (int i = static_cast<int>(calques.size()) - 1; i >= 0; --i) {
-        if (!calques[i].isVisible())
+    for (int i = static_cast<int>(getCalques().size()) - 1; i >= 0; --i) {
+        if (!getCalques()[i].isVisible())
             continue;
-        calques[i].draw(window, zoom, pos);
+        getCalques()[i].draw(window, zoom, pos);
     }
     pencilMenu.draw(window);
     topBar.draw(window);

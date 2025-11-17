@@ -24,6 +24,11 @@ void DrawApp::handleInput(sf::Event &event) {
             && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
             saveFile();
         }
+        if (event.type == sf::Event::KeyReleased &&
+            event.key.code == sf::Keyboard::Z
+            && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+            loadPreviousCalques();
+        }
         handleCommandCalques(calqueMenu.handleInput(event, consumed));
         handleCommandPencils(pencilMenu.handleInput(event, consumed,
             currentPencil));

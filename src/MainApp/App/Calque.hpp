@@ -15,6 +15,7 @@ class Calque {
     void createEmpty(int width, int height,
         sf::Color col = sf::Color::Transparent);
     void createFromFile(const std::string& filepath);
+    void copyCalque(const Calque& other);
 
     void draw(sf::RenderWindow& window, float zoom, sf::Vector2f pos);
 
@@ -37,6 +38,17 @@ class Calque {
 
     void paintAt(const sf::Vector2f& position, float zoom,
         std::shared_ptr<Pencil_I> pencil, bool erase = false);
+
+    // private getter
+    float getCalqueOpacity() const { return opacity; }
+    std::string getCalqueName() const { return name; }
+    sf::Image getCalqueImage() const { return image; }
+    sf::Texture getCalqueTexture() const { return texture; }
+    sf::Sprite getCalqueSprite() const { return sprite; }
+    bool getCalqueVisible() const { return visible; }
+    bool getCalquePainting() const { return painting; }
+    bool getCalqueIsErasing() const { return isErasing; }
+    sf::Vector2f getCalqueLastPaintPos() const { return lastPaintPos; }
 
  private:
     void paintOnePixel(const Pencil_I::Pixel pixel, bool erase = false);
