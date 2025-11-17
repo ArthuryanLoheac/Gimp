@@ -37,6 +37,21 @@ std::vector<Calque>& DrawApp::getCalques() {
     return calquesSaves[currentCalquesId];
 }
 
+Calque &DrawApp::getCalque() {
+    if (actualCalqueId < 0 ||
+        actualCalqueId >= static_cast<int>(getCalques().size())) {
+        throw Calque_Error("Invalid calque ID accessed.");
+    }
+    return getCalque();
+}
+
+Calque &DrawApp::getCalque(int id) {
+    if (id < 0 || id >= static_cast<int>(getCalques().size())) {
+        throw Calque_Error("Invalid calque ID accessed.");
+    }
+    return getCalques()[id];
+}
+
 bool DrawApp::deleteCalque() {
     bool result = deleteCalque(actualCalqueId);
     if (result)
@@ -61,10 +76,11 @@ void DrawApp::moveCalquePos(bool up) {
         actualCalqueId >= static_cast<int>(getCalques().size()))
         return;
     if (up && actualCalqueId > 0) {
-        std::swap(getCalques()[actualCalqueId], getCalques()[actualCalqueId - 1]);
+        std::swap(getCalque(), getCalques()[actualCalqueId - 1]);
         actualCalqueId = actualCalqueId - 1;
-    } else if (!up && actualCalqueId < static_cast<int>(getCalques().size()) - 1) {
-        std::swap(getCalques()[actualCalqueId], getCalques()[actualCalqueId + 1]);
+    } else if (!up && actualCalqueId <
+        static_cast<int>(getCalques().size()) - 1) {
+        std::swap(getCalque(), getCalques()[actualCalqueId + 1]);
         actualCalqueId = actualCalqueId + 1;
     }
     updateCalques();
@@ -78,7 +94,7 @@ void DrawApp::makeSaveCalques() {
     std::vector<Calque> calquesCopy;
     for (const auto& calque : getCalques()) {
         Calque calqueCopy(calque.getName());
-        calqueCopy.copy(calque);
+        calqueCopy.copyCalque(calque);
         calquesCopy.push_back(std::move(calqueCopy));
     }
     calquesSaves.push_back(std::move(calquesCopy));
@@ -91,7 +107,8 @@ void DrawApp::loadPreviousCalques() {
     if (calquesSaves.size() <= 1)
         return;
     calquesSaves.pop_back();
-    actualCalqueId = std::min(actualCalqueId, static_cast<int>(getCalques().size()) - 1);
+    actualCalqueId = std::min(actualCalqueId,
+        static_cast<int>(getCalques().size()) - 1);
     currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
     updateCalques();
 }

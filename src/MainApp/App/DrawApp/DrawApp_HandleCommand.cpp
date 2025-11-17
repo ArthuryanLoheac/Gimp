@@ -22,7 +22,7 @@ void DrawApp::handleCommandCalques(const std::string& command) {
         try {
             setId(std::stoi(command.substr(14)));
             calqueMenu.getPercentageSelector().setPercentage(
-                static_cast<int>(getCalques()[actualCalqueId].getOpacity() * 100));
+                static_cast<int>(getCalque().getOpacity() * 100));
         } catch (const std::exception &e) {
             LOG_ERROR("Invalid calque selection command: " + command);
         }
@@ -113,8 +113,9 @@ void DrawApp::handleCommandOpacity(const std::string& command) {
             int id = std::stoi(command.substr(14));
             if (id < 0 || id >= static_cast<int>(getCalques().size()))
                 return;
-            getCalques()[id].setVisible(!getCalques()[id].isVisible());
-            calqueMenu.getCalqueButtons()[id]->setSee(getCalques()[id].isVisible());
+            getCalque(id).setVisible(!getCalque(id).isVisible());
+            calqueMenu.getCalqueButtons()[id]->setSee(
+                getCalque(id).isVisible());
         } catch (const std::exception &e) {
             LOG_ERROR("Invalid calque see command: " + command);
         }
@@ -125,7 +126,7 @@ void DrawApp::handleCommandOpacity(const std::string& command) {
         if (getCalques().empty() || actualCalqueId < 0 ||
             actualCalqueId >= static_cast<int>(getCalques().size()))
             return;
-        getCalques()[actualCalqueId].setOpacity(opacity / 100.f);
+        getCalque().setOpacity(opacity / 100.f);
     } else if (command == "opacity_selector_down") {
         int opacity = calqueMenu.getPercentageSelector().getPercentage();
         opacity = std::max(0, opacity - 5);
@@ -133,7 +134,7 @@ void DrawApp::handleCommandOpacity(const std::string& command) {
         if (getCalques().empty() || actualCalqueId < 0 ||
             actualCalqueId >= static_cast<int>(getCalques().size()))
             return;
-        getCalques()[actualCalqueId].setOpacity(opacity / 100.f);
+        getCalque().setOpacity(opacity / 100.f);
     } else if (command.rfind("opacity_selector_input", 0) == 0) {
         try {
             int opacity = std::stoi(command.substr(23));
@@ -142,7 +143,7 @@ void DrawApp::handleCommandOpacity(const std::string& command) {
             if (getCalques().empty() || actualCalqueId < 0 ||
                 actualCalqueId >= static_cast<int>(getCalques().size()))
                 return;
-            getCalques()[actualCalqueId].setOpacity(opacity / 100.f);
+            getCalque().setOpacity(opacity / 100.f);
         } catch (const std::exception &e) {
             LOG_ERROR("Invalid opacity input command: " + command);
         }

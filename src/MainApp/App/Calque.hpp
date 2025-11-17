@@ -15,7 +15,7 @@ class Calque {
     void createEmpty(int width, int height,
         sf::Color col = sf::Color::Transparent);
     void createFromFile(const std::string& filepath);
-    void copy(const Calque& other);
+    void copyCalque(const Calque& other);
 
     void draw(sf::RenderWindow& window, float zoom, sf::Vector2f pos);
 
