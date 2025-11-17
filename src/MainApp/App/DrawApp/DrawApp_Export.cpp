@@ -12,12 +12,12 @@ void DrawApp::exportFile() {
     std::string path = popupFolder.openPopup("Select Folder",
         {".png", ".jpg", ".bmp"});
 
-    if (calques.empty())
+    if (getCalques().empty())
         throw DrawApp_NoCalque("No calques to export");
-    exportedImage.create(calques[0].getImage().getSize().x,
-        calques[0].getImage().getSize().y, sf::Color(0, 0, 0, 0));
-    for (int i = calques.size() - 1; i >= 0; --i) {
-        Calque &c = calques[i];
+    exportedImage.create(getCalques()[0].getImage().getSize().x,
+        getCalques()[0].getImage().getSize().y, sf::Color(0, 0, 0, 0));
+    for (int i = getCalques().size() - 1; i >= 0; --i) {
+        Calque &c = getCalques()[i];
         if (!c.isVisible())
             continue;
 

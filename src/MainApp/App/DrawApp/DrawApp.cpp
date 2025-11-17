@@ -15,7 +15,7 @@ namespace MyGimp {
 // Initialization
 
 void DrawApp::init(int width, int height) {
-    calques.clear();
+    calquesSaves.clear();
     dimensions = sf::Vector2u(width, height);
     newCalque("Calque 1", sf::Color::White);
     loadPencils();
@@ -23,11 +23,13 @@ void DrawApp::init(int width, int height) {
 
 void DrawApp::init(const std::string& filepath) {
     try {
-        calques.clear();
-        calques.emplace_back("Calque 1");
-        calques.back().createFromFile(filepath);
+        calquesSaves.clear();
+        calquesSaves.emplace_back();
+        currentCalquesId = 0;
+        getCalques().emplace_back("Calque 1");
+        getCalques().back().createFromFile(filepath);
         updateCalques();
-        dimensions = calques.back().getImage().getSize();
+        dimensions = getCalques().back().getImage().getSize();
         loadPencils();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
@@ -39,7 +41,7 @@ void DrawApp::init(const std::string& filepath) {
 
 
 void DrawApp::newFile() {
-    calques.clear();
+    calquesSaves.back().clear();
     dimensions = sf::Vector2u(800, 600);
     newCalque("Calque 1", sf::Color::White);
 }
@@ -51,7 +53,7 @@ sf::Vector2u DrawApp::getDimensions() const {
 }
 
 void DrawApp::setId(int id) {
-    if (id >= 0 && id < static_cast<int>(calques.size()))
+    if (id >= 0 && id < static_cast<int>(calquesSaves.back().size()))
         actualCalqueId = id;
     updateCalques();
 }

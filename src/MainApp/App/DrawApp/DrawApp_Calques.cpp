@@ -9,10 +9,14 @@
 #include "Exceptions/CalqueExceptions.hpp"
 
 namespace MyGimp {
+const int MAX_CALQUES_SAVES = 40;
+
 void DrawApp::newCalque(const std::string& name, sf::Color col) {
     try {
-        calques.emplace(calques.begin(), name);
-        calques.front().createEmpty(dimensions.x, dimensions.y, col);
+        calquesSaves.emplace_back();
+        currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
+        getCalques().emplace(getCalques().begin(), name);
+        getCalques().front().createEmpty(dimensions.x, dimensions.y, col);
         updateCalques();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
@@ -21,8 +25,8 @@ void DrawApp::newCalque(const std::string& name, sf::Color col) {
 
 void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
     try {
-        calques.emplace(calques.begin(), name);
-        calques.front().createFromFile(filepath);
+        getCalques().emplace(getCalques().begin(), name);
+        getCalques().front().createFromFile(filepath);
         updateCalques();
     } catch (const Calque_Error &e) {
         LOG_ERROR(e.what());
@@ -30,7 +34,7 @@ void DrawApp::newCalque(const std::string& name, const std::string& filepath) {
 }
 
 std::vector<Calque>& DrawApp::getCalques() {
-    return calques;
+    return calquesSaves[currentCalquesId];
 }
 
 bool DrawApp::deleteCalque() {
@@ -42,10 +46,10 @@ bool DrawApp::deleteCalque() {
 }
 
 bool DrawApp::deleteCalque(int id) {
-    if (calques.size() <= 1)
+    if (getCalques().size() <= 1)
         return false;
-    if (id >= 0 && id < static_cast<int>(calques.size())) {
-        calques.erase(calques.begin() + id);
+    if (id >= 0 && id < static_cast<int>(getCalques().size())) {
+        getCalques().erase(getCalques().begin() + id);
         updateCalques();
         return true;
     }
@@ -54,19 +58,42 @@ bool DrawApp::deleteCalque(int id) {
 
 void DrawApp::moveCalquePos(bool up) {
     if (actualCalqueId < 0 ||
-        actualCalqueId >= static_cast<int>(calques.size()))
+        actualCalqueId >= static_cast<int>(getCalques().size()))
         return;
     if (up && actualCalqueId > 0) {
-        std::swap(calques[actualCalqueId], calques[actualCalqueId - 1]);
+        std::swap(getCalques()[actualCalqueId], getCalques()[actualCalqueId - 1]);
         actualCalqueId = actualCalqueId - 1;
-    } else if (!up && actualCalqueId < static_cast<int>(calques.size()) - 1) {
-        std::swap(calques[actualCalqueId], calques[actualCalqueId + 1]);
+    } else if (!up && actualCalqueId < static_cast<int>(getCalques().size()) - 1) {
+        std::swap(getCalques()[actualCalqueId], getCalques()[actualCalqueId + 1]);
         actualCalqueId = actualCalqueId + 1;
     }
     updateCalques();
 }
 
 void DrawApp::updateCalques() {
-    calqueMenu.update(calques, actualCalqueId);
+    calqueMenu.update(getCalques(), actualCalqueId);
 }
+
+void DrawApp::makeSaveCalques() {
+    std::vector<Calque> calquesCopy;
+    for (const auto& calque : getCalques()) {
+        Calque calqueCopy(calque.getName());
+        calqueCopy.copy(calque);
+        calquesCopy.push_back(std::move(calqueCopy));
+    }
+    calquesSaves.push_back(std::move(calquesCopy));
+    if (calquesSaves.size() > MAX_CALQUES_SAVES)
+        calquesSaves.erase(calquesSaves.begin());
+    currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
+}
+
+void DrawApp::loadPreviousCalques() {
+    if (calquesSaves.size() <= 1)
+        return;
+    calquesSaves.pop_back();
+    actualCalqueId = std::min(actualCalqueId, static_cast<int>(getCalques().size()) - 1);
+    currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
+    updateCalques();
+}
+
 }  // namespace MyGimp
