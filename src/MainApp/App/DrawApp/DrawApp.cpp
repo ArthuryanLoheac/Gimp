@@ -53,7 +53,14 @@ sf::Vector2u DrawApp::getDimensions() const {
 }
 
 void DrawApp::setId(int id) {
-    if (id >= 0 && id < static_cast<int>(calquesSaves.back().size()))
+    int size = 0;
+    if (currentCalquesId >= 0 && currentCalquesId <
+        static_cast<int>(calquesSaves.size()))
+        size = static_cast<int>(calquesSaves[currentCalquesId].size());
+    else if (!calquesSaves.empty())
+        size = static_cast<int>(calquesSaves.back().size());
+
+    if (id >= 0 && id < size)
         actualCalqueId = id;
     updateCalques();
 }

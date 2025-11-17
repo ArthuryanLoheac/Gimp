@@ -13,8 +13,14 @@ const int MAX_CALQUES_SAVES = 40;
 
 void DrawApp::newCalque(const std::string& name, sf::Color col) {
     try {
-        calquesSaves.emplace_back();
-        currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
+        if (calquesSaves.empty()) {
+            calquesSaves.emplace_back();
+            currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
+        } else {
+            if (currentCalquesId < 0 || currentCalquesId >=
+                static_cast<int>(calquesSaves.size()))
+                currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
+        }
         getCalques().emplace(getCalques().begin(), name);
         getCalques().front().createEmpty(dimensions.x, dimensions.y, col);
         updateCalques();
