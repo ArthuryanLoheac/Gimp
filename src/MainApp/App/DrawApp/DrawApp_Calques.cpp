@@ -42,7 +42,7 @@ Calque &DrawApp::getCalque() {
         actualCalqueId >= static_cast<int>(getCalques().size())) {
         throw Calque_Error("Invalid calque ID accessed.");
     }
-    return getCalque();
+    return getCalques()[actualCalqueId];
 }
 
 Calque &DrawApp::getCalque(int id) {

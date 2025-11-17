@@ -41,7 +41,7 @@ void DrawApp::init(const std::string& filepath) {
 
 
 void DrawApp::newFile() {
-    calquesSaves.back().clear();
+    calquesSaves.clear();
     dimensions = sf::Vector2u(800, 600);
     newCalque("Calque 1", sf::Color::White);
 }
