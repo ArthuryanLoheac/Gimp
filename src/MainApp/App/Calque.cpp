@@ -167,7 +167,7 @@ const {
     return sf::Color::Transparent;
 }
 
-void Calque::copy(const Calque& other) {
+void Calque::copyCalque(const Calque& other) {
     name = other.getName();
     image = other.getImage();
     opacity = other.getOpacity();
