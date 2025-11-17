@@ -179,5 +179,4 @@ void Calque::copy(const Calque& other) {
     sprite.setPosition(other.getCalqueSprite().getPosition());
     texture = other.getCalqueTexture();
 }
-
 }  // namespace MyGimp
