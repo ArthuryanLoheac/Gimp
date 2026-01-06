@@ -90,6 +90,7 @@ void DrawApp::loadFile(const std::string& filepath) {
 
         // Replace current states
         calquesSaves.clear();
+        redoCalquesSaves.clear();
         calquesSaves.push_back(std::move(loaded));
         currentCalquesId = 0;
         actualCalqueId = 0;
