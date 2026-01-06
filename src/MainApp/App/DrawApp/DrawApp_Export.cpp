@@ -12,10 +12,18 @@ void DrawApp::exportFile() {
     std::string path = popupFolder.openPopup("Select Folder",
         {".png", ".jpg", ".bmp"});
 
+    sf::Vector2f biggerCalque = {0.f, 0.f};
+    for (const auto& calque : getCalques()) {
+        if (calque.getImage().getSize().x > biggerCalque.x)
+            biggerCalque.x = static_cast<float>(calque.getImage().getSize().x);
+        if (calque.getImage().getSize().y > biggerCalque.y)
+            biggerCalque.y = static_cast<float>(calque.getImage().getSize().y);
+    }
+
     if (getCalques().empty())
         throw DrawApp_NoCalque("No calques to export");
-    exportedImage.create(getCalques()[0].getImage().getSize().x,
-        getCalques()[0].getImage().getSize().y, sf::Color(0, 0, 0, 0));
+    exportedImage.create(biggerCalque.x,
+        biggerCalque.y, sf::Color::Transparent);
     for (int i = getCalques().size() - 1; i >= 0; --i) {
         Calque &c = getCalques()[i];
         if (!c.isVisible())

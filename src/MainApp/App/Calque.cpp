@@ -179,4 +179,11 @@ void Calque::copyCalque(const Calque& other) {
     sprite.setPosition(other.getCalqueSprite().getPosition());
     texture = other.getCalqueTexture();
 }
+
+void Calque::setImage(const sf::Image& img) {
+    image = img;
+    // update texture/sprite so that drawing uses the new image immediately
+    texture.loadFromImage(image);
+    sprite.setTexture(texture);
+}
 }  // namespace MyGimp

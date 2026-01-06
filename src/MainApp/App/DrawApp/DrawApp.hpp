@@ -41,6 +41,8 @@ class DrawApp {
     int getId() const { return actualCalqueId; }
     void saveFile();
     void exportFile();
+    void loadFile();
+    void loadFile(const std::string& filepath);
 
     void makeSaveCalques();
     void loadPreviousCalques();

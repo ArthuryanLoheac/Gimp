@@ -16,10 +16,10 @@ void DrawApp::draw(sf::RenderWindow& window) {
         getCalques()[i].draw(window, zoom, pos);
     }
     pencilMenu.draw(window);
-    topBar.draw(window);
-    calqueMenu.draw(window);
     for (auto& button : pencilsButtons)
         if (button)
             button->draw(window);
+    topBar.draw(window);
+    calqueMenu.draw(window);
 }
 }  // namespace MyGimp
