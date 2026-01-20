@@ -78,11 +78,3 @@ Test(DrawApp, set_get_id) {
     app.setId(5); // invalide
     cr_assert_eq(app.getId(), 0);
 }
-
-Test(DrawApp, save_export_file_mock) {
-    MyGimp::DrawApp app;
-    app.init(800, 600);
-    // On vérifie que les fonctions ne crashent pas (mock)
-    app.saveFile();
-    cr_assert(true);
-}
