@@ -20,6 +20,7 @@ void Pencil_A::setColor(const sf::Color &color) {
 
 void Pencil_A::clearPixelsPainted() {
     pixelsPainted.clear();
+    pixelsPaintedSet.clear();
 }
 
 const std::vector<Pencil_I::Pixel> &Pencil_A::getPixelsPainted() const {
@@ -28,15 +29,15 @@ const std::vector<Pencil_I::Pixel> &Pencil_A::getPixelsPainted() const {
 
 void Pencil_A::addPixelPainted(const Pixel &pixel) {
     pixelsPainted.push_back(pixel);
+    uint64_t key = (static_cast<uint64_t>(static_cast<uint32_t>(pixel.x)) << 32) |
+                   static_cast<uint32_t>(pixel.y);
+    pixelsPaintedSet.insert(key);
 }
 
 bool Pencil_A::isPixelinList(int x, int y) const {
-    for (const auto& pixel : pixelsPainted) {
-        if (pixel.x == x && pixel.y == y) {
-            return true;
-        }
-    }
-    return false;
+    uint64_t key = (static_cast<uint64_t>(static_cast<uint32_t>(x)) << 32) |
+                   static_cast<uint32_t>(y);
+    return pixelsPaintedSet.find(key) != pixelsPaintedSet.end();
 }
 
 sf::Color Pencil_A::getPixelImage(const int x, const int y,
