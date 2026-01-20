@@ -104,6 +104,8 @@ void DrawApp::makeSaveCalques() {
         calquesCopy.push_back(std::move(calqueCopy));
     }
     calquesSaves.push_back(std::move(calquesCopy));
+    // New save invalidates the redo stack
+    redoCalquesSaves.clear();
     if (calquesSaves.size() > MAX_CALQUES_SAVES)
         calquesSaves.erase(calquesSaves.begin());
     currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
@@ -112,10 +114,26 @@ void DrawApp::makeSaveCalques() {
 void DrawApp::loadPreviousCalques() {
     if (calquesSaves.size() <= 1)
         return;
+    // Move last save to redo stack so we can redo it later
+    redoCalquesSaves.push_back(std::move(calquesSaves.back()));
     calquesSaves.pop_back();
+    currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
     actualCalqueId = std::min(actualCalqueId,
         static_cast<int>(getCalques().size()) - 1);
+    updateCalques();
+}
+
+void DrawApp::loadNextCalques() {
+    if (redoCalquesSaves.empty())
+        return;
+    // Restore the most recent undone save
+    calquesSaves.push_back(std::move(redoCalquesSaves.back()));
+    redoCalquesSaves.pop_back();
+    if (calquesSaves.size() > MAX_CALQUES_SAVES)
+        calquesSaves.erase(calquesSaves.begin());
     currentCalquesId = static_cast<int>(calquesSaves.size()) - 1;
+    actualCalqueId = std::min(actualCalqueId,
+        static_cast<int>(getCalques().size()) - 1);
     updateCalques();
 }
 

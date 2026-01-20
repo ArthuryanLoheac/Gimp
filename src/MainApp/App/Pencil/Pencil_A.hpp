@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 #include "App/Pencil/Pencil_I.hpp"
 
@@ -35,5 +36,6 @@ class Pencil_A : public Pencil_I {
     std::string pencilName;
     std::string nameIcon;
     std::vector<Pixel> pixelsPainted;
+    std::unordered_set<uint64_t> pixelsPaintedSet;
 };
 }  // namespace MyGimp

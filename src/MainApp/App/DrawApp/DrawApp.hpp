@@ -41,13 +41,17 @@ class DrawApp {
     int getId() const { return actualCalqueId; }
     void saveFile();
     void exportFile();
+    void loadFile();
+    void loadFile(const std::string& filepath);
 
     void makeSaveCalques();
     void loadPreviousCalques();
+    void loadNextCalques();
 
  private:
     std::vector<std::vector<Calque>> calquesSaves;
     int currentCalquesId = -1;
+    std::vector<std::vector<Calque>> redoCalquesSaves;
 
     sf::Vector2u dimensions;
     float zoom = 1.0f;

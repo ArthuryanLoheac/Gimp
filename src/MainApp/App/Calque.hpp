@@ -49,6 +49,8 @@ class Calque {
     bool getCalquePainting() const { return painting; }
     bool getCalqueIsErasing() const { return isErasing; }
     sf::Vector2f getCalqueLastPaintPos() const { return lastPaintPos; }
+    // Image setter for loading from a project
+    void setImage(const sf::Image& img);
 
  private:
     void paintOnePixel(const Pencil_I::Pixel pixel, bool erase = false);
@@ -60,6 +62,11 @@ class Calque {
     sf::Texture texture;
     sf::Sprite sprite;
     bool visible = true;
+
+    // Performance optimizations
+    bool imageDirty = false;  // set when image pixels changed
+    sf::Clock textureUpdateClock;
+    sf::Time textureUpdateInterval = sf::milliseconds(30);
 
     bool painting = false;
     bool isErasing = false;
