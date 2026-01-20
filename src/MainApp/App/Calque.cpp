@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 #include "App/Calque.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
@@ -59,7 +60,8 @@ void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
         // Update texture only when image has changed and either we're not
         // actively painting or the throttle interval has elapsed.
         if (imageDirty) {
-            if (!painting || textureUpdateClock.getElapsedTime() >= textureUpdateInterval) {
+            if (!painting || textureUpdateClock.getElapsedTime()
+                >= textureUpdateInterval) {
                 texture.loadFromImage(image);
                 sprite.setTexture(texture, true);
                 imageDirty = false;
@@ -100,7 +102,8 @@ std::shared_ptr<Pencil_I> pencil) {
     float length = std::sqrt(delta.x * delta.x + delta.y * delta.y);
     // spacing in canvas pixels (approx), use half pencil size to ensure
     // continuous stroke without over-sampling
-    float spacingCanvas = std::max(1.f, static_cast<float>(pencil->getSize()) * 0.5f);
+    float spacingCanvas = std::max(1.f,
+        static_cast<float>(pencil->getSize()) * 0.5f);
     float spacingWindow = spacingCanvas * zoom;
     int steps = static_cast<int>(length / std::max(1.f, spacingWindow));
     if (steps <= 0) steps = 1;

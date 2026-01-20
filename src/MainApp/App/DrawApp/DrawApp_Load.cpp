@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <utility>
 #include <cstdint>
 
 #include "App/Logger.hpp"
@@ -71,7 +72,8 @@ void DrawApp::loadFile(const std::string& filepath) {
                 ifs.read(reinterpret_cast<char*>(pixels.data()), pixels.size());
                 if (static_cast<size_t>(ifs.gcount()) != pixels.size()) {
                     // If we can't read all bytes, bail
-                    throw DrawApp_LoadError("Unexpected EOF while reading pixels");
+                    throw DrawApp_LoadError(
+                        "Unexpected EOF while reading pixels");
                 }
             }
 

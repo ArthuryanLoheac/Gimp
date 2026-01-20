@@ -64,7 +64,7 @@ class Calque {
     bool visible = true;
 
     // Performance optimizations
-    bool imageDirty = false; // set when image pixels changed
+    bool imageDirty = false;  // set when image pixels changed
     sf::Clock textureUpdateClock;
     sf::Time textureUpdateInterval = sf::milliseconds(30);
 

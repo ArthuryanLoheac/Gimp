@@ -1,5 +1,6 @@
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 #include "Plugins/Pencils/Pencil_Grayscale.hpp"
 

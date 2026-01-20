@@ -28,7 +28,8 @@ const int y, [[maybe_unused]] const sf::Image &img) {
                 float f = (c / 255.f - 0.5f) * contrastFactor + 0.5f;
                 return static_cast<uint8_t>(std::clamp(f * 255.f, 0.f, 255.f));
             };
-            p.color = sf::Color(adjust(src.r), adjust(src.g), adjust(src.b), src.a);
+            p.color = sf::Color(adjust(src.r), adjust(src.g),
+                adjust(src.b), src.a);
             pixels.push_back(p);
         }
     }

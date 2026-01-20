@@ -29,8 +29,8 @@ const std::vector<Pencil_I::Pixel> &Pencil_A::getPixelsPainted() const {
 
 void Pencil_A::addPixelPainted(const Pixel &pixel) {
     pixelsPainted.push_back(pixel);
-    uint64_t key = (static_cast<uint64_t>(static_cast<uint32_t>(pixel.x)) << 32) |
-                   static_cast<uint32_t>(pixel.y);
+    uint64_t key = (static_cast<uint64_t>(static_cast<uint32_t>(pixel.x))
+            << 32) | static_cast<uint32_t>(pixel.y);
     pixelsPaintedSet.insert(key);
 }
 

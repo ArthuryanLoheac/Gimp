@@ -1,4 +1,6 @@
 #include <string>
+#include <fstream>
+#include <cstdint>
 
 #include "App/Logger.hpp"
 
@@ -6,8 +8,6 @@
 #include "Exceptions/DrawAppExceptions.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
 
-#include <fstream>
-#include <cstdint>
 
 
 namespace MyGimp {
