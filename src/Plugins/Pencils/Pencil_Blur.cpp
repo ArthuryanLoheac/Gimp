@@ -26,7 +26,10 @@ const int y, [[maybe_unused]] const sf::Image &img) {
             for (int bx = -1; bx <= 1; ++bx) {
                 for (int by = -1; by <= 1; ++by) {
                     sf::Color c = getPixelImage(sx + bx, sy + by, img);
-                    rSum += c.r; gSum += c.g; bSum += c.b; aSum += c.a;
+                    rSum += c.r;
+                    gSum += c.g;
+                    bSum += c.b;
+                    aSum += c.a;
                     ++count;
                 }
             }
