@@ -63,6 +63,11 @@ class Calque {
     sf::Sprite sprite;
     bool visible = true;
 
+    // Performance optimizations
+    bool imageDirty = false;  // set when image pixels changed
+    sf::Clock textureUpdateClock;
+    sf::Time textureUpdateInterval = sf::milliseconds(30);
+
     bool painting = false;
     bool isErasing = false;
     sf::Vector2f lastPaintPos;

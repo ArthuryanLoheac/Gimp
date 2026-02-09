@@ -46,10 +46,12 @@ class DrawApp {
 
     void makeSaveCalques();
     void loadPreviousCalques();
+    void loadNextCalques();
 
  private:
     std::vector<std::vector<Calque>> calquesSaves;
     int currentCalquesId = -1;
+    std::vector<std::vector<Calque>> redoCalquesSaves;
 
     sf::Vector2u dimensions;
     float zoom = 1.0f;

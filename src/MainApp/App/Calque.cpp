@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <memory>
+#include <algorithm>
 
 #include "App/Calque.hpp"
 #include "Exceptions/CalqueExceptions.hpp"
@@ -10,12 +11,17 @@ namespace MyGimp {
 void Calque::createFromFile(const std::string& filepath) {
     if (!image.loadFromFile(filepath))
         throw Calque_FileError("Unable to load image from " + filepath);
+    // initialize texture/sprite once from the loaded image
+    texture.loadFromImage(image);
+    sprite.setTexture(texture);
 }
 
 void Calque::createEmpty(int width, int height, sf::Color col) {
     if (width <= 0 || height <= 0)
         throw Calque_InvalidSize("Width and Height must be positive integers.");
     image.create(width, height, col);
+    texture.loadFromImage(image);
+    sprite.setTexture(texture);
 }
 
 void Calque::setVisible(bool isVisible) {
@@ -51,8 +57,17 @@ void Calque::setOpacity(float opacity) {
 
 void Calque::draw(sf::RenderWindow &window, float zoom, sf::Vector2f pos) {
     if (visible) {
-        texture.loadFromImage(image);
-        sprite.setTexture(texture);
+        // Update texture only when image has changed and either we're not
+        // actively painting or the throttle interval has elapsed.
+        if (imageDirty) {
+            if (!painting || textureUpdateClock.getElapsedTime()
+                >= textureUpdateInterval) {
+                texture.loadFromImage(image);
+                sprite.setTexture(texture, true);
+                imageDirty = false;
+                textureUpdateClock.restart();
+            }
+        }
         sprite.setScale(zoom, zoom);
         sprite.setPosition(pos);
         sprite.setColor(sf::Color(255, 255, 255,
@@ -68,6 +83,8 @@ std::shared_ptr<Pencil_I> pencil, bool erase) {
     sf::Vector2f pos = position - sprite.getPosition();
     isErasing = erase;
     paintAt(pos, zoom, pencil, isErasing);
+    // ensure first painted pixels are uploaded soon
+    textureUpdateClock.restart();
 }
 
 void Calque::continuePainting(const sf::Vector2f& position, float zoom,
@@ -79,12 +96,17 @@ std::shared_ptr<Pencil_I> pencil) {
         lastPaintPos = position - sprite.getPosition();
     sf::Vector2f start = lastPaintPos;
     sf::Vector2f end = position - sprite.getPosition();
-
-    // Simple Bresenham's line algorithm for painting between points
+    // Interpolate between points. Reduce number of samples when pencil
+    // is large to avoid excessive overdraw during fast movements.
     sf::Vector2f delta = end - start;
     float length = std::sqrt(delta.x * delta.x + delta.y * delta.y);
-    int steps = static_cast<int>(length);
-    if (steps == 0) steps = 1;
+    // spacing in canvas pixels (approx), use half pencil size to ensure
+    // continuous stroke without over-sampling
+    float spacingCanvas = std::max(1.f,
+        static_cast<float>(pencil->getSize()) * 0.5f);
+    float spacingWindow = spacingCanvas * zoom;
+    int steps = static_cast<int>(length / std::max(1.f, spacingWindow));
+    if (steps <= 0) steps = 1;
     for (int i = 0; i <= steps; ++i) {
         float t = static_cast<float>(i) / steps;
         sf::Vector2f point = start + t * delta;
@@ -103,6 +125,7 @@ void Calque::paintOnePixel(const Pencil_I::Pixel pixelData, bool erase) {
             sf::Uint8 newA = static_cast<sf::Uint8>(pixel.a * factorAlpha);
             image.setPixel(pixelData.x, pixelData.y,
                 sf::Color(pixel.r, pixel.g, pixel.b, newA));
+            imageDirty = true;
             return;
         }
         const sf::Color newPixel = pixelData.color;
@@ -126,12 +149,20 @@ void Calque::paintOnePixel(const Pencil_I::Pixel pixelData, bool erase) {
         const sf::Uint8 fnlA = static_cast<sf::Uint8>(outAlpha * 255);
         image.setPixel(pixelData.x, pixelData.y,
             sf::Color(fnlR, fnlG, fnlB, fnlA));
+        imageDirty = true;
     }
 }
 
 void Calque::stopPainting() {
     painting = false;
     lastPaintPos = sf::Vector2f(0, 0);
+    // ensure the final changes are uploaded immediately
+    if (imageDirty) {
+        texture.loadFromImage(image);
+        sprite.setTexture(texture, true);
+        imageDirty = false;
+        textureUpdateClock.restart();
+    }
 }
 
 bool Calque::isPainting() const {
@@ -146,7 +177,7 @@ std::shared_ptr<Pencil_I> pencil, bool erase) {
     point = point / zoom;
     std::vector<Pencil_I::Pixel> pixelsPaint =
         pencil->use(point.x, point.y, image);
-    for (const Pencil_I::Pixel pixel : pixelsPaint) {
+    for (const auto &pixel : pixelsPaint) {
         if (pencil->isPixelinList(pixel.x, pixel.y))
             continue;
         pencil->addPixelPainted(pixel);
@@ -185,5 +216,6 @@ void Calque::setImage(const sf::Image& img) {
     // update texture/sprite so that drawing uses the new image immediately
     texture.loadFromImage(image);
     sprite.setTexture(texture);
+    imageDirty = false;
 }
 }  // namespace MyGimp

@@ -16,6 +16,7 @@ namespace MyGimp {
 
 void DrawApp::init(int width, int height) {
     calquesSaves.clear();
+    redoCalquesSaves.clear();
     dimensions = sf::Vector2u(width, height);
     newCalque("Calque 1", sf::Color::White);
     loadPencils();
@@ -24,6 +25,7 @@ void DrawApp::init(int width, int height) {
 void DrawApp::init(const std::string& filepath) {
     try {
         calquesSaves.clear();
+        redoCalquesSaves.clear();
         calquesSaves.emplace_back();
         currentCalquesId = 0;
         getCalques().emplace_back("Calque 1");
@@ -42,6 +44,7 @@ void DrawApp::init(const std::string& filepath) {
 
 void DrawApp::newFile() {
     calquesSaves.clear();
+    redoCalquesSaves.clear();
     dimensions = sf::Vector2u(800, 600);
     newCalque("Calque 1", sf::Color::White);
 }

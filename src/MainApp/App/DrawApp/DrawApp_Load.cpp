@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <utility>
 #include <cstdint>
 
 #include "App/Logger.hpp"
@@ -71,7 +72,8 @@ void DrawApp::loadFile(const std::string& filepath) {
                 ifs.read(reinterpret_cast<char*>(pixels.data()), pixels.size());
                 if (static_cast<size_t>(ifs.gcount()) != pixels.size()) {
                     // If we can't read all bytes, bail
-                    throw DrawApp_LoadError("Unexpected EOF while reading pixels");
+                    throw DrawApp_LoadError(
+                        "Unexpected EOF while reading pixels");
                 }
             }
 
@@ -90,6 +92,7 @@ void DrawApp::loadFile(const std::string& filepath) {
 
         // Replace current states
         calquesSaves.clear();
+        redoCalquesSaves.clear();
         calquesSaves.push_back(std::move(loaded));
         currentCalquesId = 0;
         actualCalqueId = 0;
