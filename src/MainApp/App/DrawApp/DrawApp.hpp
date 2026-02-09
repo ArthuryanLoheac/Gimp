@@ -84,7 +84,31 @@ class DrawApp {
         const sf::Vector2u dimensionstoCopy);
     void newFile();
 
+    // Selection tool
+    void startSelection(const sf::Vector2f& windowPos);
+    void updateSelection(const sf::Vector2f& windowPos);
+    void finalizeSelection();
+    void cancelSelection();
+
+    void startMoveSelection(const sf::Vector2f& windowPos);
+    void updateMoveSelection(const sf::Vector2f& windowPos);
+    void commitMoveSelection();
+
     void loadPencils();
     void addPencil(std::shared_ptr<Pencil_I>& pencil);
+
+    // Selection state
+    bool selecting = false;
+    bool selectionActive = false;
+    bool draggingSelection = false;
+    sf::IntRect selectionRect = sf::IntRect(0,0,0,0);
+    sf::Image selectionImage;
+    sf::Image selectionBackup;
+    sf::Texture selectionTexture;
+    sf::Sprite selectionSprite;
+    sf::Vector2i selectionStartWindow{0,0};
+    sf::Vector2i selectionDragStart{0,0};
+    sf::Vector2f selectionSpriteWindowPos{0.f,0.f};
+    int selectionCalqueId = -1;
 };
 }  // namespace MyGimp
