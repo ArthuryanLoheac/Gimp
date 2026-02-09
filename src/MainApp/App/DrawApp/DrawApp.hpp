@@ -77,6 +77,7 @@ class DrawApp {
     void handleDragging(sf::Event &event, bool &consumed);
     void handleZooming(sf::Event &event);
     void handlePainting(sf::Event &event);
+    sf::Color sampleColorAt(const sf::Vector2f& windowPos);
 
     void updateCalques();
     void mixCalqueForExport(sf::Image &exportedImage, const Calque &c,
