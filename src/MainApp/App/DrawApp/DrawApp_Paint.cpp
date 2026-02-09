@@ -23,12 +23,33 @@ void DrawApp::handlePainting(sf::Event &event) {
             currentPencil->setColor(pickedColor);
     }
 
+    // Deselect on left click outside active selection
+    if (event.type == sf::Event::MouseButtonPressed &&
+        event.mouseButton.button == sf::Mouse::Left && selectionActive) {
+        sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
+        sf::FloatRect bounds = selectionSprite.getGlobalBounds();
+        if (!bounds.contains(mousePos)) {
+            cancelSelection();
+            return;
+        }
+    }
+
     // Move selection: Alt + left click inside selection
     if (event.type == sf::Event::MouseButtonPressed &&
         event.mouseButton.button == sf::Mouse::Left && selectionActive &&
         sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt)) {
         sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
         startMoveSelection(mousePos);
+        return;
+    }
+
+    // Shape drawing: R or C + left drag
+    if (event.type == sf::Event::MouseButtonPressed &&
+        event.mouseButton.button == sf::Mouse::Left &&
+        (sf::Keyboard::isKeyPressed(sf::Keyboard::R) ||
+         sf::Keyboard::isKeyPressed(sf::Keyboard::C))) {
+        sf::Vector2f mousePos(event.mouseButton.x, event.mouseButton.y);
+        startShapeDrawing(mousePos);
         return;
     }
 
@@ -43,6 +64,10 @@ void DrawApp::handlePainting(sf::Event &event) {
 
     if (event.type == sf::Event::MouseMoved) {
         sf::Vector2f mousePos(event.mouseMove.x, event.mouseMove.y);
+        if (shapeDrawing) {
+            updateShapeDrawing(mousePos);
+            return;
+        }
         if (selecting) {
             updateSelection(mousePos);
             return;
@@ -60,6 +85,10 @@ void DrawApp::handlePainting(sf::Event &event) {
 
     if (event.type == sf::Event::MouseButtonReleased &&
         event.mouseButton.button == sf::Mouse::Left) {
+        if (shapeDrawing) {
+            finalizeShapeDrawing();
+            return;
+        }
         if (selecting) {
             finalizeSelection();
             return;
@@ -89,8 +118,9 @@ void DrawApp::handlePainting(sf::Event &event) {
     // Cancel selection with Escape
     if (event.type == sf::Event::KeyReleased &&
         event.key.code == sf::Keyboard::Escape) {
-        if (selecting || selectionActive || draggingSelection) {
+        if (selecting || selectionActive || draggingSelection || shapeDrawing) {
             cancelSelection();
+            cancelShapeDrawing();
         }
     }
 }
@@ -147,6 +177,91 @@ sf::Color MyGimp::DrawApp::sampleColorAt(const sf::Vector2f& windowPos) {
     return outColor;
 }
 
+// --- Shape drawing helper functions ---
+
+void MyGimp::DrawApp::startShapeDrawing(const sf::Vector2f& windowPos) {
+    // Cancel any selection active to avoid conflicts
+    if (selectionActive) cancelSelection();
+    shapeDrawing = true;
+    shapeStartWindow = sf::Vector2i(static_cast<int>(windowPos.x), static_cast<int>(windowPos.y));
+    shapeRect = sf::IntRect(0,0,0,0);
+    // Determine which shape based on key
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+        selectionShape = SelectionShape::RECT;
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+        selectionShape = SelectionShape::CIRCLE;
+    else
+        selectionShape = SelectionShape::RECT;
+}
+
+void MyGimp::DrawApp::updateShapeDrawing(const sf::Vector2f& windowPos) {
+    sf::Vector2i cur(static_cast<int>(windowPos.x), static_cast<int>(windowPos.y));
+    int x0 = std::min(shapeStartWindow.x, cur.x);
+    int y0 = std::min(shapeStartWindow.y, cur.y);
+    int x1 = std::max(shapeStartWindow.x, cur.x);
+    int y1 = std::max(shapeStartWindow.y, cur.y);
+    // Convert window coords to canvas coords using current calque sprite
+    sf::Vector2f spritePos = getCalque().getCalqueSprite().getPosition();
+    int left = static_cast<int>(std::floor((x0 - spritePos.x) / zoom));
+    int top = static_cast<int>(std::floor((y0 - spritePos.y) / zoom));
+    int right = static_cast<int>(std::floor((x1 - spritePos.x) / zoom));
+    int bottom = static_cast<int>(std::floor((y1 - spritePos.y) / zoom));
+    if (right < left) std::swap(left, right);
+    if (bottom < top) std::swap(top, bottom);
+    shapeRect.left = std::max(0, left);
+    shapeRect.top = std::max(0, top);
+    shapeRect.width = std::max(0, right - left + 1);
+    shapeRect.height = std::max(0, bottom - top + 1);
+    if (selectionShape == SelectionShape::CIRCLE) {
+        shapeCircleCenter.x = shapeRect.left + shapeRect.width / 2;
+        shapeCircleCenter.y = shapeRect.top + shapeRect.height / 2;
+        shapeCircleRadius = std::min(shapeRect.width, shapeRect.height) / 2;
+    }
+}
+
+void MyGimp::DrawApp::finalizeShapeDrawing() {
+    if (!shapeDrawing) return;
+    shapeDrawing = false;
+    if (shapeRect.width <= 0 || shapeRect.height <= 0) return;
+    // Apply to current calque
+    makeSaveCalques();
+    Calque &c = getCalque();
+    sf::Image img = c.getCalqueImage();
+    const sf::Color col = currentPencil->getColor();
+
+    for (int sx = 0; sx < shapeRect.width; ++sx) {
+        for (int sy = 0; sy < shapeRect.height; ++sy) {
+            int ix = shapeRect.left + sx;
+            int iy = shapeRect.top + sy;
+            if (ix < 0 || iy < 0 || ix >= static_cast<int>(img.getSize().x) ||
+                iy >= static_cast<int>(img.getSize().y)) continue;
+            if (selectionShape == SelectionShape::CIRCLE) {
+                int dx = ix - shapeCircleCenter.x;
+                int dy = iy - shapeCircleCenter.y;
+                if (dx*dx + dy*dy > shapeCircleRadius * shapeCircleRadius) continue;
+            }
+            // blend col onto img at (ix,iy) using calque opacity
+            const sf::Color dst = img.getPixel(ix, iy);
+            float a = (col.a / 255.f) * c.getOpacity();
+            if (a == 0.f) continue;
+            float dstA = dst.a / 255.f;
+            float outA = a + dstA * (1 - a);
+            if (outA == 0.f) { img.setPixel(ix, iy, sf::Color(0,0,0,0)); continue; }
+            const sf::Uint8 r = static_cast<sf::Uint8>(((col.r * a) + (dst.r * dstA * (1 - a))) / outA);
+            const sf::Uint8 g = static_cast<sf::Uint8>(((col.g * a) + (dst.g * dstA * (1 - a))) / outA);
+            const sf::Uint8 b = static_cast<sf::Uint8>(((col.b * a) + (dst.b * dstA * (1 - a))) / outA);
+            const sf::Uint8 A = static_cast<sf::Uint8>(outA * 255);
+            img.setPixel(ix, iy, sf::Color(r,g,b,A));
+        }
+    }
+    c.setImage(img);
+}
+
+void MyGimp::DrawApp::cancelShapeDrawing() {
+    shapeDrawing = false;
+    shapeRect = sf::IntRect(0,0,0,0);
+}
+
 // --- Selection helper functions ---
 
 void MyGimp::DrawApp::startSelection(const sf::Vector2f& windowPos) {
@@ -158,6 +273,14 @@ void MyGimp::DrawApp::startSelection(const sf::Vector2f& windowPos) {
     selectionStartWindow = sf::Vector2i(static_cast<int>(windowPos.x),
                                         static_cast<int>(windowPos.y));
     selectionRect = sf::IntRect(0,0,0,0);
+    // Determine shape based on modifier keys: R => rectangle, C => circle
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
+        selectionShape = SelectionShape::RECT;
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+        selectionShape = SelectionShape::CIRCLE;
+    else
+        selectionShape = SelectionShape::RECT;
+    selectionCircleRadius = 0;
 }
 
 void MyGimp::DrawApp::updateSelection(const sf::Vector2f& windowPos) {
@@ -178,6 +301,13 @@ void MyGimp::DrawApp::updateSelection(const sf::Vector2f& windowPos) {
     selectionRect.top = std::max(0, top);
     selectionRect.width = std::max(0, right - left + 1);
     selectionRect.height = std::max(0, bottom - top + 1);
+
+    if (selectionShape == SelectionShape::CIRCLE) {
+        // compute circle center and radius in canvas coords
+        selectionCircleCenter.x = selectionRect.left + selectionRect.width / 2;
+        selectionCircleCenter.y = selectionRect.top + selectionRect.height / 2;
+        selectionCircleRadius = std::min(selectionRect.width, selectionRect.height) / 2;
+    }
 }
 
 void MyGimp::DrawApp::finalizeSelection() {
@@ -201,6 +331,13 @@ void MyGimp::DrawApp::finalizeSelection() {
             int iy = selectionRect.top + sy;
             if (ix >= 0 && iy >= 0 && ix < static_cast<int>(img.getSize().x) &&
                 iy < static_cast<int>(img.getSize().y)) {
+                // If circle shape, skip pixels outside circle
+                if (selectionShape == SelectionShape::CIRCLE) {
+                    int dx = ix - selectionCircleCenter.x;
+                    int dy = iy - selectionCircleCenter.y;
+                    if (dx*dx + dy*dy > selectionCircleRadius * selectionCircleRadius)
+                        continue;
+                }
                 sf::Color p = img.getPixel(ix, iy);
                 selectionImage.setPixel(sx, sy, p);
                 selectionBackup.setPixel(sx, sy, p);

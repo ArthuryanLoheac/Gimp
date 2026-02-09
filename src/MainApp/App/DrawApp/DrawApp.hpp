@@ -94,14 +94,27 @@ class DrawApp {
     void updateMoveSelection(const sf::Vector2f& windowPos);
     void commitMoveSelection();
 
+    // Shape drawing (R = rectangle, C = circle)
+    void startShapeDrawing(const sf::Vector2f& windowPos);
+    void updateShapeDrawing(const sf::Vector2f& windowPos);
+    void finalizeShapeDrawing();
+    void cancelShapeDrawing();
+
     void loadPencils();
     void addPencil(std::shared_ptr<Pencil_I>& pencil);
 
     // Selection state
+    enum class SelectionShape { RECT, CIRCLE } ;
+    SelectionShape selectionShape = SelectionShape::RECT;
+
     bool selecting = false;
     bool selectionActive = false;
     bool draggingSelection = false;
     sf::IntRect selectionRect = sf::IntRect(0,0,0,0);
+    // circle params (in canvas coords)
+    sf::Vector2i selectionCircleCenter{0,0};
+    int selectionCircleRadius = 0;
+
     sf::Image selectionImage;
     sf::Image selectionBackup;
     sf::Texture selectionTexture;
@@ -110,5 +123,12 @@ class DrawApp {
     sf::Vector2i selectionDragStart{0,0};
     sf::Vector2f selectionSpriteWindowPos{0.f,0.f};
     int selectionCalqueId = -1;
+
+    // Shape drawing state
+    bool shapeDrawing = false;
+    sf::Vector2i shapeStartWindow{0,0};
+    sf::IntRect shapeRect = sf::IntRect(0,0,0,0);
+    sf::Vector2i shapeCircleCenter{0,0};
+    int shapeCircleRadius = 0;
 };
 }  // namespace MyGimp
